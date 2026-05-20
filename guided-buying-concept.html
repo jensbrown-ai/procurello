@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Procurello — Guided Buying</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F4F3EF;
+    --ink:#1A1A1A; --ink-2:#4A4A48; --ink-3:#8A8A88;
+    --line:#E8E6E0; --line-2:#D9D6CE;
+    --brand:#7C3AED; --brand-soft:#EDE9FE;
+    --accent:#1E3A5F; --accent-soft:#E7ECF3;
+    --green:#2E7D5B; --green-soft:#E4F1EB;
+    --amber:#B97A0E; --amber-soft:#FBF1DC;
+    --r:10px; --rs:6px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:100vh}
+
+  /* SIDEBAR */
+  .sb{background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:2px}
+  .brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
+  .brand-d{width:28px;height:28px;border-radius:7px;background:var(--brand);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+  .brand-n{font-weight:600;font-size:13px;letter-spacing:-.01em}
+  .brand-s{font-size:11px;color:var(--ink-3)}
+  .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rs);color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
+  .nav:hover{background:var(--surface-2);color:var(--ink)}
+  .nav.active{background:var(--brand-soft);color:var(--brand)}
+  .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
+  .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600}
+  .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);padding:18px 10px 6px;font-weight:600}
+  .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
+  .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
+  .av-i{flex:1;min-width:0}
+  .av-n{font-size:12px;font-weight:600}
+  .av-r{font-size:11px;color:var(--ink-3)}
+
+  /* MAIN */
+  .main{padding:32px 40px 60px;overflow-y:auto;max-height:100vh}
+  .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
+  .crumb .s{color:var(--line-2)}
+  h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+  .lede{color:var(--ink-2);font-size:14px;margin-bottom:24px;max-width:620px}
+
+  /* COMPOSER */
+  .composer{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
+  .c-in{padding:16px 18px 12px}
+  .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .spk{width:12px;height:12px;color:var(--brand)}
+  .c-txt{font-size:15px;color:var(--ink);min-height:20px}
+  .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
+  .c-acts{display:flex;gap:4px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
+  .chip:hover{border-color:var(--line-2);color:var(--ink)}
+  .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
+  .btn{padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
+  .btn:hover{background:var(--surface-2)}
+  .btn-p{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn-p:hover{background:#000}
+
+  /* THREAD */
+  .thread{margin-top:24px}
+  .turn{margin-bottom:22px}
+  .t-user{display:flex;justify-content:flex-end;margin-bottom:14px}
+  .t-user-b{background:var(--accent);color:#fff;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:14px;max-width:80%;line-height:1.5}
+  .t-agent{display:flex;gap:12px}
+  .a-dot{width:28px;height:28px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+  .a-body{flex:1;min-width:0}
+  .a-name{font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);display:inline-block}
+  .a-msg{font-size:14px;color:var(--ink);line-height:1.6}
+  .a-msg p{margin-bottom:10px}
+  .a-msg strong{font-weight:600}
+
+  /* INLINE CARDS */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin:10px 0;overflow:hidden}
+  .card-h{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
+  .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+  .card-t .ai,.sum-h .ai,.card-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  .card-b{padding:12px 14px}
+
+  /* SUPPLIER RECS */
+  .sup-grid{display:grid;grid-template-columns:1fr;gap:8px}
+  .sup{display:flex;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:var(--rs);cursor:pointer;transition:all .15s;background:var(--surface)}
+  .sup:hover{border-color:var(--line-2);background:var(--surface-2)}
+  .sup.rec{border-color:var(--green);background:linear-gradient(180deg,var(--green-soft) 0%,var(--surface) 70%)}
+  .sup-logo{width:38px;height:38px;border-radius:7px;background:var(--surface-2);display:grid;place-items:center;font-weight:700;font-size:11px;color:var(--ink-2);flex-shrink:0;border:1px solid var(--line)}
+  .sup-i{flex:1;min-width:0}
+  .sup-n{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .sup-m{font-size:11px;color:var(--ink-3);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap}
+  .sup-m b{color:var(--ink-2);font-weight:500}
+  .sup-price{text-align:right;font-size:13px;font-weight:600;flex-shrink:0}
+  .sup-price-s{font-size:11px;color:var(--ink-3);font-weight:400;margin-top:2px}
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600}
+  .b-g{background:var(--green-soft);color:var(--green)}
+  .b-a{background:var(--amber-soft);color:var(--amber)}
+  .b-n{background:var(--surface-2);color:var(--ink-2)}
+
+  /* FILLED FIELDS */
+  .ff-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ff{background:var(--surface-2);padding:10px 12px;border-radius:var(--rs);border:1px solid var(--line)}
+  .ff.full{grid-column:1/-1}
+  .ff-l{font-size:11px;color:var(--ink-3);font-weight:500;margin-bottom:3px}
+  .ff-v{font-size:13px;font-weight:500}
+  .ff-v .muted{color:var(--ink-3);font-weight:400}
+
+  /* FOLLOWUP */
+  .fu{background:var(--surface);border:1px dashed var(--line-2);border-radius:var(--r);padding:13px;margin:10px 0}
+  .fu-q{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink-2)}
+  .fu-opts{display:flex;flex-wrap:wrap;gap:6px}
+  .opt{padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;cursor:pointer;background:var(--surface);transition:all .15s}
+  .opt:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* INLINE COMPOSER */
+  .icomp{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
+  .icomp input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:10px 0}
+  .icomp input::placeholder{color:var(--ink-3)}
+
+  /* RIGHT SUMMARY */
+  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:0;height:100vh;overflow-y:auto}
+  .sum-s{margin-bottom:22px}
+  .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+  .draft{background:linear-gradient(180deg,var(--accent-soft) 0%,var(--surface) 60%);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:600;background:var(--amber-soft);color:var(--amber);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em}
+  .pill .d{width:5px;height:5px;border-radius:50%;background:currentColor}
+  .draft-t{font-size:15px;font-weight:600;margin-bottom:4px;line-height:1.3}
+  .draft-sub{font-size:12px;color:var(--ink-3);margin-bottom:14px}
+  .kv{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px dashed var(--line);gap:10px}
+  .kv:last-child{border-bottom:none;padding-top:10px}
+  .kv-k{color:var(--ink-3);white-space:nowrap}
+  .kv-v{font-weight:500;color:var(--ink);text-align:right}
+  .kv-v.big{font-size:15px;font-weight:600}
+
+  /* APPROVAL */
+  .ap{display:flex;gap:10px;padding:10px 0;position:relative}
+  .ap:not(:last-child)::before{content:'';position:absolute;left:10px;top:30px;bottom:-2px;width:1px;background:var(--line-2)}
+  .ap-m{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;font-size:10px;font-weight:600;z-index:1}
+  .ap-m.done{background:var(--green);color:#fff}
+  .ap-m.cur{background:var(--accent);color:#fff;box-shadow:0 0 0 3px var(--accent-soft)}
+  .ap-m.pend{background:var(--surface);color:var(--ink-3);border:1px dashed var(--line-2)}
+  .ap-i{flex:1;min-width:0;padding-top:1px}
+  .ap-n{font-size:12px;font-weight:600;line-height:1.3}
+  .ap-d{font-size:11px;color:var(--ink-3);margin-top:2px}
+
+  /* CHECKS */
+  .chk{display:flex;align-items:flex-start;gap:8px;padding:7px 0;font-size:12px}
+  .chk-i{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+  .chk-i.ok{background:var(--green);color:#fff}
+  .chk-i.warn{background:var(--amber);color:#fff}
+  .chk-i svg{width:8px;height:8px;stroke:currentColor;stroke-width:3;fill:none}
+  .chk-t{color:var(--ink-2)}
+  .chk-t b{color:var(--ink);font-weight:600}
+
+  .actions{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+  .actions .btn{width:100%;text-align:center;padding:10px}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sb">
+    <div class="brand">
+      <div class="brand-d">P</div>
+      <div>
+        <div class="brand-n">Procurello</div>
+        <div class="brand-s">Buyer workspace</div>
+      </div>
+    </div>
+
+    <div class="nav active">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      Buy something
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
+      My requests
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Approvals <span class="pill">3</span>
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Orders
+    </div>
+
+    <div class="nav-h">Workspace</div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Suppliers
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      Contracts
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Spend insights
+    </div>
+
+    <div class="sb-foot">
+      <div class="av">JM</div>
+      <div class="av-i">
+        <div class="av-n">Jamie Mendez</div>
+        <div class="av-r">Wellman Lab · 4421</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+    <div class="crumb">
+      <span>Shop</span><span class="s">/</span><span>New request</span>
+    </div>
+
+    <h1>What do you need to buy?</h1>
+    <p class="lede">Describe it in plain language — I'll find the right supplier, fill in the forms, check policy, and route it for approval.</p>
+
+    <!-- COMPOSER -->
+    <div class="composer">
+      <div class="c-in">
+        <div class="c-lbl">
+          <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
+          Ask your buying agent
+        </div>
+        <div class="c-txt">
+          We need a centrifuge serviced and recalibrated for the Wellman lab — budget around $4,500, needed by end of month.
+        </div>
+      </div>
+      <div class="c-row">
+        <div class="c-acts">
+          <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Attach quote</span>
+          <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Need-by date</span>
+          <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
+        </div>
+        <button class="btn btn-p">Continue →</button>
+      </div>
+    </div>
+
+    <!-- THREAD -->
+    <div class="thread">
+
+      <!-- Turn 1 -->
+      <div class="turn">
+        <div class="t-agent">
+          <div class="a-dot">AI</div>
+          <div class="a-body">
+            <div class="a-name">Buying agent <span class="live"></span> working</div>
+            <div class="a-msg">
+              <p>Got it. This looks like a <strong>service request</strong> for lab equipment calibration — I'm setting it up as a Services line item (not a goods purchase) so the right tax treatment and approvals apply.</p>
+              <p>Three suppliers in your network can do centrifuge calibration. I've ranked them by what matters here — active contract, lead time, and past performance with Wellman Lab:</p>
+
+              <div class="card">
+                <div class="card-h">
+                  <div class="card-t">Recommended suppliers <span class="ai">AI Ranked</span></div>
+                  <span style="font-size:11px;color:var(--ink-3)">3 of 7 shown</span>
+                </div>
+                <div class="card-b">
+                  <div class="sup-grid">
+                    <div class="sup rec">
+                      <div class="sup-logo">PRC</div>
+                      <div class="sup-i">
+                        <div class="sup-n">
+                          PrecisionCal Services
+                          <span class="badge b-g">✓ Preferred</span>
+                          <span class="badge b-n">MSA active</span>
+                        </div>
+                        <div class="sup-m">
+                          <span><b>5–7 days</b> lead</span>
+                          <span>Used 4× by your lab</span>
+                          <span>On-time 98%</span>
+                        </div>
+                      </div>
+                      <div class="sup-price">
+                        ~$4,200
+                        <div class="sup-price-s">based on prior orders</div>
+                      </div>
+                    </div>
+
+                    <div class="sup">
+                      <div class="sup-logo">MTC</div>
+                      <div class="sup-i">
+                        <div class="sup-n">
+                          MetroTest Calibration
+                          <span class="badge b-g">Diverse-owned</span>
+                        </div>
+                        <div class="sup-m">
+                          <span><b>10–14 days</b> lead</span>
+                          <span>No prior orders</span>
+                          <span>Quote required</span>
+                        </div>
+                      </div>
+                      <div class="sup-price">
+                        Request quote
+                        <div class="sup-price-s">est. $3,800–4,800</div>
+                      </div>
+                    </div>
+
+                    <div class="sup">
+                      <div class="sup-logo">LAB</div>
+                      <div class="sup-i">
+                        <div class="sup-n">
+                          LabServ Industries
+                          <span class="badge b-a">COI expires Jun 30</span>
+                        </div>
+                        <div class="sup-m">
+                          <span><b>3–5 days</b> lead</span>
+                          <span>Used 12× campus-wide</span>
+                          <span>On-time 91%</span>
+                        </div>
+                      </div>
+                      <div class="sup-price">
+                        ~$4,650
+                        <div class="sup-price-s">last similar order</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p>My pick is <strong>PrecisionCal</strong> — they're under an active MSA, so we skip the quote step and shorten the approval path by one level. Want me to draft it with them?</p>
+
+              <div class="fu">
+                <div class="fu-q">How should I proceed?</div>
+                <div class="fu-opts">
+                  <span class="opt">✓ Use PrecisionCal</span>
+                  <span class="opt">Request quotes from all 3</span>
+                  <span class="opt">Show more suppliers</span>
+                  <span class="opt">I have a specific vendor in mind</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Turn 2 -->
+      <div class="turn">
+        <div class="t-user">
+          <div class="t-user-b">Go with PrecisionCal. The machine is the Beckman Allegra X-15R in room 312.</div>
+        </div>
+
+        <div class="t-agent">
+          <div class="a-dot">AI</div>
+          <div class="a-body">
+            <div class="a-name">Buying agent</div>
+            <div class="a-msg">
+              <p>Done — drafted as a non-catalog services requisition with PrecisionCal. I pulled the asset record for the Beckman Allegra (Asset #WL-0312-04) and attached it so they don't have to ask.</p>
+
+              <div class="card">
+                <div class="card-h">
+                  <div class="card-t">Auto-filled from your request <span class="ai">AI</span></div>
+                  <span style="font-size:11px;color:var(--ink-3)">Click any field to edit</span>
+                </div>
+                <div class="card-b">
+                  <div class="ff-grid">
+                    <div class="ff full">
+                      <div class="ff-l">Product / service description</div>
+                      <div class="ff-v">Centrifuge calibration & service — Beckman Allegra X-15R (Asset WL-0312-04)</div>
+                    </div>
+                    <div class="ff">
+                      <div class="ff-l">Commodity code</div>
+                      <div class="ff-v">41103905 · Calibration services</div>
+                    </div>
+                    <div class="ff">
+                      <div class="ff-l">Line item type</div>
+                      <div class="ff-v">Services</div>
+                    </div>
+                    <div class="ff">
+                      <div class="ff-l">Amount</div>
+                      <div class="ff-v">$4,200.00 USD</div>
+                    </div>
+                    <div class="ff">
+                      <div class="ff-l">Need by</div>
+                      <div class="ff-v">May 30, 2026</div>
+                    </div>
+                    <div class="ff full">
+                      <div class="ff-l">Cost object</div>
+                      <div class="ff-v">Fund 100 · Dept 4421 · Project WL-CAL-26 <span class="muted">(your default for lab maintenance)</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p>Two things to know before submitting:</p>
+
+              <div class="card">
+                <div class="card-b" style="padding:6px 14px">
+                  <div class="chk">
+                    <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <div class="chk-t"><b>Under MSA</b> — no quote required, single-approver path.</div>
+                  </div>
+                  <div class="chk">
+                    <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <div class="chk-t"><b>Within budget</b> — $4,200 leaves $20,800 in your lab maintenance allocation.</div>
+                  </div>
+                  <div class="chk">
+                    <div class="chk-i warn"><svg viewBox="0 0 24 24"><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="16.5"/></svg></div>
+                    <div class="chk-t"><b>Heads up:</b> this asset is also on Dr. Chen's calibration schedule next quarter. Want me to flag for shared cost-split?</div>
+                  </div>
+                </div>
+              </div>
+
+              <p style="color:var(--ink-3);font-size:13px">Anything to add, or should I send it for approval?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- INLINE CHAT INPUT -->
+    <div class="icomp">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      <input placeholder="Reply, ask a question, or change something…" />
+      <button class="btn btn-p" style="padding:7px 14px">Send</button>
+    </div>
+
+  </main>
+
+  <!-- ===== RIGHT SUMMARY ===== -->
+  <aside class="sum">
+
+    <div class="sum-s">
+      <div class="sum-h">
+        <span>Draft requisition</span>
+        <span class="ai">Live</span>
+      </div>
+      <div class="draft">
+        <span class="pill"><span class="d"></span>Drafting</span>
+        <div class="draft-t">Centrifuge calibration<br/>— Wellman Lab</div>
+        <div class="draft-sub">Req · auto-numbered on submit</div>
+
+        <div class="kv">
+          <span class="kv-k">Supplier</span>
+          <span class="kv-v">PrecisionCal Services</span>
+        </div>
+        <div class="kv">
+          <span class="kv-k">Type</span>
+          <span class="kv-v">Service · MSA</span>
+        </div>
+        <div class="kv">
+          <span class="kv-k">Need by</span>
+          <span class="kv-v">May 30, 2026</span>
+        </div>
+        <div class="kv">
+          <span class="kv-k">Cost object</span>
+          <span class="kv-v">WL-CAL-26</span>
+        </div>
+        <div class="kv">
+          <span class="kv-k">Total</span>
+          <span class="kv-v big">$4,200.00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sum-s">
+      <div class="sum-h"><span>Approval path</span><span style="font-size:11px;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0">Est. 1 day</span></div>
+      <div>
+        <div class="ap">
+          <div class="ap-m done">✓</div>
+          <div class="ap-i">
+            <div class="ap-n">You (requester)</div>
+            <div class="ap-d">Jamie Mendez · ready to submit</div>
+          </div>
+        </div>
+        <div class="ap">
+          <div class="ap-m cur">2</div>
+          <div class="ap-i">
+            <div class="ap-n">Dr. Sarah Wellman</div>
+            <div class="ap-d">PI approver · typically responds &lt;4h</div>
+          </div>
+        </div>
+        <div class="ap">
+          <div class="ap-m pend">3</div>
+          <div class="ap-i">
+            <div class="ap-n">Procurement</div>
+            <div class="ap-d">Auto-approve under MSA threshold</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sum-s">
+      <div class="sum-h"><span>Policy & compliance</span></div>
+      <div>
+        <div class="chk">
+          <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="chk-t">Supplier insurance current</div>
+        </div>
+        <div class="chk">
+          <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="chk-t">W-9 on file (2024)</div>
+        </div>
+        <div class="chk">
+          <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="chk-t">Not flagged on watchlists</div>
+        </div>
+        <div class="chk">
+          <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="chk-t">Funded — Project WL-CAL-26</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-p">Submit for approval</button>
+      <button class="btn">Save draft</button>
+    </div>
+
+  </aside>
+
+</div>
+
+</body>
+</html>
