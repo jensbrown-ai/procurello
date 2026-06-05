@@ -18,14 +18,10 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:100vh}
+  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
 
   /* SIDEBAR */
   .sb{background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:2px}
-  .brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
-  .brand-d{width:28px;height:28px;border-radius:7px;background:var(--brand);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
-  .brand-n{font-weight:600;font-size:13px;letter-spacing:-.01em}
-  .brand-s{font-size:11px;color:var(--ink-3)}
   .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rs);color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
   .nav:hover{background:var(--surface-2);color:var(--ink)}
   .nav.active{background:var(--brand-soft);color:var(--brand)}
@@ -39,7 +35,7 @@
   .av-r{font-size:11px;color:var(--ink-3)}
 
   /* MAIN */
-  .main{padding:32px 40px 60px;overflow-y:auto;max-height:100vh}
+  .main{padding:32px 40px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
   .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
   .crumb .s{color:var(--line-2)}
   h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
@@ -151,7 +147,7 @@
   .icomp input::placeholder{color:var(--ink-3)}
 
   /* RIGHT — CART */
-  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
   .sum-s{margin-bottom:22px}
   .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
   .sum-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em}
@@ -195,21 +191,54 @@
 
   .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:20px}
   .actions .btn{width:100%;text-align:center;padding:10px}
-</style>
+
+  /* ── Topbar (cross-page nav) ─────────────────────────────── */
+  .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+  .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.25) 30%,rgba(60,18,57,.25) 70%,transparent);pointer-events:none}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
+  .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
+  .tb-dot{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--brand),var(--aubergine));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:0 4px 12px -4px rgba(124,58,237,.4)}
+  .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+  .tb-sub{font-size:11px;color:var(--ink-3)}
+  .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
+  .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
+  .tb-links a:hover{color:var(--ink)}
+  .tb-links a.tb-active{color:var(--brand);font-weight:600}
+  .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
+  .tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
+
+  </style>
 </head>
 <body>
+
+
+<!-- ── Topbar ── -->
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="tb-brand">
+      <div class="tb-dot">P</div>
+      <div>
+        <div class="tb-name">Procurello</div>
+        <div class="tb-sub">Guided buying</div>
+      </div>
+    </a>
+    <div class="tb-links">
+      <a href="index.html#concept">Concept</a>
+      <a href="index.html#different">Why It Matters</a>
+      <a href="index.html#demos">Demos</a>
+    </div>
+    <div class="tb-user">
+      <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
+      <div class="tb-av">JM</div>
+    </div>
+  </div>
+</nav>
 
 <div class="app">
 
   <!-- ===== SIDEBAR ===== -->
   <aside class="sb">
-    <div class="brand">
-      <div class="brand-d">P</div>
-      <div>
-        <div class="brand-n">Procurello</div>
-        <div class="brand-s">Buyer workspace</div>
-      </div>
-    </div>
 
     <div class="nav active">
       <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -241,15 +270,7 @@
       <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
       Spend insights
     </div>
-
-    <div class="sb-foot">
-      <div class="av">JM</div>
-      <div class="av-i">
-        <div class="av-n">Jamie Mendez</div>
-        <div class="av-r">Wellman Lab · 4421</div>
-      </div>
-    </div>
-  </aside>
+    </aside>
 
   <!-- ===== MAIN ===== -->
   <main class="main">
@@ -304,7 +325,7 @@
                     <div class="prod best">
                       <div class="prod-flag">★ Best value · Contract</div>
                       <div class="prod-img">
-                        <img src="microflex.png" alt="Microflex MidKnight Nitrile Exam Gloves" loading="lazy">
+                        <img src="images/microflex.png" alt="Microflex MidKnight Nitrile Exam Gloves" loading="lazy">
                       </div>
                       <div class="prod-body">
                         <div class="prod-sup"><span class="sup-dot">FS</span>Fisher Scientific</div>
@@ -329,7 +350,7 @@
                     <!-- VWR -->
                     <div class="prod">
                       <div class="prod-img">
-                        <img src="vwr.jpg" alt="VWR Signature Nitrile Exam Gloves" loading="lazy">
+                        <img src="images/vwr.jpg" alt="VWR Signature Nitrile Exam Gloves" loading="lazy">
                       </div>
                       <div class="prod-body">
                         <div class="prod-sup"><span class="sup-dot">VW</span>VWR International</div>
@@ -353,7 +374,7 @@
                     <!-- Grainger -->
                     <div class="prod">
                       <div class="prod-img">
-                        <img src="ansell.png" alt="Ansell TouchNTuff Nitrile Gloves" loading="lazy">
+                        <img src="images/ansell.png" alt="Ansell TouchNTuff Nitrile Gloves" loading="lazy">
                       </div>
                       <div class="prod-body">
                         <div class="prod-sup"><span class="sup-dot">GR</span>Grainger</div>

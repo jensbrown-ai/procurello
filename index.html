@@ -303,7 +303,48 @@
     .diff-item{grid-template-columns:30px 1fr;gap:14px}
     .diff-st{grid-column:2;text-align:left;padding-top:4px}
   }
-</style>
+
+  /* ── Category management section ─────────────────────── */
+  .catmgmt-section{background:linear-gradient(180deg,var(--surface-2) 0%,var(--bg) 100%)}
+  .orb-catmgmt-1{top:-100px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(124,58,237,.13),transparent 70%)}
+  .orb-catmgmt-2{bottom:-60px;left:-100px;width:360px;height:360px;background:radial-gradient(circle,rgba(60,18,57,.09),transparent 70%)}
+  .catmgmt-split{display:grid;grid-template-columns:1fr 380px;gap:60px;align-items:start;margin-bottom:64px}
+  .catmgmt-h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .catmgmt-h3::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,var(--brand),var(--aubergine));border-radius:2px;flex-shrink:0}
+  .catmgmt-p{font-size:14px;color:var(--ink-2);line-height:1.72;margin-bottom:28px}
+  .catmgmt-persona{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-top:4px}
+  .catmgmt-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:600;flex-shrink:0}
+  .catmgmt-av-n{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+  .catmgmt-av-r{font-size:11px;color:var(--ink-3);line-height:1.5}
+  .catmgmt-compass{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 22px;box-shadow:0 2px 16px rgba(0,0,0,.04);position:sticky;top:72px}
+  .compass-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;letter-spacing:-.01em}
+  .compass-sub{font-size:11px;color:var(--ink-3);margin-bottom:14px}
+  .compass-svg{width:100%;height:auto;display:block}
+  .compass-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+  .cl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-2)}
+  .cl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .catmgmt-caps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .catmgmt-cap{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 24px;position:relative;overflow:hidden;transition:all .2s;text-decoration:none;color:inherit;display:block}
+  .catmgmt-cap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--aubergine));opacity:0;transition:opacity .25s}
+  .catmgmt-cap:hover::before{opacity:1}
+  .catmgmt-cap:hover{border-color:var(--line-2);box-shadow:0 4px 20px -8px rgba(0,0,0,.1);transform:translateY(-1px)}
+  .catmgmt-cap-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;margin-bottom:16px}
+  .catmgmt-cap-icon svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.8;fill:none}
+  .catmgmt-cap-icon.port{background:var(--brand-soft);color:var(--brand)}
+  .catmgmt-cap-icon.plan{background:var(--purple-soft);color:var(--purple)}
+  .catmgmt-cap-icon.spend{background:var(--green-soft);color:var(--green)}
+  .catmgmt-cap-t{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.01em}
+  .catmgmt-cap-d{font-size:13px;color:var(--ink-2);line-height:1.65}
+  /* demo cards for category screens */
+  .demo-img.catport{background:linear-gradient(135deg,var(--brand-soft),rgba(239,233,254,.4))}
+  .demo-img.catwork{background:linear-gradient(135deg,rgba(239,233,254,.6),var(--surface-2))}
+  .demo-img.catgrid{background:linear-gradient(135deg,rgba(229,246,238,.6),var(--surface-2))}
+  .demo-icon-big.catport svg,.demo-icon-big.catwork svg,.demo-icon-big.catgrid svg{stroke:var(--brand)}
+  .demo-icon-big.catport{background:var(--brand-soft);color:var(--brand)}
+  .demo-icon-big.catwork{background:var(--purple-soft);color:var(--purple)}
+  .demo-icon-big.catgrid{background:var(--green-soft);color:var(--green)}
+
+  </style>
 </head>
 <body>
 
@@ -317,9 +358,9 @@
     </div>
     <div class="nav-links">
       <a href="#concept">Concept</a>
+      <a href="#different">Why It Matters</a>
       <a href="#demos">Demos</a>
-      <a href="#different">Why it matters</a>
-      <a href="requester-home.html" class="nav-cta">Start the demo →</a>
+      <a href="#demos" class="nav-cta">Start the demo →</a>
     </div>
   </div>
 </div>
@@ -346,11 +387,11 @@
         </div>
         <div class="hero-stats">
           <div>
-            <div class="hero-stat-v">7</div>
+            <div class="hero-stat-v">10</div>
             <div class="hero-stat-l">Interactive screens</div>
           </div>
           <div>
-            <div class="hero-stat-v">3</div>
+            <div class="hero-stat-v">4</div>
             <div class="hero-stat-l">Personas</div>
           </div>
           <div>
@@ -617,6 +658,100 @@
   </div>
 </section>
 
+
+<!-- ====== CATEGORY MANAGEMENT ====== -->
+<section class="section catmgmt-section" id="category">
+  <div class="orb orb-catmgmt-1"></div>
+  <div class="orb orb-catmgmt-2"></div>
+  <div class="wrap">
+
+    <div class="section-h">
+      <div class="section-eyebrow">Strategic category management</div>
+      <h2>From buying transactions to portfolio strategy.</h2>
+      <p class="lead">Procurement systems handle execution. The strategic layer — spend positioning, category plans, supplier strategy — lives in spreadsheets, disconnected from the data that should feed it. Procurello makes strategy live.</p>
+    </div>
+
+    <div class="catmgmt-split">
+      <div>
+        <p class="catmgmt-p">When strategy and execution live in separate tools, strategy loses. Category plans go stale the moment they're written. Managed spend targets miss because buyers never see them. The gap isn't a people problem — it's a structural one. Closing it means putting the strategic layer in the same platform as the requisition, the contract, and the invoice.</p>
+        <p class="catmgmt-p">The category management module extends Procurello into that strategic layer. A fourth persona — the category manager — operates across the full portfolio: positioning spend, running sourcing events, tracking plans against KPIs, and watching managed spend move in real time as buying behaviour changes below.</p>
+      </div>
+
+      <div class="catmgmt-compass">
+        <div class="compass-title">Category Compass™</div>
+        <div class="compass-sub">Strategic action layer — built on Kraljic positioning</div>
+        <svg class="compass-svg" viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg">
+          <!-- Quadrant fills -->
+          <rect x="6" y="6" width="136" height="128" rx="7" fill="rgba(124,58,237,.07)" stroke="rgba(124,58,237,.15)" stroke-width="1"/>
+          <rect x="150" y="6" width="144" height="128" rx="7" fill="rgba(185,122,14,.06)" stroke="rgba(185,122,14,.12)" stroke-width="1"/>
+          <rect x="6" y="142" width="136" height="128" rx="7" fill="rgba(46,125,91,.06)" stroke="rgba(46,125,91,.12)" stroke-width="1"/>
+          <rect x="150" y="142" width="144" height="128" rx="7" fill="rgba(168,53,31,.06)" stroke="rgba(168,53,31,.12)" stroke-width="1"/>
+          <!-- Quadrant labels -->
+          <text x="74" y="28" text-anchor="middle" font-family="Inter,system-ui" font-size="9.5" font-weight="700" fill="rgba(109,40,217,.85)" letter-spacing=".07em">CONSOLIDATE</text>
+          <text x="222" y="28" text-anchor="middle" font-family="Inter,system-ui" font-size="9.5" font-weight="700" fill="rgba(146,84,10,.85)" letter-spacing=".07em">PARTNER</text>
+          <text x="74" y="164" text-anchor="middle" font-family="Inter,system-ui" font-size="9.5" font-weight="700" fill="rgba(46,125,91,.85)" letter-spacing=".07em">STREAMLINE</text>
+          <text x="222" y="164" text-anchor="middle" font-family="Inter,system-ui" font-size="9.5" font-weight="700" fill="rgba(168,53,31,.85)" letter-spacing=".07em">SECURE</text>
+          <!-- Sub-labels -->
+          <text x="74" y="41" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.65)">Aggregate · enforce compliance</text>
+          <text x="222" y="41" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.65)">Invest · deepen relationship</text>
+          <text x="74" y="177" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.65)">Automate · catalog-enable</text>
+          <text x="222" y="177" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.65)">Dual-source · secure supply</text>
+          <!-- Portfolio bubbles -->
+          <circle cx="68" cy="88" r="24" fill="rgba(124,58,237,.18)" stroke="rgba(124,58,237,.4)" stroke-width="1.5"/>
+          <text x="68" y="92" text-anchor="middle" font-family="Inter,system-ui" font-size="8.5" font-weight="600" fill="rgba(109,40,217,.9)">MRO</text>
+          <circle cx="98" cy="65" r="17" fill="rgba(124,58,237,.13)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+          <text x="98" y="69" text-anchor="middle" font-family="Inter,system-ui" font-size="8" font-weight="600" fill="rgba(109,40,217,.8)">IT</text>
+          <circle cx="38" cy="72" r="19" fill="rgba(124,58,237,.13)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+          <text x="38" y="76" text-anchor="middle" font-family="Inter,system-ui" font-size="8" font-weight="600" fill="rgba(109,40,217,.8)">Lab</text>
+          <circle cx="215" cy="80" r="18" fill="rgba(185,122,14,.18)" stroke="rgba(185,122,14,.4)" stroke-width="1.5"/>
+          <text x="215" y="84" text-anchor="middle" font-family="Inter,system-ui" font-size="8" font-weight="600" fill="rgba(146,84,10,.9)">Sci. Inst.</text>
+          <circle cx="180" cy="100" r="16" fill="rgba(168,53,31,.14)" stroke="rgba(168,53,31,.35)" stroke-width="1"/>
+          <text x="180" y="104" text-anchor="middle" font-family="Inter,system-ui" font-size="7.5" font-weight="600" fill="rgba(168,53,31,.85)">Chem.</text>
+          <circle cx="40" cy="208" r="13" fill="rgba(46,125,91,.16)" stroke="rgba(46,125,91,.4)" stroke-width="1"/>
+          <text x="40" y="212" text-anchor="middle" font-family="Inter,system-ui" font-size="7.5" font-weight="600" fill="rgba(46,125,91,.9)">Office</text>
+          <circle cx="76" cy="196" r="14" fill="rgba(46,125,91,.13)" stroke="rgba(46,125,91,.3)" stroke-width="1"/>
+          <text x="76" y="200" text-anchor="middle" font-family="Inter,system-ui" font-size="7.5" font-weight="600" fill="rgba(46,125,91,.8)">Pack.</text>
+          <!-- Axis labels -->
+          <text x="150" y="284" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.55)" letter-spacing=".05em">MARKET HOLDS LEVERAGE →</text>
+          <text x="9" y="142" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.55)" letter-spacing=".05em" writing-mode="vertical-rl" transform="rotate(180,9,142)">MISSION-CRITICAL ↑</text>
+        </svg>
+        <div class="compass-legend">
+          <div class="cl-item"><div class="cl-dot" style="background:rgba(124,58,237,.6)"></div>Consolidate</div>
+          <div class="cl-item"><div class="cl-dot" style="background:rgba(185,122,14,.6)"></div>Partner</div>
+          <div class="cl-item"><div class="cl-dot" style="background:rgba(46,125,91,.6)"></div>Streamline</div>
+          <div class="cl-item"><div class="cl-dot" style="background:rgba(168,53,31,.6)"></div>Secure</div>
+          <div class="cl-item" style="color:var(--ink-3);margin-left:auto;font-size:10px">Bubble size = spend</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="catmgmt-caps">
+      <a class="catmgmt-cap" href="category-portfolio.html">
+        <div class="catmgmt-cap-icon port">
+          <svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="16" cy="13" r="2.5"/><circle cx="6" cy="17" r="2"/><circle cx="14" cy="6" r="2"/></svg>
+        </div>
+        <div class="catmgmt-cap-t">Category portfolio</div>
+        <div class="catmgmt-cap-d">The full spend portfolio mapped onto the Category Compass™ — bubbles sized by spend, positioned by supply risk and business criticality. Toggle between Kraljic and Compass views. Click any category to open its workspace.</div>
+      </a>
+      <a class="catmgmt-cap" href="mro-category-workspace.html">
+        <div class="catmgmt-cap-icon plan">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
+        </div>
+        <div class="catmgmt-cap-t">Living category plans</div>
+        <div class="catmgmt-cap-d">Strategy documents that stay connected to real data. Structured plans with KPI dashboards, methodology milestone boards, sourcing event linkage, and AI-generated category briefs — updated as spend and contracts move.</div>
+      </a>
+      <a class="catmgmt-cap" href="mro-subcategory-grid.html">
+        <div class="catmgmt-cap-icon spend">
+          <svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 17V9M13 17v-5M17 17V5"/></svg>
+        </div>
+        <div class="catmgmt-cap-t">Spend intelligence</div>
+        <div class="catmgmt-cap-d">Managed versus unmanaged breakdowns by category and sub-category. Sourcing event coverage gaps, supplier concentration, and AI-identified opportunities — surfaced where the category manager can act on them.</div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
 <!-- ====== DEMOS ====== -->
 <section class="section demos" id="demos">
   <div class="orb orb-demos-1"></div>
@@ -624,147 +759,80 @@
   <div class="wrap">
     <div class="section-h">
       <div class="section-eyebrow">Interactive demos</div>
-      <h2>Seven screens. Three personas. One unified experience.</h2>
-      <p class="lead">Each demo is a fully designed prototype showing how the concept works for a specific user or scenario. Click any card to open the live demo.</p>
+      <h2>Many personas. One unified experience.</h2>
+      <p class="lead">Each demo is a fully designed prototype showing how the concept works for a specific user. Click any tile to open the live demo.</p>
     </div>
 
-    <!-- COMMAND CENTERS -->
-    <div class="demo-group">
-      <div class="demo-group-h">
-        <div class="demo-group-t">Command centers · by persona</div>
-        <div class="demo-group-c">3 of 3</div>
-      </div>
+    <div class="demo-grid four">
 
-      <div class="demo-grid">
-        <a href="requester-home.html" class="demo">
-          <div class="demo-img req">
-            <div class="demo-icon-big req">
-              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            </div>
+      <a href="leader-dashboard.html" class="demo">
+        <div class="demo-img leader">
+          <div class="demo-icon-big leader">
+            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
           </div>
-          <div class="demo-body">
-            <div class="demo-persona">Requester · Jamie Mendez · Lab Manager</div>
-            <div class="demo-t">Requester home</div>
-            <div class="demo-d">Personal workspace combining a conversational composer with a forward-looking command center. KPIs, savings deep-dive, predictions, recent activity.</div>
-            <div class="demo-foot">
-              <span class="demo-time">Best <b>starting point</b></span>
-              <span class="demo-arrow">→</span>
-            </div>
+        </div>
+        <div class="demo-body">
+          <div class="demo-persona">Dr. Sarah Reyes · Assoc. Dean, Research</div>
+          <div class="demo-t">Leader</div>
+          <div class="demo-d">PI leaderboard, grant health, market intelligence feed, anomaly detection, and a 14-day approval pipeline preview.</div>
+          <div class="demo-foot">
+            <span class="demo-time">For <b>executive sponsors</b></span>
+            <span class="demo-arrow">→</span>
           </div>
-        </a>
+        </div>
+      </a>
 
-        <a href="leader-dashboard.html" class="demo">
-          <div class="demo-img leader">
-            <div class="demo-icon-big leader">
-              <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
-            </div>
+      <a href="category-portfolio.html" class="demo">
+        <div class="demo-img catport">
+          <div class="demo-icon-big catport">
+            <svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="16" cy="13" r="2.5"/><circle cx="6" cy="17" r="2"/><circle cx="14" cy="6" r="2"/></svg>
           </div>
-          <div class="demo-body">
-            <div class="demo-persona">Leader · Dr. Sarah Reyes · Assoc. Dean</div>
-            <div class="demo-t">Leader dashboard</div>
-            <div class="demo-d">PI leaderboard with grant health, market intelligence feed, anomaly detection, 14-day approval pipeline preview, peer benchmarking.</div>
-            <div class="demo-foot">
-              <span class="demo-time">For <b>executive sponsors</b></span>
-              <span class="demo-arrow">→</span>
-            </div>
+        </div>
+        <div class="demo-body">
+          <div class="demo-persona">Marcus Chen · Category Manager</div>
+          <div class="demo-t">Categories</div>
+          <div class="demo-d">Spend portfolio mapped on the Category Compass™, living category plans, sourcing events, contracts, and spend intelligence.</div>
+          <div class="demo-foot">
+            <span class="demo-time">For <b>category managers</b></span>
+            <span class="demo-arrow">→</span>
           </div>
-        </a>
+        </div>
+      </a>
 
-        <a href="ap-operations.html" class="demo">
-          <div class="demo-img ap">
-            <div class="demo-icon-big ap">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
+      <a href="requester-home.html" class="demo">
+        <div class="demo-img req">
+          <div class="demo-icon-big req">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </div>
-          <div class="demo-body">
-            <div class="demo-persona">AP Operations · David Kwan · Manager</div>
-            <div class="demo-t">AP operations</div>
-            <div class="demo-d">Predictive cash flow, "what's coming" upstream visibility, in-flight queue tabs, team capacity forecast, discount calendar, fraud alerts.</div>
-            <div class="demo-foot">
-              <span class="demo-time">Most <b>novel feature</b></span>
-              <span class="demo-arrow">→</span>
-            </div>
+        </div>
+        <div class="demo-body">
+          <div class="demo-persona">Jamie Mendez · Lab Manager</div>
+          <div class="demo-t">Requester</div>
+          <div class="demo-d">Conversational buying agent, savings command centre, grant health tracking, predictive KPIs, and guided buying scenarios.</div>
+          <div class="demo-foot">
+            <span class="demo-time">Best <b>starting point</b></span>
+            <span class="demo-arrow">→</span>
           </div>
-        </a>
-      </div>
-    </div>
+        </div>
+      </a>
 
-    <!-- SCENARIOS -->
-    <div class="demo-group">
-      <div class="demo-group-h">
-        <div class="demo-group-t">Guided buying scenarios · how the agent handles each path</div>
-        <div class="demo-group-c">4 of 4</div>
-      </div>
+      <a href="ap-operations.html" class="demo">
+        <div class="demo-img ap">
+          <div class="demo-icon-big ap">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+        </div>
+        <div class="demo-body">
+          <div class="demo-persona">David Kwan · AP Operations Manager</div>
+          <div class="demo-t">AP Operations</div>
+          <div class="demo-d">30-day invoice pipeline, exception triage, 3-way match queue, payment run preview, and supplier risk monitoring.</div>
+          <div class="demo-foot">
+            <span class="demo-time">For <b>AP teams</b></span>
+            <span class="demo-arrow">→</span>
+          </div>
+        </div>
+      </a>
 
-      <div class="demo-grid four">
-        <a href="catalog-guided-buying.html" class="demo">
-          <div class="demo-img catalog">
-            <div class="demo-icon-big catalog">
-              <svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
-            </div>
-          </div>
-          <div class="demo-body">
-            <div class="demo-persona">Catalog · Punchout</div>
-            <div class="demo-t">Everyday buying</div>
-            <div class="demo-d">Common items, contract pricing, supplier comparison, internal stock check, restock detection.</div>
-            <div class="demo-foot">
-              <span class="demo-time"><b>~30s</b> to cart</span>
-              <span class="demo-arrow">→</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="guided-buying-concept.html" class="demo">
-          <div class="demo-img noncat">
-            <div class="demo-icon-big noncat">
-              <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-            </div>
-          </div>
-          <div class="demo-body">
-            <div class="demo-persona">Non-catalog · Services</div>
-            <div class="demo-t">One-off requests</div>
-            <div class="demo-d">Plain-language service request, AI-ranked suppliers, auto-filled requisition, optimized approval path.</div>
-            <div class="demo-foot">
-              <span class="demo-time"><b>~2 min</b> to submit</span>
-              <span class="demo-arrow">→</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="invoice-guided-buying.html" class="demo">
-          <div class="demo-img invoice">
-            <div class="demo-icon-big invoice">
-              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
-            </div>
-          </div>
-          <div class="demo-body">
-            <div class="demo-persona">Invoice · 3-way match</div>
-            <div class="demo-t">Closing the loop</div>
-            <div class="demo-d">Drop an invoice, agent matches the PO, prompts receipt, runs 12 compliance checks silently with audit trail.</div>
-            <div class="demo-foot">
-              <span class="demo-time"><b>~45s</b> to clear AP</span>
-              <span class="demo-arrow">→</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="contract-quote-guided-buying.html" class="demo">
-          <div class="demo-img contract">
-            <div class="demo-icon-big contract">
-              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6M9 11h6"/></svg>
-            </div>
-          </div>
-          <div class="demo-body">
-            <div class="demo-persona">Supplier-led · Contract + PO</div>
-            <div class="demo-t">Vendor proposal</div>
-            <div class="demo-d">Drop a 14-page proposal; agent extracts SOW + quote + MSA, benchmarks against history, offers 3 legal paths.</div>
-            <div class="demo-foot">
-              <span class="demo-time"><b>~3 days</b> end-to-end</span>
-              <span class="demo-arrow">→</span>
-            </div>
-          </div>
-        </a>
-      </div>
     </div>
   </div>
 </section>
@@ -863,10 +931,14 @@
         <a href="guided-buying-concept.html">Non-catalog services</a>
         <a href="invoice-guided-buying.html">Invoice receiving</a>
         <a href="contract-quote-guided-buying.html">Contract handling</a>
+      <a href="category-portfolio.html">Category portfolio</a>
+      <a href="mro-category-workspace.html">Category workspace</a>
+      <a href="mro-subcategory-grid.html">Sub-category grid</a>
       </div>
 
       <div class="footer-col">
         <h4>Resources</h4>
+        <a href="requirements.md">Requirements document</a>
         <a href="#concept">Core concepts</a>
         <a href="#different">What's different</a>
         <a href="#demos">All demos</a>

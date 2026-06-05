@@ -16,19 +16,16 @@
     --amber:#B97A0E; --amber-soft:#FBF1DC;
     --purple:#6B4C9A; --purple-soft:#EFE8F5;
     --teal:#2A6F73; --teal-soft:#E0EDEE;
+    --aubergine:#3C1239;
     --r:10px; --rs:6px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
   a{text-decoration:none;color:inherit}
-  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:100vh}
+  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
 
   /* SIDEBAR */
   .sb{background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:2px}
-  .brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
-  .brand-d{width:28px;height:28px;border-radius:7px;background:var(--brand);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
-  .brand-n{font-weight:600;font-size:13px;letter-spacing:-.01em}
-  .brand-s{font-size:11px;color:var(--ink-3)}
   .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rs);color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
   .nav:hover{background:var(--surface-2);color:var(--ink)}
   .nav.active{background:var(--brand-soft);color:var(--brand)}
@@ -43,7 +40,7 @@
   .av-r{font-size:11px;color:var(--ink-3)}
 
   /* MAIN */
-  .main{padding:32px 36px 60px;overflow-y:auto;max-height:100vh}
+  .main{padding:32px 36px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
   .greeting{font-size:13px;color:var(--ink-3);margin-bottom:6px;font-weight:500;display:flex;align-items:center;gap:8px}
   .greeting .dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
   h1{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px;line-height:1.15}
@@ -194,7 +191,7 @@
   .qs-arrow{transition:all .2s;font-size:14px;color:var(--ink-3)}
 
   /* RIGHT PANEL */
-  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 22px 28px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 22px 28px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
   .sum-s{margin-bottom:22px}
   .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
 
@@ -208,7 +205,7 @@
   .at-i.amber{background:var(--amber)}
   .at-i.teal{background:var(--teal)}
   .at-i.accent{background:var(--accent)}
-  .at-i.brand{background:var(--brand)}
+  .at-i
   .at-b{flex:1;min-width:0}
   .at-t{font-size:12px;font-weight:600;line-height:1.3}
   .at-d{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.4}
@@ -277,21 +274,62 @@
   /* FOOTER NOTE */
   .footer-n{margin-top:auto;padding-top:18px;font-size:11px;color:var(--ink-3);line-height:1.5}
   .footer-n b{color:var(--ink-2)}
-</style>
+
+  /* ── Topbar (cross-page nav) ─────────────────────────────── */
+  .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+  .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.25) 30%,rgba(60,18,57,.25) 70%,transparent);pointer-events:none}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
+  .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
+  .tb-dot{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--brand),var(--aubergine));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:0 4px 12px -4px rgba(124,58,237,.4)}
+  .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+  .tb-sub{font-size:11px;color:var(--ink-3)}
+  .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
+  .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
+  .tb-links a:hover{color:var(--ink)}
+  .tb-links a.tb-active{color:var(--brand);font-weight:600}
+  .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
+  .tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
+
+  
+    .pi-grid    { grid-template-columns: 1fr; }
+    .quick      { grid-template-columns: 1fr; }
+    .pulse-grid { grid-template-columns: 1fr; }
+    .ticker     { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  </style>
 </head>
 <body>
 
+
+<!-- ── Topbar ── -->
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="tb-brand">
+      <div class="tb-dot">P</div>
+      <div>
+        <div class="tb-name">Procurello</div>
+        <div class="tb-sub">Buyer workspace</div>
+      </div>
+    </a>
+        <div class="tb-links">
+      <a href="index.html#concept">Concept</a>
+      <a href="index.html#different">Why It Matters</a>
+      <a href="index.html#demos">Demos</a>
+    </div>
+    <div class="tb-user">
+      <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
+      <div class="tb-av">JM</div>
+    </div>
+  </div>
+</nav>
+
 <div class="app">
+
 
   <!-- ===== SIDEBAR ===== -->
   <aside class="sb">
-    <div class="brand">
-      <div class="brand-d">P</div>
-      <div>
-        <div class="brand-n">Procurello</div>
-        <div class="brand-s">Buyer workspace</div>
-      </div>
-    </div>
 
     <div class="nav active">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -327,15 +365,7 @@
       <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
       Spend insights
     </div>
-
-    <div class="sb-foot">
-      <div class="av">JM</div>
-      <div class="av-i">
-        <div class="av-n">Jamie Mendez</div>
-        <div class="av-r">Wellman Lab · 4421</div>
-      </div>
-    </div>
-  </aside>
+    </aside>
 
   <!-- ===== MAIN ===== -->
   <main class="main">
@@ -361,6 +391,55 @@
           <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
         </div>
         <button class="btn btn-p">Continue →</button>
+      </div>
+    </div>
+
+    <div class="sec-block">
+      <div class="sec-h">
+        <div class="sec-t">Try a scenario</div>
+        <div class="sec-sub">Walk through each path the agent handles</div>
+      </div>
+
+      <div class="quick">
+        <a href="catalog-guided-buying.html" class="qs">
+          <div class="qs-icon catalog">
+            <svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
+          </div>
+          <div class="qs-pill">Catalog · Punchout</div>
+          <div class="qs-t">Quick everyday buying</div>
+          <div class="qs-d">Common items, contract pricing, internal stock check, supplier punchout — all in one cart.</div>
+          <div class="qs-foot"><span><b>~30s</b> to cart</span><span class="qs-arrow">→</span></div>
+        </a>
+
+        <a href="guided-buying-concept.html" class="qs">
+          <div class="qs-icon noncat">
+            <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="qs-pill">Non-catalog · Services</div>
+          <div class="qs-t">One-off services & equipment</div>
+          <div class="qs-d">Plain-language request, supplier ranking, auto-filled requisition, shortest approval path.</div>
+          <div class="qs-foot"><span><b>~2 min</b> to submit</span><span class="qs-arrow">→</span></div>
+        </a>
+
+        <a href="invoice-guided-buying.html" class="qs">
+          <div class="qs-icon invoice">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
+          </div>
+          <div class="qs-pill">Invoice · 3-way match</div>
+          <div class="qs-t">Close the loop on a PO</div>
+          <div class="qs-d">Drop an invoice, agent matches the PO, prompts receipt, runs 12 compliance checks silently.</div>
+          <div class="qs-foot"><span><b>~45s</b> to clear AP</span><span class="qs-arrow">→</span></div>
+        </a>
+
+        <a href="contract-quote-guided-buying.html" class="qs">
+          <div class="qs-icon contract">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6M9 11h6"/></svg>
+          </div>
+          <div class="qs-pill">Supplier-led · Contract + PO</div>
+          <div class="qs-t">Vendor sent a proposal</div>
+          <div class="qs-d">Drop a 14-page proposal — agent extracts, finds prior contract, offers three legal paths with timelines.</div>
+          <div class="qs-foot"><span><b>~3 days</b> end-to-end</span><span class="qs-arrow">→</span></div>
+        </a>
       </div>
     </div>
 
@@ -843,55 +922,6 @@
     </div>
 
     <!-- QUICK SCENARIOS -->
-    <div class="sec-block" style="margin-bottom:0">
-      <div class="sec-h">
-        <div class="sec-t">Try a scenario</div>
-        <div class="sec-sub">Walk through each path the agent handles</div>
-      </div>
-
-      <div class="quick">
-        <a href="catalog-guided-buying.html" class="qs">
-          <div class="qs-icon catalog">
-            <svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
-          </div>
-          <div class="qs-pill">Catalog · Punchout</div>
-          <div class="qs-t">Quick everyday buying</div>
-          <div class="qs-d">Common items, contract pricing, internal stock check, supplier punchout — all in one cart.</div>
-          <div class="qs-foot"><span><b>~30s</b> to cart</span><span class="qs-arrow">→</span></div>
-        </a>
-
-        <a href="guided-buying-concept.html" class="qs">
-          <div class="qs-icon noncat">
-            <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          </div>
-          <div class="qs-pill">Non-catalog · Services</div>
-          <div class="qs-t">One-off services & equipment</div>
-          <div class="qs-d">Plain-language request, supplier ranking, auto-filled requisition, shortest approval path.</div>
-          <div class="qs-foot"><span><b>~2 min</b> to submit</span><span class="qs-arrow">→</span></div>
-        </a>
-
-        <a href="invoice-guided-buying.html" class="qs">
-          <div class="qs-icon invoice">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
-          </div>
-          <div class="qs-pill">Invoice · 3-way match</div>
-          <div class="qs-t">Close the loop on a PO</div>
-          <div class="qs-d">Drop an invoice, agent matches the PO, prompts receipt, runs 12 compliance checks silently.</div>
-          <div class="qs-foot"><span><b>~45s</b> to clear AP</span><span class="qs-arrow">→</span></div>
-        </a>
-
-        <a href="contract-quote-guided-buying.html" class="qs">
-          <div class="qs-icon contract">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6M9 11h6"/></svg>
-          </div>
-          <div class="qs-pill">Supplier-led · Contract + PO</div>
-          <div class="qs-t">Vendor sent a proposal</div>
-          <div class="qs-d">Drop a 14-page proposal — agent extracts, finds prior contract, offers three legal paths with timelines.</div>
-          <div class="qs-foot"><span><b>~3 days</b> end-to-end</span><span class="qs-arrow">→</span></div>
-        </a>
-      </div>
-    </div>
-
   </main>
 
   <!-- ===== RIGHT — PULSE & ATTENTION ===== -->
@@ -996,6 +1026,8 @@
     }
   });
 </script>
+
+
 
 </body>
 </html>
