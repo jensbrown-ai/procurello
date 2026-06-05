@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Category Portfolio — Procurello</title>
+<style>
+/* ── Variables ────────────────────────────────────────────────── */
+:root {
+  --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F4F3EF;
+  --ink:#1A1A1A; --ink-2:#4A4A48; --ink-3:#8A8A88;
+  --line:#E8E6E0; --line-2:#D9D6CE;
+  --brand:#7C3AED; --brand-soft:#EDE9FE;
+  --accent:#1E3A5F; --accent-soft:#E7ECF3;
+  --green:#2E7D5B; --green-soft:#E4F1EB;
+  --amber:#B97A0E; --amber-soft:#FBF1DC;
+  --red:#A8351F;   --red-soft:#FBEBE8;
+  --purple:#6B4C9A;--purple-soft:#EFE8F5;
+  --teal:#2A6F73;  --teal-soft:#E0EDEE;
+  --aubergine:#3C1239;
+  --r:10px; --rs:6px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── Nav ─────────────────────────────────────────────────────── */
+nav{position:sticky;top:0;background:rgba(250,250,247,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.25) 30%,rgba(60,18,57,.25) 70%,transparent);pointer-events:none}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:56px;max-width:1460px;margin:0 auto}
+.brand-mark{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.brand-dot{width:28px;height:28px;border-radius:var(--rs);background:linear-gradient(135deg,var(--brand),var(--aubergine));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:0 4px 12px -4px rgba(124,58,237,.4);flex-shrink:0}
+.brand-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+.brand-sub{font-size:11px;color:var(--ink-3)}
+.nav-links{display:flex;align-items:center;gap:24px;font-size:13px;color:var(--ink-2);font-weight:500}
+.nav-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
+.nav-links a:hover{color:var(--ink)}
+
+/* ── Main ─────────────────────────────────────────────────────── */
+main{padding:32px 2.5rem 4rem;max-width:1460px;margin:0 auto;position:relative}
+
+/* ── Page header ──────────────────────────────────────────────── */
+.ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.75rem}
+.eyebrow{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--brand);margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem}
+.eyebrow span{width:4px;height:4px;border-radius:50%;background:var(--brand);display:inline-block}
+.ptitle{font-family:'Inter',system-ui,sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1;margin-bottom:.4rem}
+.psub{font-size:.86rem;color:var(--ink-2)}
+.pa{display:flex;gap:.75rem;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.5rem 1.2rem;border-radius:var(--rs);font-family:'Inter',system-ui,sans-serif;font-size:.83rem;font-weight:500;cursor:pointer;border:none;transition:all .15s;text-decoration:none;letter-spacing:-.01em}
+.btn-p{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn-p:hover{background:#000}
+.btn-g{background:rgba(0,0,0,.04);color:var(--ink);border:1px solid var(--line)}
+.btn-g:hover{background:rgba(0,0,0,.065)}
+
+/* ── KPI Strip ────────────────────────────────────────────────── */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.75rem}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.15rem 1.4rem;position:relative;overflow:hidden;transition:border-color .2s,background .2s;animation:fadeUp .5s ease both}
+.kpi:hover{border-color:rgba(124,58,237,.35);background:var(--surface-2)}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),transparent);opacity:.35}
+.kpi.warn::after{background:linear-gradient(90deg,var(--yellow),transparent)}
+.kpi.good::after{background:linear-gradient(90deg,var(--green),transparent)}
+.kpi-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.65rem}
+.kpi-ico{font-size:1rem;opacity:.75}
+.chip{display:inline-flex;align-items:center;gap:2px;font-size:.67rem;font-weight:700;padding:2px 7px;border-radius:4px}
+.c-up{background:rgba(16,185,129,.15);color:#34D399}
+.c-dn{background:rgba(239,68,68,.15);color:#FCA5A5}
+.c-warn{background:rgba(245,158,11,.15);color:#FCD34D}
+.c-info{background:rgba(124,58,237,.15);color:var(--brand)}
+.kpi-val{font-family:'Inter',system-ui,sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1;margin-bottom:.3rem}
+.kpi-lbl{font-size:.73rem;color:var(--ink-2);font-weight:500;text-transform:uppercase;letter-spacing:.07em}
+
+/* ── 2-col grid ───────────────────────────────────────────────── */
+.mgrid{display:grid;grid-template-columns:1fr 352px;gap:1.25rem;margin-bottom:2rem}
+
+/* ── Section card ─────────────────────────────────────────────── */
+.sc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.sch{padding:1.05rem 1.5rem;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.sct{font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.scd{font-size:.72rem;color:var(--ink-3);margin-top:2px}
+.pills{display:flex;gap:3px;background:rgba(0,0,0,.04);border-radius:var(--rs);padding:3px}
+.pill{padding:4px 13px;border-radius:var(--rs);font-size:.76rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--ink-2);transition:all .15s;font-family:'Inter',system-ui,sans-serif}
+.pill.on{background:var(--brand);color:#fff}
+
+/* ── SVG chart ────────────────────────────────────────────────── */
+.chart-wrap{padding:1.2rem 1.5rem .75rem;position:relative}
+#msvg{width:100%;height:auto;display:block}
+.bub{cursor:pointer}
+.bub-lbl{pointer-events:none}
+
+/* ── Tooltip ──────────────────────────────────────────────────── */
+#tip{position:fixed;z-index:500;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.85rem 1.1rem;min-width:185px;box-shadow:0 4px 20px rgba(0,0,0,.12);display:none}
+.tn{font-family:'Inter',system-ui,sans-serif;font-weight:700;font-size:.84rem;color:var(--ink);margin-bottom:.5rem;display:flex;align-items:center;gap:.45rem}
+.tn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tr{display:flex;justify-content:space-between;gap:1rem;color:var(--ink-2);font-size:.75rem;margin-top:3px}
+.tv{color:var(--ink);font-weight:600}
+
+/* ── Legend list ──────────────────────────────────────────────── */
+.leg-list{padding:.25rem 0;overflow-y:auto;max-height:calc(360px + 24px)}
+.leg-item{display:flex;align-items:center;gap:.7rem;padding:.58rem 1.5rem;cursor:pointer;transition:background .15s;border-left:3px solid transparent}
+.leg-item:hover{background:rgba(0,0,0,.04)}
+.leg-item.hi{background:rgba(124,58,237,.08);border-left-color:var(--brand)}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.leg-name{font-size:.8rem;font-weight:500;color:var(--ink);flex:1}
+.leg-spend{font-family:'Inter',system-ui,sans-serif;font-size:.78rem;font-weight:700;color:var(--ink);margin-right:.3rem}
+.leg-footer{padding:.65rem 1.5rem;border-top:1px solid var(--line);display:flex;gap:.6rem;flex-wrap:wrap}
+.lfs{font-size:.69rem;color:var(--ink-3)}
+.lfs strong{color:var(--ink-2);font-weight:600}
+
+/* ── Badges ───────────────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.bq-leverage,.bq-consolidate{background:rgba(139,92,246,.2);color:#C4B5FD}
+.bq-strategic,.bq-partner{background:rgba(245,158,11,.2);color:#FCD34D}
+.bq-routine,.bq-streamline{background:rgba(107,114,128,.2);color:#D1D5DB}
+.bq-bottleneck,.bq-secure{background:rgba(239,68,68,.2);color:#FCA5A5}
+
+/* ── Cards section ────────────────────────────────────────────── */
+.csh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.cst{font-family:'Inter',system-ui,sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em}
+.fchips{display:flex;gap:.5rem}
+.fc{padding:4px 14px;border-radius:20px;font-size:.74rem;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);transition:all .15s;font-family:'Inter',system-ui,sans-serif}
+.fc:hover{color:var(--ink);border-color:var(--line-2)}
+.fc.on{background:rgba(124,58,237,.12);color:var(--brand);border-color:rgba(124,58,237,.4)}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+
+/* ── Category card ────────────────────────────────────────────── */
+.cc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.35rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;text-decoration:none;display:block;color:inherit;opacity:0;animation:fadeUp .5s ease forwards}
+.cc:hover{border-color:rgba(124,58,237,.44);background:rgba(255,255,255,.055);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.35)}
+.cc.feat{border-color:rgba(124,58,237,.52);background:rgba(124,58,237,.072)}
+.cc.feat:hover{border-color:rgba(124,58,237,.68)}
+.cc.feat::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 10% 0%,rgba(124,58,237,.12) 0%,transparent 70%);pointer-events:none}
+.ct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.cico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.07)}
+.stchip{font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em}
+.st-active{background:rgba(16,185,129,.14);color:#2E7D5B;border:1px solid rgba(16,185,129,.22)}
+.st-review{background:rgba(245,158,11,.14);color:#92540A;border:1px solid rgba(245,158,11,.22)}
+.st-stale{background:rgba(239,68,68,.14);color:#B91C1C;border:1px solid rgba(239,68,68,.22)}
+.st-stable{background:rgba(124,58,237,.14);color:var(--brand);border:1px solid rgba(124,58,237,.22)}
+.cname{font-family:'Inter',system-ui,sans-serif;font-size:.87rem;font-weight:700;color:var(--ink);margin-bottom:.2rem;letter-spacing:-.02em;line-height:1.25}
+.cowner{font-size:.68rem;color:var(--ink-3);margin-bottom:.85rem}
+.cspend-row{display:flex;align-items:baseline;gap:.4rem;margin-bottom:.75rem}
+.cspend{font-family:'Inter',system-ui,sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.cspend-lbl{font-size:.69rem;color:var(--ink-3)}
+.mwrap{margin-bottom:.85rem}
+.mbar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.32rem}
+.mlbl{font-size:.7rem;color:var(--ink-2)}
+.mpct{font-size:.78rem;font-weight:700;color:var(--ink)}
+.mtrack{height:4px;border-radius:2px;background:rgba(0,0,0,.06);overflow:hidden}
+.mfill{height:100%;border-radius:2px;width:0;transition:width 1.2s ease}
+.cbadges{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.9rem}
+.cfooter{display:flex;gap:1.25rem;border-top:1px solid var(--line);padding-top:.85rem}
+.csv{font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:700;line-height:1}
+.csl{font-size:.65rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.spark{width:100%;height:26px;overflow:visible;margin-bottom:.8rem;display:block}
+
+/* ── Animations ───────────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(124,58,237,.3);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+</div>
+
+<!-- ── Navigation ──────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="brand-mark">
+      <div class="brand-dot">P</div>
+      <div>
+        <div class="brand-name">Procurello</div>
+        <div class="brand-sub">Category Portfolio</div>
+      </div>
+    </a>
+    <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="requester-home.html">Requester</a>
+    <a href="leader-dashboard.html">Leader</a>
+    <a href="ap-operations.html">AP Ops</a>
+    <a href="category-portfolio.html" style="color:var(--brand);font-weight:600">Categories</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+    <span style="font-size:12px;color:var(--ink-3)">Marcus Chen &nbsp;·&nbsp; Category Management</span>
+    <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0">MC</div>
+  </div>
+  </div>
+</nav>
+
+<!-- ── Main ────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- Page header -->
+  <div class="ph">
+    <div>
+      <div class="eyebrow"><span></span>Meridian Research University System</div>
+      <div class="ptitle">Category Portfolio</div>
+      <div class="psub">8 managed categories &nbsp;·&nbsp; Marcus Chen &nbsp;·&nbsp; FY2026 Annual View &nbsp;·&nbsp; Last reviewed June 2026</div>
+    </div>
+    <div class="pa">
+      <button class="btn btn-g">↓ Export Report</button>
+      <button class="btn btn-p">+ New Category Plan</button>
+    </div>
+  </div>
+
+  <!-- KPI Strip -->
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <!-- Main 2-col: chart + legend -->
+  <div class="mgrid">
+
+    <!-- Left: positioning matrix -->
+    <div class="sc">
+      <div class="sch">
+        <div>
+          <div class="sct">Category Positioning Matrix</div>
+          <div class="scd">Bubble size = annual spend &nbsp;·&nbsp; Hover for detail &nbsp;·&nbsp; Click MRO to open workspace</div>
+        </div>
+        <div class="pills">
+          <button class="pill on" id="pill-k" onclick="setMode('kraljic',this)">Kraljic Grid</button>
+          <button class="pill" id="pill-c" onclick="setMode('compass',this)">Category Compass</button>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <svg id="msvg" viewBox="0 0 560 370" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gL" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#8B5CF6" stop-opacity=".09"/>
+              <stop offset="100%" stop-color="#8B5CF6" stop-opacity=".02"/>
+            </linearGradient>
+            <linearGradient id="gS" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F59E0B" stop-opacity=".09"/>
+              <stop offset="100%" stop-color="#F59E0B" stop-opacity=".02"/>
+            </linearGradient>
+            <linearGradient id="gR" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#6B7280" stop-opacity=".06"/>
+              <stop offset="100%" stop-color="#6B7280" stop-opacity=".01"/>
+            </linearGradient>
+            <linearGradient id="gB" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#EF4444" stop-opacity=".08"/>
+              <stop offset="100%" stop-color="#EF4444" stop-opacity=".02"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Quadrant fills -->
+          <rect id="qL" x="58" y="22" width="242" height="148" fill="url(#gL)" rx="3"/>
+          <rect id="qS" x="300" y="22" width="242" height="148" fill="url(#gS)" rx="3"/>
+          <rect id="qR" x="58" y="170" width="242" height="148" fill="url(#gR)" rx="3"/>
+          <rect id="qBk" x="300" y="170" width="242" height="148" fill="url(#gB)" rx="3"/>
+
+          <!-- Dividers -->
+          <line x1="58" y1="170" x2="542" y2="170" stroke="rgba(0,0,0,.07)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="300" y1="22" x2="300" y2="318" stroke="rgba(0,0,0,.07)" stroke-width="1" stroke-dasharray="4,4"/>
+
+          <!-- Axes -->
+          <line x1="58" y1="318" x2="542" y2="318" stroke="rgba(0,0,0,.12)" stroke-width="1.5"/>
+          <line x1="58" y1="22" x2="58" y2="318" stroke="rgba(0,0,0,.12)" stroke-width="1.5"/>
+          <!-- Arrowheads -->
+          <polygon points="542,315 548,318 542,321" fill="rgba(0,0,0,.12)"/>
+          <polygon points="55,22 58,16 61,22" fill="rgba(0,0,0,.12)"/>
+
+          <!-- Axis labels -->
+          <text id="x-axis-lbl" x="300" y="348" text-anchor="middle" fill="rgba(107,114,128,.7)" font-family="Inter,system-ui,sans-serif" font-size="9.5" font-weight="600" letter-spacing=".07em">SUPPLY RISK</text>
+          <text id="x-lo" x="70" y="335" fill="rgba(107,114,128,.5)" font-family="Inter,system-ui,sans-serif" font-size="8.5">Low</text>
+          <text id="x-hi" x="540" y="335" text-anchor="end" fill="rgba(107,114,128,.5)" font-family="Inter,system-ui,sans-serif" font-size="8.5">High</text>
+          <text id="y-axis-lbl" x="14" y="170" text-anchor="middle" fill="rgba(107,114,128,.7)" font-family="Inter,system-ui,sans-serif" font-size="9.5" font-weight="600" letter-spacing=".07em" transform="rotate(-90,14,170)">SPEND INFLUENCE</text>
+          <text id="y-lo" x="52" y="314" text-anchor="end" fill="rgba(107,114,128,.5)" font-family="Inter,system-ui,sans-serif" font-size="8.5">Low</text>
+          <text id="y-hi" x="52" y="30" text-anchor="end" fill="rgba(107,114,128,.5)" font-family="Inter,system-ui,sans-serif" font-size="8.5">High</text>
+
+          <!-- Quadrant labels -->
+          <text id="ql1" x="179" y="42" text-anchor="middle" fill="rgba(139,92,246,.6)" font-family="Syne,sans-serif" font-size="10.5" font-weight="700" letter-spacing=".12em">LEVERAGE</text>
+          <text id="ql2" x="421" y="42" text-anchor="middle" fill="rgba(245,158,11,.6)" font-family="Syne,sans-serif" font-size="10.5" font-weight="700" letter-spacing=".12em">STRATEGIC</text>
+          <text id="ql3" x="179" y="302" text-anchor="middle" fill="rgba(107,114,128,.8)" font-family="Syne,sans-serif" font-size="10.5" font-weight="700" letter-spacing=".12em">ROUTINE</text>
+          <text id="ql4" x="421" y="302" text-anchor="middle" fill="rgba(239,68,68,.55)" font-family="Syne,sans-serif" font-size="10.5" font-weight="700" letter-spacing=".12em">BOTTLENECK</text>
+
+          <!-- Bubbles (injected by JS) -->
+          <g id="bubbles"></g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Right: category index -->
+    <div class="sc">
+      <div class="sch">
+        <div>
+          <div class="sct">Category Index</div>
+          <div class="scd">8 categories &nbsp;·&nbsp; $170.3M portfolio</div>
+        </div>
+      </div>
+      <div class="leg-list" id="legList"></div>
+      <div class="leg-footer">
+        <span class="lfs"><strong>3</strong> Leverage</span>
+        <span class="lfs"><strong>2</strong> Strategic</span>
+        <span class="lfs"><strong>2</strong> Routine</span>
+        <span class="lfs"><strong>1</strong> Bottleneck</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Category cards -->
+  <div class="csh">
+    <div class="cst">All Categories</div>
+    <div class="fchips">
+      <button class="fc on" onclick="filterCards('all',this)">All 8</button>
+      <button class="fc" onclick="filterCards('Leverage',this)">Leverage</button>
+      <button class="fc" onclick="filterCards('Strategic',this)">Strategic</button>
+      <button class="fc" onclick="filterCards('Routine',this)">Routine</button>
+      <button class="fc" onclick="filterCards('Bottleneck',this)">Bottleneck</button>
+    </div>
+  </div>
+  <div class="cgrid" id="cgrid"></div>
+
+</main>
+
+<!-- Tooltip -->
+<div id="tip">
+  <div class="tn"><div class="tn-dot" id="tt-dot"></div><span id="tt-name"></span></div>
+  <div class="tr"><span>Annual spend</span><span class="tv" id="tt-spend"></span></div>
+  <div class="tr"><span>Under management</span><span class="tv" id="tt-managed"></span></div>
+  <div class="tr" id="tt-strat-row"><span>Strategy</span><span class="tv" id="tt-strat"></span></div>
+  <div class="tr"><span>Active contracts</span><span class="tv" id="tt-contracts"></span></div>
+  <div class="tr"><span>Suppliers</span><span class="tv" id="tt-suppliers"></span></div>
+</div>
+
+<script>
+/* ─── Data ────────────────────────────────────────────────────────── */
+const cats = [
+  {id:'mro',  name:'MRO & Facilities',        icon:'🔧', spend:43.8, managed:61, q:'Leverage',   c:'Consolidate', status:'active',  contracts:8,  suppliers:24, color:'#8B5CF6', featured:true,  krx:42,kry:76, cpx:38,cpy:64, spark:[22,24,21,25,23,26,22,24,23,25,24,26]},
+  {id:'lab',  name:'Lab Consumables',         icon:'🧪', spend:30.7,  managed:74, q:'Leverage',   c:'Consolidate', status:'active',  contracts:12, suppliers:31, color:'#3B82F6', featured:false, krx:25,kry:61, cpx:29,cpy:56, spark:[18,19,21,20,23,22,24,25,23,26,27,28]},
+  {id:'it',   name:'IT Hardware & Peripherals',icon:'💻',spend:25.8,  managed:82, q:'Leverage',   c:'Streamline',  status:'active',  contracts:6,  suppliers:18, color:'#06B6D4', featured:false, krx:33,kry:68, cpx:36,cpy:51, spark:[30,28,27,26,25,24,23,22,21,22,20,19]},
+  {id:'sci',  name:'Scientific Instruments',  icon:'🔬', spend:24.1,  managed:55, q:'Strategic',  c:'Partner',     status:'review',  contracts:4,  suppliers:22, color:'#F59E0B', featured:false, krx:75,kry:77, cpx:74,cpy:83, spark:[20,18,24,19,26,21,28,19,25,22,26,23]},
+  {id:'chem', name:'Chemicals & Reagents',    icon:'⚗️', spend:20.9,  managed:68, q:'Strategic',  c:'Secure',      status:'active',  contracts:9,  suppliers:27, color:'#EF4444', featured:false, krx:63,kry:52, cpx:68,cpy:47, spark:[22,23,21,22,20,21,22,20,19,21,20,19]},
+  {id:'pack', name:'Packaging & Shipping',    icon:'📦', spend:12.7,  managed:71, q:'Routine',    c:'Streamline',  status:'stable',  contracts:3,  suppliers:11, color:'#10B981', featured:false, krx:19,kry:36, cpx:24,cpy:29, spark:[14,14,15,14,15,14,15,14,15,14,13,14]},
+  {id:'office',name:'Office Supplies',        icon:'🖊️', spend:7.4,  managed:89, q:'Routine',    c:'Streamline',  status:'stable',  contracts:2,  suppliers:4,  color:'#6B7280', featured:false, krx:15,kry:20, cpx:16,cpy:16, spark:[9,9,8,9,8,8,7,8,7,7,7,7]},
+  {id:'print',name:'Professional Print',      icon:'🖨️', spend:4.9,  managed:43, q:'Bottleneck', c:'Streamline',  status:'stale',   contracts:1,  suppliers:8,  color:'#F97316', featured:false, krx:59,kry:24, cpx:59,cpy:24, spark:[8,6,9,5,8,4,9,5,7,6,5,7]}
+];
+
+const kpis = [
+  {ico:'📊', val:'$170.3M', lbl:'Total Portfolio Spend',      chip:'↑ 3.2% YoY',      cls:'c-up',   mod:''},
+  {ico:'🎯', val:'68.1%',  lbl:'Overall Managed Spend',      chip:'↑ 4.1pp vs LY',   cls:'c-up',   mod:'good'},
+  {ico:'📋', val:'6 / 8',  lbl:'Active Category Plans',      chip:'On Track',         cls:'c-info', mod:''},
+  {ico:'⚠️', val:'4',      lbl:'Contracts Expiring <90 Days',chip:'Needs Action',     cls:'c-warn', mod:'warn'},
+  {ico:'⚡', val:'7',      lbl:'Open Sourcing Events',        chip:'2 Awarding Soon',  cls:'c-info', mod:''}
+];
+
+/* ─── Chart config ────────────────────────────────────────────────── */
+const C = {lx:58, rx:542, ty:22, by:318};
+C.pw = C.rx - C.lx;   // 484
+C.ph = C.by - C.ty;   // 296
+C.mx = (C.lx+C.rx)/2; // 300
+C.my = (C.ty+C.by)/2; // 170
+
+const MAX_SPEND = 43.8;
+function bR(spend){ return 9 + 18 * Math.sqrt(spend / MAX_SPEND); }
+function toSvg(px, py){ return { x: C.lx + (px/100)*C.pw, y: C.by - (py/100)*C.ph }; }
+
+const MODES = {
+  kraljic:{
+    xLbl:'SUPPLY RISK', yLbl:'SPEND INFLUENCE',
+    xLo:'Low', xHi:'High', yLo:'Low', yHi:'High',
+    q1:'LEVERAGE', q2:'STRATEGIC', q3:'ROUTINE', q4:'BOTTLENECK',
+    c1:'rgba(139,92,246,.62)',c2:'rgba(245,158,11,.62)',c3:'rgba(107,114,128,.55)',c4:'rgba(239,68,68,.58)',
+    key:'q'
+  },
+  compass:{
+    xLbl:'SUPPLY MARKET POWER', yLbl:'BUSINESS CRITICALITY',
+    xLo:'We Hold Leverage', xHi:'Market Holds Leverage', yLo:'Operational', yHi:'Mission-Critical',
+    q1:'CONSOLIDATE', q2:'PARTNER', q3:'STREAMLINE', q4:'SECURE',
+    c1:'rgba(139,92,246,.62)',c2:'rgba(245,158,11,.62)',c3:'rgba(16,185,129,.62)',c4:'rgba(239,68,68,.58)',
+    key:'c'
+  }
+};
+let currentMode = 'kraljic';
+
+/* ─── Position tracking ───────────────────────────────────────────── */
+const curPos = {};
+cats.forEach(c => { curPos[c.id] = toSvg(c.krx, c.kry); });
+
+/* ─── rAF animation ───────────────────────────────────────────────── */
+function easeOutBack(t){
+  const c1=1.40, c3=c1+1;
+  return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2);
+}
+function animateBubble(id, toX, toY){
+  const g = document.getElementById('bg-'+id);
+  if(!g) return;
+  const from = {...curPos[id]};
+  const dur = 700;
+  const t0 = performance.now();
+  (function step(now){
+    const t = Math.min((now-t0)/dur, 1);
+    const e = t < 1 ? easeOutBack(t) : 1;
+    const x = from.x + (toX - from.x)*e;
+    const y = from.y + (toY - from.y)*e;
+    g.setAttribute('transform',`translate(${x.toFixed(2)},${y.toFixed(2)})`);
+    if(t < 1) requestAnimationFrame(step);
+    else curPos[id] = {x:toX, y:toY};
+  })(t0);
+}
+
+/* ─── KPI render ──────────────────────────────────────────────────── */
+function renderKPIs(){
+  document.getElementById('kpiRow').innerHTML = kpis.map((k,i)=>`
+    <div class="kpi ${k.mod}" style="animation-delay:${.05+i*.07}s">
+      <div class="kpi-head"><div class="kpi-ico">${k.ico}</div><div class="chip ${k.cls}">${k.chip}</div></div>
+      <div class="kpi-val">${k.val}</div>
+      <div class="kpi-lbl">${k.lbl}</div>
+    </div>`).join('');
+}
+
+/* ─── Sparkline ───────────────────────────────────────────────────── */
+function sparkPath(data, w, h){
+  const mn=Math.min(...data), mx=Math.max(...data), rng=mx-mn||1;
+  return data.map((v,i)=>{
+    const x=(i/(data.length-1))*w;
+    const y=h - ((v-mn)/rng)*(h*.8) - h*.1;
+    return `${i?'L':'M'}${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+}
+
+/* ─── Bar color ───────────────────────────────────────────────────── */
+function barGrad(pct){
+  if(pct>=80) return 'linear-gradient(90deg,#10B981,#34D399)';
+  if(pct>=65) return 'linear-gradient(90deg,#7C3AED,#A78BFA)';
+  return 'linear-gradient(90deg,#F59E0B,#FCD34D)';
+}
+const statusCls = {active:'st-active',review:'st-review',stale:'st-stale',stable:'st-stable'};
+const statusTxt = {active:'Active Plan',review:'Review Needed',stale:'Stale',stable:'Stable'};
+function bCls(s){ return 'bq-'+s.toLowerCase(); }
+
+/* ─── Category cards ──────────────────────────────────────────────── */
+function renderCards(filter){
+  const visible = filter==='all' ? cats : cats.filter(c=>c.q===filter);
+  document.getElementById('cgrid').innerHTML = visible.map((c,i)=>{
+    const sp = sparkPath(c.spark, 100, 22);
+    const unmanaged = (c.spend*(1-c.managed/100)).toFixed(1);
+    const href = c.featured ? 'mro-category-workspace.html' : '#';
+    return `<a href="${href}" class="cc ${c.featured?'feat':''}" style="animation-delay:${.28+i*.06}s" data-id="${c.id}" data-q="${c.q}">
+      <div class="ct">
+        <div class="cico">${c.icon}</div>
+        <div class="stchip ${statusCls[c.status]}">${statusTxt[c.status]}</div>
+      </div>
+      <div class="cname">${c.name}</div>
+      <div class="cowner">Owner: Marcus Chen</div>
+      <div class="cspend-row">
+        <div class="cspend">$${c.spend}M</div>
+        <div class="cspend-lbl">annual spend</div>
+      </div>
+      <svg class="spark" viewBox="0 0 100 22">
+        <path d="${sp}" fill="none" stroke="${c.color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/>
+      </svg>
+      <div class="mwrap">
+        <div class="mbar-top"><div class="mlbl">Spend under management</div><div class="mpct">${c.managed}%</div></div>
+        <div class="mtrack"><div class="mfill" style="background:${barGrad(c.managed)}" data-w="${c.managed}"></div></div>
+      </div>
+      <div class="cbadges">
+        <span class="badge ${bCls(c.q)}">${c.q}</span>
+        <span class="badge ${bCls(c.c)}">${c.c}</span>
+      </div>
+      <div class="cfooter">
+        <div><div class="csv">${c.contracts}</div><div class="csl">Contracts</div></div>
+        <div><div class="csv">${c.suppliers}</div><div class="csl">Suppliers</div></div>
+        <div><div class="csv">$${unmanaged}M</div><div class="csl">Unmanaged</div></div>
+      </div>
+    </a>`;
+  }).join('');
+  // Animate bars in after brief delay
+  setTimeout(()=>{
+    document.querySelectorAll('.mfill').forEach(el=>{
+      el.style.width = el.dataset.w + '%';
+    });
+  }, 120);
+}
+
+function filterCards(f, el){
+  document.querySelectorAll('.fc').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  renderCards(f);
+}
+
+/* ─── Legend ──────────────────────────────────────────────────────── */
+function renderLegend(mode){
+  const key = MODES[mode].key;
+  document.getElementById('legList').innerHTML = cats.map(c=>`
+    <div class="leg-item" data-id="${c.id}" onmouseenter="hlBub('${c.id}',true)" onmouseleave="hlBub('${c.id}',false)">
+      <div class="leg-dot" style="background:${c.color}"></div>
+      <div class="leg-name">${c.name}</div>
+      <span class="leg-spend">$${c.spend}M</span>
+      <span class="badge ${bCls(c[key])}">${c[key]}</span>
+    </div>`).join('');
+}
+
+/* ─── Bubbles ─────────────────────────────────────────────────────── */
+function initBubbles(){
+  const g = document.getElementById('bubbles');
+  g.innerHTML = '';
+  cats.forEach((c,idx)=>{
+    const pos = toSvg(c.krx, c.kry);
+    const r = bR(c.spend);
+    const el = document.createElementNS('http://www.w3.org/2000/svg','g');
+    el.setAttribute('class','bub');
+    el.setAttribute('id','bub-'+c.id);
+    el.style.opacity = '0';
+    el.innerHTML = `
+      <g id="bg-${c.id}" transform="translate(${pos.x.toFixed(1)},${pos.y.toFixed(1)})">
+        <circle id="bc-${c.id}" r="${r}" fill="${c.color}" fill-opacity=".22" stroke="${c.color}" stroke-width="1.5" stroke-opacity=".7"/>
+        <text class="bub-lbl" y=".35em" text-anchor="middle" dominant-baseline="middle" fill="rgba(26,26,26,.9)" font-family="Inter,system-ui,sans-serif" font-size="${r>20?9.5:8.5}" font-weight="600">${c.icon}</text>
+      </g>`;
+    g.appendChild(el);
+    // Fade in staggered
+    setTimeout(()=>{
+      el.style.transition = 'opacity .4s ease';
+      el.style.opacity = '1';
+    }, 300 + idx * 90);
+    // Events
+    el.addEventListener('mouseenter', e => { setBubOp(c.id,.6); showTip(e,c); hlLeg(c.id,true); });
+    el.addEventListener('mousemove', moveTip);
+    el.addEventListener('mouseleave', ()  => { setBubOp(c.id,.22); hideTip(); hlLeg(c.id,false); });
+    if(c.featured){
+      el.addEventListener('click', ()=>{ window.location.href='mro-category-workspace.html'; });
+    }
+  });
+}
+
+function setBubOp(id, op){
+  const bc = document.getElementById('bc-'+id);
+  if(bc) bc.setAttribute('fill-opacity', op);
+}
+function hlBub(id, on){ setBubOp(id, on ? .6 : .22); }
+function hlLeg(id, on){
+  document.querySelectorAll('.leg-item').forEach(el=>{
+    el.classList.toggle('hi', on && el.dataset.id === id);
+  });
+}
+
+/* ─── Mode toggle ─────────────────────────────────────────────────── */
+function setMode(mode, btn){
+  if(mode === currentMode) return;
+  currentMode = mode;
+  document.querySelectorAll('.pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const m = MODES[mode];
+  // Axis labels
+  document.getElementById('x-axis-lbl').textContent = m.xLbl;
+  document.getElementById('x-lo').textContent = m.xLo;
+  document.getElementById('x-hi').textContent = m.xHi;
+  document.getElementById('y-axis-lbl').textContent = m.yLbl;
+  document.getElementById('y-lo').textContent = m.yLo;
+  document.getElementById('y-hi').textContent = m.yHi;
+  // Quadrant labels + colors
+  ['ql1','ql2','ql3','ql4'].forEach((id,i)=>{
+    const el = document.getElementById(id);
+    el.textContent = [m.q1,m.q2,m.q3,m.q4][i];
+    el.setAttribute('fill', [m.c1,m.c2,m.c3,m.c4][i]);
+  });
+  // Animate bubbles
+  cats.forEach(c=>{
+    const pos = mode==='kraljic' ? toSvg(c.krx,c.kry) : toSvg(c.cpx,c.cpy);
+    animateBubble(c.id, pos.x, pos.y);
+  });
+  // Update legend
+  renderLegend(mode);
+}
+
+/* ─── Tooltip ─────────────────────────────────────────────────────── */
+function showTip(e, c){
+  const tip = document.getElementById('tip');
+  document.getElementById('tt-dot').style.background = c.color;
+  document.getElementById('tt-name').textContent = c.name;
+  document.getElementById('tt-spend').textContent = '$'+c.spend+'M';
+  document.getElementById('tt-managed').textContent = c.managed+'%';
+  document.getElementById('tt-strat').textContent = currentMode==='kraljic' ? c.q : c.c;
+  document.getElementById('tt-contracts').textContent = c.contracts;
+  document.getElementById('tt-suppliers').textContent = c.suppliers;
+  tip.style.display = 'block';
+  moveTip(e);
+}
+function moveTip(e){
+  const tip = document.getElementById('tip');
+  const x = e.clientX + 16, y = e.clientY - 12;
+  tip.style.left = Math.min(x, window.innerWidth - 210) + 'px';
+  tip.style.top = Math.max(8, Math.min(y, window.innerHeight - 180)) + 'px';
+}
+function hideTip(){ document.getElementById('tip').style.display='none'; }
+
+/* ─── Init ────────────────────────────────────────────────────────── */
+renderKPIs();
+renderLegend('kraljic');
+renderCards('all');
+initBubbles();
+</script>
+</body>
+</html>
