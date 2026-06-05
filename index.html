@@ -3,955 +3,882 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Procurello — Procurement that thinks ahead</title>
+<title>Procurello Procurement that thinks ahead</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F4F3EF;
-    --ink:#1A1A1A; --ink-2:#4A4A48; --ink-3:#8A8A88;
-    --line:#E8E6E0; --line-2:#D9D6CE;
-    --brand:#7C3AED; --brand-soft:#EDE9FE;
-    --accent:#1E3A5F; --accent-soft:#E7ECF3;
-    --green:#2E7D5B; --green-soft:#E4F1EB;
-    --amber:#B97A0E; --amber-soft:#FBF1DC;
-    --red:#A8351F; --red-soft:#FBEBE8;
-    --purple:#6B4C9A; --purple-soft:#EFE8F5;
-    --teal:#2A6F73; --teal-soft:#E0EDEE;
-    --indigo:#4A5BB8; --indigo-soft:#E7E9F5;
-    /* Aubergine palette — for footer, deep accents, decorative depth */
-    --aubergine:#3C1239;
-    --aubergine-2:#2B0828;
-    --aubergine-soft:#5B2456;
-    --lavender-wash:#F7F3FE;
-    --lavender-line:#E0D8F5;
-    --r:10px; --rs:6px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    background:
-      radial-gradient(ellipse 1200px 800px at 50% 0%, rgba(124, 58, 237, 0.04), transparent 50%),
-      radial-gradient(ellipse 1000px 600px at 50% 100%, rgba(60, 18, 57, 0.03), transparent 50%),
-      var(--bg);
-    color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased
-  }
-  a{text-decoration:none;color:inherit}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+ :root {
+ /* DS v2 colour tokens */
+ --bg:#F5F2EF; --surface:#FFFFFF; --surface-2:#EDE8E3;
+ --ink:#1F1A17; --ink-2:#7A6E65; --ink-3:#B8AFA6;
+ --line:#D9D2CB; --line-2:#B8AFA6;
+ --brand:#7C3AED; --brand-soft:#EDE9FE;
+ --accent:#1E3A5F; --accent-soft:#E7ECF3;
+ --green:#3D6B4A; --green-soft:#E4F1EB;
+ --amber:#7A5C1E; --amber-soft:#F5EDD8;
+ --red:#7A2C1E; --red-soft:#FBEBE8;
+ --purple:#5D1E58; --purple-soft:#EFE8F5;
+ --teal:#2A6F73; --teal-soft:#E0EDEE;
+ --aubergine:#3C1239; --aubergine-2:#2B0828; --aubergine-soft:#5B2456;
+ --plum:#5D1E58;
+ --violet-mid:#7C3AED; --violet-light:#A87CE8;
+ --lavender-wash:#F7F3FE; --lavender-line:#E0D8F5;
+ /* Typography */
+ --font-display:'DM Serif Display',Georgia,serif;
+ --font-body:'Karla','Helvetica Neue',sans-serif;
+ --font-mono:'DM Mono','Courier New',monospace;
+ --r:10px; --rs:6px;
+ }
+ *{box-sizing:border-box;margin:0;padding:0}
+ html{scroll-behavior:smooth}
+ body{
+ background:
+ radial-gradient(ellipse 1200px 800px at 50% 0%, rgba(124, 58, 237, 0.04), transparent 50%),
+ radial-gradient(ellipse 1000px 600px at 50% 100%, rgba(60, 18, 57, 0.03), transparent 50%),
+ var(--bg);
+ color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased
+ }
+ a{text-decoration:none;color:inherit}
+ .wrap{max-width:1180px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
 
-  /* NAV */
-  .topnav{position:sticky;top:0;background:rgba(250,250,247,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:50}
-  .topnav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124, 58, 237, 0.3) 30%,rgba(60, 18, 57, 0.3) 70%,transparent);pointer-events:none}
-  .topnav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;max-width:1180px;margin:0 auto;position:relative;z-index:1}
-  .brand-mark{display:flex;align-items:center;gap:10px}
-  .brand-dot{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--brand),var(--aubergine));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:0 4px 12px -4px rgba(124, 58, 237, 0.5)}
-  .brand-name{font-weight:600;font-size:14px;letter-spacing:-.01em}
-  .brand-tag{font-size:11px;color:var(--ink-3);font-weight:500;padding:2px 7px;background:var(--surface-2);border-radius:4px;margin-left:6px}
-  .nav-links{display:flex;align-items:center;gap:26px;font-size:13px;color:var(--ink-2);font-weight:500}
-  .nav-links a:hover{color:var(--ink)}
-  .nav-cta{padding:7px 14px;background:linear-gradient(135deg,var(--brand),var(--aubergine));color:#fff;border-radius:7px;font-size:13px;font-weight:500;transition:all .15s;box-shadow:0 4px 12px -4px rgba(124, 58, 237, 0.4)}
-  .nav-cta:hover{box-shadow:0 6px 16px -4px rgba(124, 58, 237, 0.5);transform:translateY(-1px)}
+ /* NAV */
+ .topnav{position:sticky;top:0;background:rgba(250,250,247,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:50}
+ .topnav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124, 58, 237, 0.3) 30%,rgba(60, 18, 57, 0.3) 70%,transparent);pointer-events:none}
+ .topnav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;max-width:1180px;margin:0 auto;position:relative;z-index:1}
+ .brand-mark{display:flex;align-items:center;gap:10px}
+ .brand-dot{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--brand),var(--aubergine));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:0 4px 12px -4px rgba(124, 58, 237, 0.5)}
+ .brand-name{font-weight:600;font-size:14px;letter-spacing:-.01em}
+ .brand-tag{font-size:11px;color:var(--ink-3);font-weight:500;padding:2px 7px;background:var(--surface-2);border-radius:4px;margin-left:6px}
+ .nav-links{display:flex;align-items:center;gap:26px;font-size:13px;color:var(--ink-2);font-weight:500}
+ .nav-links a:hover{color:var(--ink)}
+ .nav-cta{padding:7px 14px;background:linear-gradient(135deg,var(--brand),var(--aubergine));color:#fff;border-radius:7px;font-size:13px;font-weight:500;transition:all .15s;box-shadow:0 4px 12px -4px rgba(124, 58, 237, 0.4)}
+ .nav-cta:hover{box-shadow:0 6px 16px -4px rgba(124, 58, 237, 0.5);transform:translateY(-1px)}
 
-  /* HERO */
-  .hero{
-    padding:80px 0 90px;
-    position:relative;
-    overflow:hidden;
-    background:
-      radial-gradient(ellipse 800px 500px at 90% -10%, rgba(124, 58, 237, 0.10), transparent 60%),
-      radial-gradient(ellipse 600px 400px at 10% 110%, rgba(60, 18, 57, 0.06), transparent 60%),
-      var(--bg);
-  }
-  /* Decorative blurred orbs */
-  .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
-  .orb-hero-1{top:-150px;right:-100px;width:480px;height:480px;background:radial-gradient(circle,rgba(124, 58, 237, 0.22),transparent 70%)}
-  .orb-hero-2{bottom:-100px;left:-80px;width:360px;height:360px;background:radial-gradient(circle,rgba(60, 18, 57, 0.14),transparent 70%)}
-  .orb-hero-3{top:50%;left:50%;width:200px;height:200px;background:radial-gradient(circle,rgba(167, 139, 250, 0.18),transparent 70%);transform:translate(-50%,-50%)}
+ /* HERO */
+ .hero{
+ padding:80px 0 90px;
+ position:relative;
+ overflow:hidden;
+ background:
+ radial-gradient(ellipse 800px 500px at 90% -10%, rgba(124, 58, 237, 0.10), transparent 60%),
+ radial-gradient(ellipse 600px 400px at 10% 110%, rgba(60, 18, 57, 0.06), transparent 60%),
+ var(--bg);
+ }
+ /* Decorative blurred orbs */
+ .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+ .orb-hero-1{top:-150px;right:-100px;width:480px;height:480px;background:radial-gradient(circle,rgba(124, 58, 237, 0.22),transparent 70%)}
+ .orb-hero-2{bottom:-100px;left:-80px;width:360px;height:360px;background:radial-gradient(circle,rgba(60, 18, 57, 0.14),transparent 70%)}
+ .orb-hero-3{top:50%;left:50%;width:200px;height:200px;background:radial-gradient(circle,rgba(167, 139, 250, 0.18),transparent 70%);transform:translate(-50%,-50%)}
 
-  /* Section orbs - softer than hero but still visible */
-  .orb-pillars-1{top:-120px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(124, 58, 237, 0.18),transparent 70%)}
-  .orb-pillars-2{bottom:-80px;right:-60px;width:340px;height:340px;background:radial-gradient(circle,rgba(60, 18, 57, 0.12),transparent 70%)}
-  .orb-demos-1{top:200px;right:-150px;width:420px;height:420px;background:radial-gradient(circle,rgba(124, 58, 237, 0.14),transparent 70%)}
-  .orb-demos-2{bottom:-80px;left:-100px;width:320px;height:320px;background:radial-gradient(circle,rgba(60, 18, 57, 0.10),transparent 70%)}
-  .orb-diff-1{top:-100px;right:-100px;width:380px;height:380px;background:radial-gradient(circle,rgba(124, 58, 237, 0.16),transparent 70%)}
-  .orb-diff-2{bottom:100px;left:-120px;width:300px;height:300px;background:radial-gradient(circle,rgba(60, 18, 57, 0.12),transparent 70%)}
-  .orb-shift-1{top:-80px;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(ellipse,rgba(124, 58, 237, 0.12),transparent 70%)}
-  .hero .wrap{position:relative;z-index:1}
-  .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:center}
-  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;background:var(--brand-soft);color:var(--brand);border-radius:999px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:20px}
-  .hero-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
-  .hero h1{font-size:62px;line-height:1.05;letter-spacing:-.03em;font-weight:700;margin-bottom:22px;color:var(--ink)}
-  .hero h1 .accent{color:var(--brand);position:relative;display:inline-block;background:linear-gradient(135deg,var(--brand) 0%,var(--aubergine) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .hero h1 .accent::after{content:'';position:absolute;left:0;right:0;bottom:4px;height:10px;background:linear-gradient(90deg,rgba(124, 58, 237, 0.25) 0%,rgba(60, 18, 57, 0.18) 100%);z-index:-1;border-radius:4px}
-  .hero p.lede{font-size:18px;line-height:1.6;color:var(--ink-2);margin-bottom:28px;max-width:520px}
-  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
-  .btn:hover{background:var(--surface-2);border-color:var(--ink-3)}
-  .btn-p{background:linear-gradient(135deg,var(--brand) 0%,var(--aubergine) 100%);color:#fff;border-color:var(--aubergine);box-shadow:0 8px 24px -8px rgba(124, 58, 237, 0.5)}
-  .btn-p:hover{background:linear-gradient(135deg,#6D28D9 0%,var(--aubergine-2) 100%);border-color:var(--aubergine-2);box-shadow:0 12px 32px -8px rgba(124, 58, 237, 0.6);transform:translateY(-1px)}
-  .btn svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
-  .hero-stats{display:flex;gap:40px;margin-top:50px;padding-top:30px;border-top:1px solid var(--line);position:relative}
-  .hero-stats::before{content:'';position:absolute;top:-1px;left:0;width:120px;height:2px;background:linear-gradient(90deg,var(--brand),var(--aubergine),transparent);border-radius:2px}
-  .hero-stat-v{font-size:24px;font-weight:700;letter-spacing:-.02em;color:var(--ink);background:linear-gradient(135deg,var(--ink) 0%,var(--aubergine) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .hero-stat-l{font-size:12px;color:var(--ink-3);margin-top:3px;font-weight:500}
+ /* Section orbs - softer than hero but still visible */
+ .orb-pillars-1{top:-120px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(124, 58, 237, 0.18),transparent 70%)}
+ .orb-pillars-2{bottom:-80px;right:-60px;width:340px;height:340px;background:radial-gradient(circle,rgba(60, 18, 57, 0.12),transparent 70%)}
+ .orb-demos-1{top:200px;right:-150px;width:420px;height:420px;background:radial-gradient(circle,rgba(124, 58, 237, 0.14),transparent 70%)}
+ .orb-demos-2{bottom:-80px;left:-100px;width:320px;height:320px;background:radial-gradient(circle,rgba(60, 18, 57, 0.10),transparent 70%)}
+ .orb-diff-1{top:-100px;right:-100px;width:380px;height:380px;background:radial-gradient(circle,rgba(124, 58, 237, 0.16),transparent 70%)}
+ .orb-diff-2{bottom:100px;left:-120px;width:300px;height:300px;background:radial-gradient(circle,rgba(60, 18, 57, 0.12),transparent 70%)}
+ .orb-shift-1{top:-80px;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(ellipse,rgba(124, 58, 237, 0.12),transparent 70%)}
+ .hero .wrap{position:relative;z-index:1}
+ .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:center}
+ .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;background:var(--brand-soft);color:var(--brand);border-radius:999px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:20px}
+ .hero-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+ .hero h1{font-size:62px;line-height:1.05;letter-spacing:-.03em;font-family:var(--font-display);font-weight:400;margin-bottom:22px;color:var(--ink)}
+ .hero h1 .accent{color:var(--brand);position:relative;display:inline-block;background:linear-gradient(135deg,var(--brand) 0%,var(--aubergine) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+ .hero h1 .accent::after{content:'';position:absolute;left:0;right:0;bottom:4px;height:10px;background:linear-gradient(90deg,rgba(124, 58, 237, 0.25) 0%,rgba(60, 18, 57, 0.18) 100%);z-index:-1;border-radius:4px}
+ .hero p.lede{font-size:18px;line-height:1.6;color:var(--ink-2);margin-bottom:28px;max-width:520px}
+ .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+ .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
+ .btn:hover{background:var(--surface-2);border-color:var(--ink-3)}
+ .btn-p{background:linear-gradient(135deg,var(--brand) 0%,var(--aubergine) 100%);color:#fff;border-color:var(--aubergine);box-shadow:0 8px 24px -8px rgba(124, 58, 237, 0.5)}
+ .btn-p:hover{background:linear-gradient(135deg,#6D28D9 0%,var(--aubergine-2) 100%);border-color:var(--aubergine-2);box-shadow:0 12px 32px -8px rgba(124, 58, 237, 0.6);transform:translateY(-1px)}
+ .btn svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+ .hero-stats{display:flex;gap:40px;margin-top:50px;padding-top:30px;border-top:1px solid var(--line);position:relative}
+ .hero-stats::before{content:'';position:absolute;top:-1px;left:0;width:120px;height:2px;background:linear-gradient(90deg,var(--brand),var(--aubergine),transparent);border-radius:2px}
+ .hero-stat-v{font-size:24px;font-family:var(--font-display);font-weight:400;letter-spacing:-.02em;color:var(--ink);background:linear-gradient(135deg,var(--ink) 0%,var(--aubergine) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+ .hero-stat-l{font-size:12px;color:var(--ink-3);margin-top:3px;font-family:var(--font-mono);font-weight:500}
 
-  /* HERO VISUAL */
-  .hero-visual{position:relative;height:480px}
-  .hv-card{position:absolute;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 32px -16px rgba(0,0,0,.15),0 2px 6px rgba(0,0,0,.04);padding:18px 20px}
-  .hv-composer{top:30px;left:20px;width:340px;z-index:3}
-  .hv-c-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-  .hv-c-lbl svg{width:11px;height:11px;color:var(--brand)}
-  .hv-c-text{font-size:14px;color:var(--ink);line-height:1.5;margin-bottom:8px}
-  .hv-c-cursor{display:inline-block;width:2px;height:14px;background:var(--ink);margin-left:1px;animation:blink 1s infinite;vertical-align:middle}
-  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
-  .hv-c-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--line);margin-top:8px;font-size:11px;color:var(--ink-3)}
-  .hv-c-foot .pill{padding:3px 8px;background:var(--ink);color:#fff;border-radius:4px;font-size:11px;font-weight:500}
+ /* HERO VISUAL */
+ .hero-visual{position:relative;height:480px}
+ .hv-card{position:absolute;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 32px -16px rgba(0,0,0,.15),0 2px 6px rgba(0,0,0,.04);padding:18px 20px}
+ .hv-composer{top:30px;left:20px;width:340px;z-index:3}
+ .hv-c-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+ .hv-c-lbl svg{width:11px;height:11px;color:var(--brand)}
+ .hv-c-text{font-size:14px;color:var(--ink);line-height:1.5;margin-bottom:8px}
+ .hv-c-cursor{display:inline-block;width:2px;height:14px;background:var(--ink);margin-left:1px;animation:blink 1s infinite;vertical-align:middle}
+ @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+ .hv-c-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--line);margin-top:8px;font-size:11px;color:var(--ink-3)}
+ .hv-c-foot .pill{padding:3px 8px;background:var(--ink);color:#fff;border-radius:4px;font-size:11px;font-weight:500}
 
-  .hv-agent{top:200px;left:50px;width:300px;z-index:2;background:linear-gradient(180deg,var(--indigo-soft) 0%,var(--surface) 100%);border-color:#C7CBE5}
-  .hv-agent-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-  .hv-agent-dot{width:20px;height:20px;border-radius:6px;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:9px;font-weight:700}
-  .hv-agent-name{font-size:11px;color:var(--ink-3);font-weight:600}
-  .hv-agent-live{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);margin-left:auto}
-  .hv-agent-body{font-size:13px;color:var(--ink);line-height:1.5}
-  .hv-agent-body b{font-weight:600}
+ .hv-agent{top:200px;left:50px;width:300px;z-index:2;background:var(--surface);align-items:center;gap:8px;margin-bottom:10px}
+ .hv-agent-dot{width:20px;height:20px;border-radius:6px;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:9px;font-weight:700}
+ .hv-agent-name{font-size:11px;color:var(--ink-3);font-weight:600}
+ .hv-agent-live{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);margin-left:auto}
+ .hv-agent-body{font-size:13px;color:var(--ink);line-height:1.5}
+ .hv-agent-body b{font-weight:600}
 
-  .hv-suppliers{top:60px;right:0;width:260px;z-index:3}
-  .hv-sup-h{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600;margin-bottom:12px}
-  .hv-sup{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
-  .hv-sup:last-child{border-bottom:none}
-  .hv-sup-logo{width:28px;height:28px;border-radius:6px;background:var(--surface-2);display:grid;place-items:center;font-weight:700;font-size:10px;color:var(--ink-2);flex-shrink:0;border:1px solid var(--line)}
-  .hv-sup.rec .hv-sup-logo{background:var(--green-soft);color:var(--green);border-color:var(--green)}
-  .hv-sup-info{flex:1;min-width:0}
-  .hv-sup-n{font-size:12px;font-weight:600;color:var(--ink)}
-  .hv-sup-m{font-size:10px;color:var(--ink-3);margin-top:1px}
-  .hv-sup-price{font-size:12px;font-weight:600;color:var(--ink-2)}
+ .hv-suppliers{top:60px;right:0;width:260px;z-index:3}
+ .hv-sup-h{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600;margin-bottom:12px}
+ .hv-sup{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+ .hv-sup:last-child{border-bottom:none}
+ .hv-sup-logo{width:28px;height:28px;border-radius:6px;background:var(--surface-2);display:grid;place-items:center;font-weight:700;font-size:10px;color:var(--ink-2);flex-shrink:0;border:1px solid var(--line)}
+ .hv-sup.rec .hv-sup-logo{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+ .hv-sup-info{flex:1;min-width:0}
+ .hv-sup-n{font-size:12px;font-weight:600;color:var(--ink)}
+ .hv-sup-m{font-size:10px;color:var(--ink-3);margin-top:1px}
+ .hv-sup-price{font-size:12px;font-weight:600;color:var(--ink-2)}
 
-  .hv-pred{bottom:30px;right:20px;width:280px;z-index:4;border-color:#C7CBE5;background:linear-gradient(180deg,var(--surface) 0%,var(--indigo-soft) 200%)}
-  .hv-pred-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .hv-pred-t{font-size:11px;font-weight:600;color:var(--ink-2)}
-  .hv-pred-badge{font-size:9px;color:var(--indigo);background:var(--indigo-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-  .hv-pred-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-2);padding:5px 0}
-  .hv-pred-dot{width:5px;height:5px;border-radius:50%;background:var(--indigo);flex-shrink:0}
-  .hv-pred-row b{color:var(--ink);font-weight:600}
+ .hv-pred{bottom:30px;right:20px;width:280px;z-index:4;background:var(--surface);align-items:center;justify-content:space-between;margin-bottom:12px}
+ .hv-pred-t{font-size:11px;font-weight:600;color:var(--ink-2)}
+ .hv-pred-badge{font-size:9px;color:var(--indigo);background:var(--indigo-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+ .hv-pred-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-2);padding:5px 0}
+ .hv-pred-dot{width:5px;height:5px;border-radius:50%;background:var(--indigo);flex-shrink:0}
+ .hv-pred-row b{color:var(--ink);font-weight:600}
 
-  /* SECTION */
-  .section{padding:90px 0;border-top:1px solid var(--line);position:relative;overflow:hidden}
-  .section .wrap{position:relative;z-index:1}
-  .section-h{text-align:center;max-width:720px;margin:0 auto 60px}
-  .section-eyebrow{font-size:12px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;display:inline-flex;align-items:center;gap:8px}
-  .section-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--aubergine));box-shadow:0 0 0 3px rgba(124, 58, 237, 0.15)}
-  .section h2{font-size:40px;font-weight:600;letter-spacing:-.025em;line-height:1.15;margin-bottom:16px;color:var(--ink)}
-  .section p.lead{font-size:17px;color:var(--ink-2);line-height:1.6}
+ /* SECTION */
+ .section{padding:90px 0;border-top:1px solid var(--line);position:relative;overflow:hidden}
+ .section .wrap{position:relative;z-index:1}
+ .section-h{text-align:center;max-width:720px;margin:0 auto 60px}
+ .section-eyebrow{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;display:inline-flex;align-items:center;gap:8px}
+ .section-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--aubergine));box-shadow:0 0 0 3px rgba(124, 58, 237, 0.15)}
+ .section h2{font-size:40px;font-weight:600;letter-spacing:-.025em;line-height:1.15;margin-bottom:16px;color:var(--ink)}
+ .section p.lead{font-size:17px;color:var(--ink-2);line-height:1.6}
 
-  /* PROBLEM/SHIFT */
-  .shift{
-    background:
-      radial-gradient(ellipse 700px 400px at 50% 0%, rgba(124, 58, 237, 0.05), transparent 60%),
-      var(--surface);
-  }
-  .shift::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:3px;background:linear-gradient(90deg,transparent,var(--brand) 40%,var(--aubergine) 60%,transparent);border-radius:2px}
-  .shift-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:30px;align-items:center;max-width:1000px;margin:0 auto}
-  .shift-col{padding:32px;border-radius:14px}
-  .shift-col.before{background:var(--surface-2);border:1px solid var(--line)}
-  .shift-col.after{background:linear-gradient(180deg,var(--brand-soft) 0%,var(--surface) 100%);border:1px solid #D8CDF5;box-shadow:0 12px 32px -16px rgba(124, 58, 237, 0.15)}
-  .shift-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:10px}
-  .shift-col.after .shift-l{color:var(--brand)}
-  .shift-t{font-size:22px;font-weight:600;letter-spacing:-.015em;margin-bottom:18px;line-height:1.3}
-  .shift-list{list-style:none;padding:0}
-  .shift-list li{padding:8px 0;font-size:14px;color:var(--ink-2);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
-  .shift-list li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--ink-3);flex-shrink:0;margin-top:9px}
-  .shift-col.after .shift-list li::before{background:var(--brand)}
-  .shift-arrow{font-size:32px;color:var(--brand);font-weight:300;opacity:.6}
+ /* PROBLEM/SHIFT */
+ .shift{
+ background:
+ radial-gradient(ellipse 700px 400px at 50% 0%, rgba(124, 58, 237, 0.05), transparent 60%),
+ var(--surface);
+ }
+ .shift::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:3px;background:linear-gradient(90deg,transparent,var(--brand) 40%,var(--aubergine) 60%,transparent);border-radius:2px}
+ .shift-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:30px;align-items:center;max-width:1000px;margin:0 auto}
+ .shift-col{padding:32px;border-radius:14px}
+ .shift-col.before{background:var(--surface-2);border:1px solid var(--line)}
+ .shift-col.after{background:linear-gradient(180deg,var(--brand-soft) 0%,var(--surface) 100%);border:1px solid #D8CDF5;box-shadow:0 12px 32px -16px rgba(124, 58, 237, 0.15)}
+ .shift-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:10px}
+ .shift-col.after .shift-l{color:var(--brand)}
+ .shift-t{font-size:22px;font-weight:600;letter-spacing:-.015em;margin-bottom:18px;line-height:1.3}
+ .shift-list{list-style:none;padding:0}
+ .shift-list li{padding:8px 0;font-size:14px;color:var(--ink-2);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+ .shift-list li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--ink-3);flex-shrink:0;margin-top:9px}
+ .shift-col.after .shift-list li::before{background:var(--brand)}
+ .shift-arrow{font-size:32px;color:var(--brand);font-weight:300;opacity:.6}
 
-  /* PILLARS */
-  .pillars-section{
-    background:
-      radial-gradient(ellipse 800px 600px at 20% 30%, rgba(124, 58, 237, 0.06), transparent 60%),
-      radial-gradient(ellipse 600px 500px at 85% 70%, rgba(60, 18, 57, 0.04), transparent 60%);
-  }
-  .pillars-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:3px;background:linear-gradient(90deg,transparent,var(--brand) 40%,var(--aubergine) 60%,transparent);border-radius:2px}
-  .pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  .pillar{padding:28px 26px;background:var(--surface);border:1px solid var(--line);border-radius:14px;transition:all .2s;position:relative;overflow:hidden}
-  .pillar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--aubergine));opacity:0;transition:opacity .25s}
-  .pillar:hover::before{opacity:1}
-  .pillar:hover{border-color:var(--lavender-line);transform:translateY(-2px);box-shadow:0 16px 40px -20px rgba(124, 58, 237, 0.25)}
-  .pillar-icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;color:#fff;margin-bottom:18px}
-  .pillar-icon.conv{background:linear-gradient(135deg,var(--brand),#5B21B6)}
-  .pillar-icon.pred{background:linear-gradient(135deg,var(--indigo),#3A4A95)}
-  .pillar-icon.audit{background:linear-gradient(135deg,var(--green),#1F5840)}
-  .pillar-icon.market{background:linear-gradient(135deg,var(--accent),#0E2440)}
-  .pillar-icon.pattern{background:linear-gradient(135deg,var(--purple),#4D3473)}
-  .pillar-icon.behavior{background:linear-gradient(135deg,var(--teal),#1A4F52)}
-  .pillar-icon svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none}
-  .pillar-t{font-size:18px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
-  .pillar-d{font-size:14px;color:var(--ink-2);line-height:1.55}
+ /* PILLARS */
+ .pillars-section{
+ background:
+ radial-gradient(ellipse 800px 600px at 20% 30%, rgba(124, 58, 237, 0.06), transparent 60%),
+ radial-gradient(ellipse 600px 500px at 85% 70%, rgba(60, 18, 57, 0.04), transparent 60%);
+ }
+ .pillars-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:3px;background:linear-gradient(90deg,transparent,var(--brand) 40%,var(--aubergine) 60%,transparent);border-radius:2px}
+ .pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+ .pillar{padding:28px 26px;background:var(--surface);border:1px solid var(--line);border-radius:14px;transition:all .2s;position:relative;overflow:hidden}
+ .pillar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--aubergine));opacity:0;transition:opacity .25s}
+ .pillar:hover::before{opacity:1}
+ .pillar:hover{border-color:var(--lavender-line);transform:translateY(-2px);box-shadow:0 16px 40px -20px rgba(124, 58, 237, 0.25)}
+ .pillar-icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;color:#fff;margin-bottom:18px}
+ .pillar-icon.conv{background:linear-gradient(135deg,var(--brand),#5B21B6)}
+ .pillar-icon.pred{background:linear-gradient(135deg,#5D1E58,#3C1239)}
+ .pillar-icon.audit{background:linear-gradient(135deg,var(--green),#1F5840)}
+ .pillar-icon.market{background:linear-gradient(135deg,var(--accent),#0E2440)}
+ .pillar-icon.pattern{background:linear-gradient(135deg,var(--purple),#4D3473)}
+ .pillar-icon.behavior{background:linear-gradient(135deg,var(--teal),#1A4F52)}
+ .pillar-icon svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none}
+ .pillar-t{font-size:18px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
+ .pillar-d{font-size:14px;color:var(--ink-2);line-height:1.55}
 
-  /* CONCEPT WRAP - richer gradient */
-  .concept-wrap{
-    background:linear-gradient(135deg,var(--surface) 0%,var(--lavender-wash) 50%,var(--surface) 100%);
-    border:1px solid var(--lavender-line);
-    border-radius:18px;
-    padding:48px 40px;
-    margin-top:30px;
-    position:relative;
-    overflow:hidden;
-  }
-  .concept-wrap::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(124, 58, 237, 0.12),transparent 70%);filter:blur(60px);pointer-events:none}
-  .concept-wrap::after{content:'';position:absolute;bottom:-80px;left:-80px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(60, 18, 57, 0.08),transparent 70%);filter:blur(50px);pointer-events:none}
-  .concept-svg{width:100%;max-width:900px;display:block;margin:0 auto;position:relative;z-index:1}
-  .concept-cap{text-align:center;font-size:13px;color:var(--ink-3);margin-top:20px;max-width:600px;margin-left:auto;margin-right:auto;line-height:1.6;position:relative;z-index:1}
-  .demo-group{margin-bottom:60px}
-  .demo-group:last-child{margin-bottom:0}
-  .demo-group-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-  .demo-group-t{font-size:14px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
-  .demo-group-c{font-size:13px;color:var(--ink-3)}
-  .demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .demo-grid.four{grid-template-columns:repeat(4,1fr)}
-  .demo{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit;position:relative}
-  .demo::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--aubergine));opacity:0;transition:opacity .2s;z-index:2}
-  .demo:hover::before{opacity:1}
-  .demo:hover{border-color:var(--ink-3);transform:translateY(-2px);box-shadow:0 12px 32px -16px rgba(0,0,0,.12)}
-  .demo:hover .demo-arrow{transform:translateX(3px);color:var(--ink)}
-  .demo-img{height:100px;display:grid;place-items:center;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
-  .demo-img.req{background:linear-gradient(135deg,#EDE9FE,#FAFAF7)}
-  .demo-img.leader{background:linear-gradient(135deg,#E7ECF3,#FAFAF7)}
-  .demo-img.ap{background:linear-gradient(135deg,#E0EDEE,#FAFAF7)}
-  .demo-img.catalog{background:linear-gradient(135deg,#E4F1EB,#FAFAF7)}
-  .demo-img.noncat{background:linear-gradient(135deg,#E7ECF3,#FAFAF7)}
-  .demo-img.invoice{background:linear-gradient(135deg,#E0EDEE,#FAFAF7)}
-  .demo-img.contract{background:linear-gradient(135deg,#EFE8F5,#FAFAF7)}
-  .demo-icon-big{width:48px;height:48px;border-radius:11px;display:grid;place-items:center;color:#fff}
-  .demo-icon-big.req{background:linear-gradient(135deg,var(--brand),#5B21B6)}
-  .demo-icon-big.leader{background:linear-gradient(135deg,var(--accent),#0E2440)}
-  .demo-icon-big.ap{background:linear-gradient(135deg,var(--teal),#1A4F52)}
-  .demo-icon-big.catalog{background:linear-gradient(135deg,var(--green),#1F5840)}
-  .demo-icon-big.noncat{background:linear-gradient(135deg,var(--accent),#0E2440)}
-  .demo-icon-big.invoice{background:linear-gradient(135deg,var(--teal),#1A4F52)}
-  .demo-icon-big.contract{background:linear-gradient(135deg,var(--purple),#4D3473)}
-  .demo-icon-big svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none}
-  .demo-body{padding:18px 20px;flex:1;display:flex;flex-direction:column}
-  .demo-persona{font-size:10px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-  .demo-t{font-size:16px;font-weight:600;line-height:1.3;margin-bottom:6px}
-  .demo-d{font-size:13px;color:var(--ink-2);line-height:1.5;flex:1;margin-bottom:12px}
-  .demo-foot{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink-3);padding-top:10px;border-top:1px solid var(--line)}
-  .demo-time{font-weight:500}
-  .demo-time b{color:var(--ink-2);font-weight:600}
-  .demo-arrow{transition:all .2s;color:var(--ink-3);font-size:14px;font-weight:600}
+ /* CONCEPT WRAP - richer gradient */
+ .concept-wrap{
+ background:linear-gradient(135deg,var(--surface) 0%,var(--lavender-wash) 50%,var(--surface) 100%);
+ border:1px solid var(--lavender-line);
+ border-radius:18px;
+ padding:48px 40px;
+ margin-top:30px;
+ position:relative;
+ overflow:hidden;
+ }
+ .concept-wrap::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(124, 58, 237, 0.12),transparent 70%);filter:blur(60px);pointer-events:none}
+ .concept-wrap::after{content:'';position:absolute;bottom:-80px;left:-80px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(60, 18, 57, 0.08),transparent 70%);filter:blur(50px);pointer-events:none}
+ .concept-svg{width:100%;max-width:900px;display:block;margin:0 auto;position:relative;z-index:1}
+ .concept-cap{text-align:center;font-size:13px;color:var(--ink-3);margin-top:20px;max-width:600px;margin-left:auto;margin-right:auto;line-height:1.6;position:relative;z-index:1}
+ .demo-group{margin-bottom:60px}
+ .demo-group:last-child{margin-bottom:0}
+ .demo-group-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+ .demo-group-t{font-size:14px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+ .demo-group-c{font-size:13px;color:var(--ink-3)}
+ .demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+ .demo-grid.four{grid-template-columns:repeat(4,1fr)}
+ .demo{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit;position:relative}
+ .demo::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--aubergine));opacity:0;transition:opacity .2s;z-index:2}
+ .demo:hover::before{opacity:1}
+ .demo:hover{border-color:var(--ink-3);transform:translateY(-2px);box-shadow:0 12px 32px -16px rgba(0,0,0,.12)}
+ .demo:hover .demo-arrow{transform:translateX(3px);color:var(--ink)}
+ .demo-img{height:100px;display:grid;place-items:center;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+ .demo-img.req{background:linear-gradient(135deg,#EDE9FE,#FAFAF7)}
+ .demo-img.leader{background:linear-gradient(135deg,#E7ECF3,#FAFAF7)}
+ .demo-img.ap{background:linear-gradient(135deg,#E0EDEE,#FAFAF7)}
+ .demo-img.cat{background:linear-gradient(135deg,#EDE9FE,#F5F2EF)}
+ .demo-img.catalog{background:linear-gradient(135deg,#E4F1EB,#FAFAF7)}
+ .demo-img.noncat{background:linear-gradient(135deg,#E7ECF3,#FAFAF7)}
+ .demo-img.invoice{background:linear-gradient(135deg,#E0EDEE,#FAFAF7)}
+ .demo-img.contract{background:linear-gradient(135deg,#EFE8F5,#FAFAF7)}
+ .demo-icon-big{width:48px;height:48px;border-radius:11px;display:grid;place-items:center;color:#fff}
+ .demo-icon-big.req{background:linear-gradient(135deg,var(--brand),#5B21B6)}
+ .demo-icon-big.leader{background:linear-gradient(135deg,var(--accent),#0E2440)}
+ .demo-icon-big.ap{background:linear-gradient(135deg,var(--teal),#1A4F52)}
+ .demo-icon-big.cat{background:linear-gradient(135deg,var(--plum),var(--aubergine))}
+ .demo-icon-big.catalog{background:linear-gradient(135deg,var(--green),#1F5840)}
+ .demo-icon-big.noncat{background:linear-gradient(135deg,var(--accent),#0E2440)}
+ .demo-icon-big.invoice{background:linear-gradient(135deg,var(--teal),#1A4F52)}
+ .demo-icon-big.contract{background:linear-gradient(135deg,var(--purple),#4D3473)}
+ .demo-icon-big svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none}
+ .demo-body{padding:18px 20px;flex:1;display:flex;flex-direction:column}
+ .demo-persona{font-size:10px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+ .demo-t{font-size:16px;font-family:var(--font-display);font-weight:400;line-height:1.3;margin-bottom:6px}
+ .demo-d{font-size:13px;color:var(--ink-2);line-height:1.5;flex:1;margin-bottom:12px}
+ .demo-foot{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink-3);padding-top:10px;border-top:1px solid var(--line)}
+ .demo-time{font-weight:500}
+ .demo-time b{color:var(--ink-2);font-weight:600}
+ .demo-arrow{transition:all .2s;color:var(--ink-3);font-size:14px;font-weight:600}
 
-  /* DEMOS section with subtle purple wash */
-  .demos{
-    background:
-      radial-gradient(ellipse 800px 600px at 80% 20%, rgba(124, 58, 237, 0.04), transparent 60%),
-      radial-gradient(ellipse 600px 500px at 15% 90%, rgba(60, 18, 57, 0.03), transparent 60%),
-      var(--surface);
-  }
-  .demos::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:3px;background:linear-gradient(90deg,transparent,var(--aubergine) 40%,var(--brand) 60%,transparent);border-radius:2px}
-  .demo:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 16px 40px -20px rgba(124, 58, 237, 0.22)}
+ /* DEMOS section with subtle purple wash */
+ .demos{
+ background:
+ radial-gradient(ellipse 800px 600px at 80% 20%, rgba(124, 58, 237, 0.04), transparent 60%),
+ radial-gradient(ellipse 600px 500px at 15% 90%, rgba(60, 18, 57, 0.03), transparent 60%),
+ var(--surface);
+ }
+ .demos::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:3px;background:linear-gradient(90deg,transparent,var(--aubergine) 40%,var(--brand) 60%,transparent);border-radius:2px}
+ .demo:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 16px 40px -20px rgba(124, 58, 237, 0.22)}
 
-  /* DIFFERENTIATORS */
-  .differentiators-section{
-    background:
-      linear-gradient(180deg, var(--lavender-wash) 0%, var(--bg) 100%);
-  }
-  .differentiators-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:3px;background:linear-gradient(90deg,transparent,var(--aubergine) 40%,var(--brand) 60%,transparent);border-radius:2px}
-  .diff-list{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-  .diff-item{display:grid;grid-template-columns:30px 1fr 200px;gap:16px;padding:18px 22px;background:var(--surface);border:1px solid var(--line);border-radius:12px;align-items:center;transition:all .2s}
-  .diff-item:hover{border-color:var(--lavender-line);box-shadow:0 12px 32px -16px rgba(124, 58, 237, 0.15)}
-  .diff-i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;flex-shrink:0}
-  .diff-i svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.5;fill:none}
-  .diff-i.green{background:var(--green)}
-  .diff-i.indigo{background:var(--indigo)}
-  .diff-i.brand{background:var(--brand)}
-  .diff-i.purple{background:var(--purple)}
-  .diff-i.teal{background:var(--teal)}
-  .diff-t{font-size:14px;font-weight:600;line-height:1.4}
-  .diff-d{font-size:13px;color:var(--ink-2);line-height:1.5;margin-top:3px}
-  .diff-st{font-size:11px;color:var(--ink-3);text-align:right;font-weight:500;line-height:1.4}
-  .diff-st b{color:var(--ink-2);font-weight:600;font-size:12px}
+ /* DIFFERENTIATORS */
+ .differentiators-section{
+ background:
+ linear-gradient(180deg, var(--lavender-wash) 0%, var(--bg) 100%);
+ }
+ .differentiators-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:3px;background:linear-gradient(90deg,transparent,var(--aubergine) 40%,var(--brand) 60%,transparent);border-radius:2px}
+ .diff-list{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+ .diff-item{display:grid;grid-template-columns:30px 1fr 200px;gap:16px;padding:18px 22px;background:var(--surface);border:1px solid var(--line);border-radius:12px;align-items:center;transition:all .2s}
+ .diff-item:hover{border-color:var(--lavender-line);box-shadow:0 12px 32px -16px rgba(124, 58, 237, 0.15)}
+ .diff-i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;flex-shrink:0}
+ .diff-i svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.5;fill:none}
+ .diff-i.green{background:var(--green)}
+ .diff-i.indigo{background:var(--aubergine)}
+ .diff-i.brand{background:var(--brand)}
+ .diff-i.purple{background:var(--purple)}
+ .diff-i.teal{background:var(--teal)}
+ .diff-t{font-size:14px;font-weight:600;line-height:1.4}
+ .diff-d{font-size:13px;color:var(--ink-2);line-height:1.5;margin-top:3px}
+ .diff-st{font-size:11px;color:var(--ink-3);text-align:right;font-weight:500;line-height:1.4}
+ .diff-st b{color:var(--ink-2);font-weight:600;font-size:12px}
 
-  /* FOOTER - deep aubergine */
-  .footer{
-    background:linear-gradient(180deg, var(--aubergine) 0%, var(--aubergine-2) 100%);
-    color:var(--surface-2);
-    padding:60px 0 40px;
-    margin-top:60px;
-    position:relative;
-    overflow:hidden;
-  }
-  .footer::before{content:'';position:absolute;top:-150px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(124, 58, 237, 0.18),transparent 70%);filter:blur(80px);pointer-events:none}
-  .footer::after{content:'';position:absolute;bottom:-100px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(167, 139, 250, 0.12),transparent 70%);filter:blur(60px);pointer-events:none}
-  .footer .wrap{position:relative;z-index:1}
-  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:50px;margin-bottom:40px}
-  .footer-brand{display:flex;flex-direction:column;gap:14px}
-  .footer-brand .brand-mark .brand-name{color:#fff}
-  .footer-brand .brand-mark .brand-tag{background:rgba(255,255,255,.12);color:#E5DDF0}
-  .footer-tag{font-size:13px;color:#C5B5C8;line-height:1.6;max-width:380px}
-  .footer-col h4{font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
-  .footer-col a{display:block;padding:4px 0;font-size:13px;color:#C5B5C8;transition:color .15s}
-  .footer-col a:hover{color:#fff}
-  .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:24px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#A99CAC}
-  .footer-bottom .legal{display:flex;gap:18px}
+ /* FOOTER - deep aubergine */
+ .footer{
+ background:linear-gradient(180deg, var(--aubergine) 0%, var(--aubergine-2) 100%);
+ color:var(--surface-2);
+ padding:60px 0 40px;
+ margin-top:60px;
+ position:relative;
+ overflow:hidden;
+ }
+ .footer::before{content:'';position:absolute;top:-150px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(124, 58, 237, 0.18),transparent 70%);filter:blur(80px);pointer-events:none}
+ .footer::after{content:'';position:absolute;bottom:-100px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(167, 139, 250, 0.12),transparent 70%);filter:blur(60px);pointer-events:none}
+ .footer .wrap{position:relative;z-index:1}
+ .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:50px;margin-bottom:40px}
+ .footer-brand{display:flex;flex-direction:column;gap:14px}
+ .footer-brand .brand-mark .brand-name{color:#fff}
+ .footer-brand .brand-mark .brand-tag{background:rgba(255,255,255,.12);color:#E5DDF0}
+ .footer-tag{font-size:13px;color:#C5B5C8;line-height:1.6;max-width:380px}
+ .footer-col h4{font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+ .footer-col a{display:block;padding:4px 0;font-size:13px;color:#C5B5C8;transition:color .15s}
+ .footer-col a:hover{color:#fff}
+ .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:24px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#A99CAC}
+ .footer-bottom .legal{display:flex;gap:18px}
 
-  /* RESPONSIVE */
-  @media (max-width:900px) {
-    .hero-grid{grid-template-columns:1fr;gap:40px}
-    .hero h1{font-size:42px}
-    .hero-visual{height:auto;min-height:400px}
-    .pillars-grid,.demo-grid,.demo-grid.four{grid-template-columns:1fr}
-    .shift-grid{grid-template-columns:1fr}
-    .shift-arrow{transform:rotate(90deg)}
-    .footer-grid{grid-template-columns:1fr}
-    .diff-item{grid-template-columns:30px 1fr;gap:14px}
-    .diff-st{grid-column:2;text-align:left;padding-top:4px}
-  }
-
-  /* ── Category management section ─────────────────────── */
-  .catmgmt-section{background:linear-gradient(180deg,var(--surface-2) 0%,var(--bg) 100%)}
-  .orb-catmgmt-1{top:-100px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(124,58,237,.13),transparent 70%)}
-  .orb-catmgmt-2{bottom:-60px;left:-100px;width:360px;height:360px;background:radial-gradient(circle,rgba(60,18,57,.09),transparent 70%)}
-  .catmgmt-split{display:grid;grid-template-columns:1fr 380px;gap:60px;align-items:start;margin-bottom:64px}
-  .catmgmt-h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
-  .catmgmt-h3::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,var(--brand),var(--aubergine));border-radius:2px;flex-shrink:0}
-  .catmgmt-p{font-size:14px;color:var(--ink-2);line-height:1.72;margin-bottom:28px}
-  .catmgmt-persona{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-top:4px}
-  .catmgmt-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:600;flex-shrink:0}
-  .catmgmt-av-n{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
-  .catmgmt-av-r{font-size:11px;color:var(--ink-3);line-height:1.5}
-  .catmgmt-compass{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 22px;box-shadow:0 2px 16px rgba(0,0,0,.04);position:sticky;top:72px}
-  .compass-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;letter-spacing:-.01em}
-  .compass-sub{font-size:11px;color:var(--ink-3);margin-bottom:14px}
-  .compass-svg{width:100%;height:auto;display:block}
-  .compass-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
-  .cl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-2)}
-  .cl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .catmgmt-caps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .catmgmt-cap{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 24px;position:relative;overflow:hidden;transition:all .2s;text-decoration:none;color:inherit;display:block}
-  .catmgmt-cap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--aubergine));opacity:0;transition:opacity .25s}
-  .catmgmt-cap:hover::before{opacity:1}
-  .catmgmt-cap:hover{border-color:var(--line-2);box-shadow:0 4px 20px -8px rgba(0,0,0,.1);transform:translateY(-1px)}
-  .catmgmt-cap-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;margin-bottom:16px}
-  .catmgmt-cap-icon svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.8;fill:none}
-  .catmgmt-cap-icon.port{background:var(--brand-soft);color:var(--brand)}
-  .catmgmt-cap-icon.plan{background:var(--purple-soft);color:var(--purple)}
-  .catmgmt-cap-icon.spend{background:var(--green-soft);color:var(--green)}
-  .catmgmt-cap-t{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.01em}
-  .catmgmt-cap-d{font-size:13px;color:var(--ink-2);line-height:1.65}
-  /* demo cards for category screens */
-  .demo-img.catport{background:linear-gradient(135deg,var(--brand-soft),rgba(239,233,254,.4))}
-  .demo-img.catwork{background:linear-gradient(135deg,rgba(239,233,254,.6),var(--surface-2))}
-  .demo-img.catgrid{background:linear-gradient(135deg,rgba(229,246,238,.6),var(--surface-2))}
-  .demo-icon-big.catport svg,.demo-icon-big.catwork svg,.demo-icon-big.catgrid svg{stroke:var(--brand)}
-  .demo-icon-big.catport{background:var(--brand-soft);color:var(--brand)}
-  .demo-icon-big.catwork{background:var(--purple-soft);color:var(--purple)}
-  .demo-icon-big.catgrid{background:var(--green-soft);color:var(--green)}
-
-  </style>
+ /* RESPONSIVE */
+ @media (max-width:900px) {
+ .hero-grid{grid-template-columns:1fr;gap:40px}
+ .hero h1{font-size:42px}
+ .hero-visual{height:auto;min-height:400px}
+ .pillars-grid,.demo-grid,.demo-grid.four{grid-template-columns:1fr}
+ .shift-grid{grid-template-columns:1fr}
+ .shift-arrow{transform:rotate(90deg)}
+ .footer-grid{grid-template-columns:1fr}
+ .diff-item{grid-template-columns:30px 1fr;gap:14px}
+ .diff-st{grid-column:2;text-align:left;padding-top:4px}
+ }
+</style>
 </head>
 <body>
 
 <!-- ====== TOP NAV ====== -->
 <div class="topnav">
-  <div class="topnav-inner">
-    <div class="brand-mark">
-      <div class="brand-dot">P</div>
-      <div class="brand-name">Procurello</div>
-      <span class="brand-tag">Concept</span>
-    </div>
-    <div class="nav-links">
-      <a href="#concept">Concept</a>
-      <a href="#different">Why It Matters</a>
-      <a href="#demos">Demos</a>
-      <a href="#demos" class="nav-cta">Start the demo →</a>
-    </div>
-  </div>
+ <div class="topnav-inner">
+ <div class="brand-mark">
+ <div class="brand-dot">P</div>
+ <div class="brand-name">Procurello</div>
+ <span class="brand-tag">Concept</span>
+ </div>
+ <div class="nav-links">
+ <a href="#concept">Concept</a>
+ <a href="#different">Why It Matters</a>
+ <a href="#demos">Demos</a>
+ <a href="#demos" class="nav-cta">Start the demo →</a>
+ </div>
+ </div>
 </div>
 
 <!-- ====== HERO ====== -->
 <section class="hero">
-  <div class="orb orb-hero-1"></div>
-  <div class="orb orb-hero-2"></div>
-  <div class="orb orb-hero-3"></div>
-  <div class="wrap">
-    <div class="hero-grid">
-      <div>
-        <div class="hero-eyebrow"><span class="dot"></span>Agentic spend management · Prototype</div>
-        <h1>Procurement that<br/><span class="accent">thinks ahead.</span></h1>
-        <p class="lede">An AI-powered workspace for buying, contracts, and accounts payable. Casual users describe what they need; the agent figures out the right path, runs compliance silently, and predicts what's coming so nothing is a surprise.</p>
-        <div class="hero-ctas">
-          <a href="requester-home.html" class="btn btn-p">
-            Open the requester demo
-            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
-          <a href="#demos" class="btn">
-            See all 7 personas & flows
-          </a>
-        </div>
-        <div class="hero-stats">
-          <div>
-            <div class="hero-stat-v">10</div>
-            <div class="hero-stat-l">Interactive screens</div>
-          </div>
-          <div>
-            <div class="hero-stat-v">4</div>
-            <div class="hero-stat-l">Personas</div>
-          </div>
-          <div>
-            <div class="hero-stat-v">4</div>
-            <div class="hero-stat-l">End-to-end scenarios</div>
-          </div>
-          <div>
-            <div class="hero-stat-v">30d</div>
-            <div class="hero-stat-l">Predictive horizon</div>
-          </div>
-        </div>
-      </div>
+ <div class="orb orb-hero-1"></div>
+ <div class="orb orb-hero-2"></div>
+ <div class="orb orb-hero-3"></div>
+ <div class="wrap">
+ <div class="hero-grid">
+ <div>
+ <div class="hero-eyebrow"><span class="dot"></span>Agentic spend management · Prototype</div>
+ <h1>Procurement that<br/><span class="accent">thinks ahead.</span></h1>
+ <p class="lede">An AI-powered workspace for buying, contracts, and accounts payable. Casual users describe what they need; the agent figures out the right path, runs compliance silently, and predicts what's coming so nothing is a surprise.</p>
+ <div class="hero-ctas">
+ <a href="#demos" class="btn btn-p">
+ Start the demo
+ <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+ </a>
+ <a href="#concept" class="btn">
+ Explore the concept ↓
+ </a>
+ </div>
+ <div class="hero-stats">
+ <div>
+ <div class="hero-stat-v">10</div>
+ <div class="hero-stat-l">Interactive screens</div>
+ </div>
+ <div>
+ <div class="hero-stat-v">4</div>
+ <div class="hero-stat-l">Personas</div>
+ </div>
+ <div>
+ <div class="hero-stat-v">4</div>
+ <div class="hero-stat-l">End-to-end scenarios</div>
+ </div>
+ <div>
+ <div class="hero-stat-v">30d</div>
+ <div class="hero-stat-l">Predictive horizon</div>
+ </div>
+ </div>
+ </div>
 
-      <!-- HERO VISUAL - layered cards showing the agent at work -->
-      <div class="hero-visual">
+ <!-- HERO VISUAL - layered cards showing the agent at work -->
+ <div class="hero-visual">
 
-        <!-- Composer with user input -->
-        <div class="hv-card hv-composer">
-          <div class="hv-c-lbl">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
-            What do you need to buy?
-          </div>
-          <div class="hv-c-text">We need a centrifuge serviced and recalibrated for the Wellman lab<span class="hv-c-cursor"></span></div>
-          <div class="hv-c-foot">
-            <span>Attach quote · Need-by date</span>
-            <span class="pill">Continue</span>
-          </div>
-        </div>
+ <!-- Composer with user input -->
+ <div class="hv-card hv-composer">
+ <div class="hv-c-lbl">
+ <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
+ What do you need to buy?
+ </div>
+ <div class="hv-c-text">We need a centrifuge serviced and recalibrated for the Wellman lab<span class="hv-c-cursor"></span></div>
+ <div class="hv-c-foot">
+ <span>Attach quote · Need-by date</span>
+ <span class="pill">Continue</span>
+ </div>
+ </div>
 
-        <!-- Supplier recommendations from agent -->
-        <div class="hv-card hv-suppliers">
-          <div class="hv-sup-h">Recommended suppliers</div>
-          <div class="hv-sup rec">
-            <div class="hv-sup-logo">PRC</div>
-            <div class="hv-sup-info">
-              <div class="hv-sup-n">PrecisionCal</div>
-              <div class="hv-sup-m">MSA · 5–7 day lead</div>
-            </div>
-            <div class="hv-sup-price">$4,200</div>
-          </div>
-          <div class="hv-sup">
-            <div class="hv-sup-logo">MTC</div>
-            <div class="hv-sup-info">
-              <div class="hv-sup-n">MetroTest</div>
-              <div class="hv-sup-m">Quote required</div>
-            </div>
-            <div class="hv-sup-price">~$4.5K</div>
-          </div>
-          <div class="hv-sup">
-            <div class="hv-sup-logo">LAB</div>
-            <div class="hv-sup-info">
-              <div class="hv-sup-n">LabServ</div>
-              <div class="hv-sup-m">3–5 day lead</div>
-            </div>
-            <div class="hv-sup-price">$4,650</div>
-          </div>
-        </div>
+ <!-- Supplier recommendations from agent -->
+ <div class="hv-card hv-suppliers">
+ <div class="hv-sup-h">Recommended suppliers</div>
+ <div class="hv-sup rec">
+ <div class="hv-sup-logo">PRC</div>
+ <div class="hv-sup-info">
+ <div class="hv-sup-n">PrecisionCal</div>
+ <div class="hv-sup-m">MSA · 5 7 day lead</div>
+ </div>
+ <div class="hv-sup-price">$4,200</div>
+ </div>
+ <div class="hv-sup">
+ <div class="hv-sup-logo">MTC</div>
+ <div class="hv-sup-info">
+ <div class="hv-sup-n">MetroTest</div>
+ <div class="hv-sup-m">Quote required</div>
+ </div>
+ <div class="hv-sup-price">~$4.5K</div>
+ </div>
+ <div class="hv-sup">
+ <div class="hv-sup-logo">LAB</div>
+ <div class="hv-sup-info">
+ <div class="hv-sup-n">LabServ</div>
+ <div class="hv-sup-m">3 5 day lead</div>
+ </div>
+ <div class="hv-sup-price">$4,650</div>
+ </div>
+ </div>
 
-        <!-- Agent thinking -->
-        <div class="hv-card hv-agent">
-          <div class="hv-agent-h">
-            <div class="hv-agent-dot">AI</div>
-            <div class="hv-agent-name">Buying agent</div>
-            <div class="hv-agent-live"></div>
-          </div>
-          <div class="hv-agent-body">This is a <b>service request</b>. I'll set it up as a non-catalog services line, rank suppliers by contract status, and route it for the shortest approval path.</div>
-        </div>
+ <!-- Agent thinking -->
+ <div class="hv-card hv-agent">
+ <div class="hv-agent-h">
+ <div class="hv-agent-dot">AI</div>
+ <div class="hv-agent-name">Buying agent</div>
+ <div class="hv-agent-live"></div>
+ </div>
+ <div class="hv-agent-body">This is a <b>service request</b>. I'll set it up as a non-catalog services line, rank suppliers by contract status, and route it for the shortest approval path.</div>
+ </div>
 
-        <!-- Prediction card -->
-        <div class="hv-card hv-pred">
-          <div class="hv-pred-h">
-            <div class="hv-pred-t">What's coming your way</div>
-            <span class="hv-pred-badge">Telepathy</span>
-          </div>
-          <div class="hv-pred-row"><span class="hv-pred-dot"></span>Sigma reagents · arrive <b>Wed</b></div>
-          <div class="hv-pred-row"><span class="hv-pred-dot"></span>Dr. Wellman approval · ~<b>3 hrs</b></div>
-          <div class="hv-pred-row"><span class="hv-pred-dot"></span>USD strong · forward-buy <b>EU reagents</b></div>
-          <div class="hv-pred-row"><span class="hv-pred-dot"></span>Strand invoice expected <b>~May 26</b></div>
-        </div>
+ <!-- Prediction card -->
+ <div class="hv-card hv-pred">
+ <div class="hv-pred-h">
+ <div class="hv-pred-t">What's coming your way</div>
+ <span class="hv-pred-badge">Telepathy</span>
+ </div>
+ <div class="hv-pred-row"><span class="hv-pred-dot"></span>Sigma reagents · arrive <b>Wed</b></div>
+ <div class="hv-pred-row"><span class="hv-pred-dot"></span>Dr. Wellman approval · ~<b>3 hrs</b></div>
+ <div class="hv-pred-row"><span class="hv-pred-dot"></span>USD strong · forward-buy <b>EU reagents</b></div>
+ <div class="hv-pred-row"><span class="hv-pred-dot"></span>Strand invoice expected <b>~May 26</b></div>
+ </div>
 
-      </div>
-    </div>
-  </div>
+ </div>
+ </div>
+ </div>
 </section>
 
 <!-- ====== THE SHIFT ====== -->
 <section class="section shift">
-  <div class="orb orb-shift-1"></div>
-  <div class="wrap">
-    <div class="section-h">
-      <div class="section-eyebrow">The shift</div>
-      <h2>From forms to conversation. From reactive to predictive.</h2>
-      <p class="lead">Today's procurement systems make casual users navigate eighteen tiles, four shop links, and six form types — and still arrive at AP unprepared. We rebuilt the experience from the user's question backward.</p>
-    </div>
+ <div class="orb orb-shift-1"></div>
+ <div class="wrap">
+ <div class="section-h">
+ <div class="section-eyebrow">The shift</div>
+ <h2>From forms to conversation. From reactive to predictive.</h2>
+ <p class="lead">Today's procurement systems make casual users navigate eighteen tiles, four shop links, and six form types and still arrive at AP unprepared. We rebuilt the experience from the user's question backward.</p>
+ </div>
 
-    <div class="shift-grid">
-      <div class="shift-col before">
-        <div class="shift-l">Today</div>
-        <div class="shift-t">Form-driven, reactive, opaque</div>
-        <ul class="shift-list">
-          <li>User has to pick the right form before they begin</li>
-          <li>Catalog vs. non-catalog is the user's problem to solve</li>
-          <li>Red-text disclaimers buried at the bottom of pages</li>
-          <li>Compliance is a manual analyst task after the fact</li>
-          <li>AP gets invoices with no warning, scrambles for receipts</li>
-          <li>Leaders see anomalies only at grant close</li>
-        </ul>
-      </div>
+ <div class="shift-grid">
+ <div class="shift-col before">
+ <div class="shift-l">Today</div>
+ <div class="shift-t">Form-driven, reactive, opaque</div>
+ <ul class="shift-list">
+ <li>User has to pick the right form before they begin</li>
+ <li>Catalog vs. non-catalog is the user's problem to solve</li>
+ <li>Red-text disclaimers buried at the bottom of pages</li>
+ <li>Compliance is a manual analyst task after the fact</li>
+ <li>AP gets invoices with no warning, scrambles for receipts</li>
+ <li>Leaders see anomalies only at grant close</li>
+ </ul>
+ </div>
 
-      <div class="shift-arrow">→</div>
+ <div class="shift-arrow">→</div>
 
-      <div class="shift-col after">
-        <div class="shift-l">This concept</div>
-        <div class="shift-t">Conversational, predictive, transparent</div>
-        <ul class="shift-list">
-          <li>One composer accepts text, files, or forwarded emails</li>
-          <li>Agent classifies intent and picks the right procurement object</li>
-          <li>Guardrails surface as gentle nudges during composition</li>
-          <li>12 compliance checks run silently, exportable audit trail</li>
-          <li>AP sees a 30-day cash flow forecast with confidence intervals</li>
-          <li>Leaders see anomalies 4 months early, with action options</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+ <div class="shift-col after">
+ <div class="shift-l">This concept</div>
+ <div class="shift-t">Conversational, predictive, transparent</div>
+ <ul class="shift-list">
+ <li>One composer accepts text, files, or forwarded emails</li>
+ <li>Agent classifies intent and picks the right procurement object</li>
+ <li>Guardrails surface as gentle nudges during composition</li>
+ <li>12 compliance checks run silently, exportable audit trail</li>
+ <li>AP sees a 30-day cash flow forecast with confidence intervals</li>
+ <li>Leaders see anomalies 4 months early, with action options</li>
+ </ul>
+ </div>
+ </div>
+ </div>
 </section>
 
 <!-- ====== PILLARS / CONCEPT ====== -->
 <section class="section pillars-section" id="concept">
-  <div class="orb orb-pillars-1"></div>
-  <div class="orb orb-pillars-2"></div>
-  <div class="wrap">
-    <div class="section-h">
-      <div class="section-eyebrow">Core capabilities</div>
-      <h2>Six ideas that change the experience.</h2>
-      <p class="lead">Each capability addresses a specific failure mode of today's systems. Together they reframe procurement as an intelligent service rather than a compliance exercise.</p>
-    </div>
+ <div class="orb orb-pillars-1"></div>
+ <div class="orb orb-pillars-2"></div>
+ <div class="wrap">
+ <div class="section-h">
+ <div class="section-eyebrow">Core capabilities</div>
+ <h2>Six ideas that change the experience.</h2>
+ <p class="lead">Each capability addresses a specific failure mode of today's systems. Together they reframe procurement as an intelligent service rather than a compliance exercise.</p>
+ </div>
 
-    <div class="pillars-grid">
-      <div class="pillar">
-        <div class="pillar-icon conv">
-          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        </div>
-        <div class="pillar-t">Conversational entry</div>
-        <div class="pillar-d">One composer accepts plain language, attached quotes, supplier proposals, or forwarded invoices. The agent picks the path — no form selection required.</div>
-      </div>
+ <div class="pillars-grid">
+ <div class="pillar">
+ <div class="pillar-icon conv">
+ <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+ </div>
+ <div class="pillar-t">Conversational entry</div>
+ <div class="pillar-d">One composer accepts plain language, attached quotes, supplier proposals, or forwarded invoices. The agent picks the path no form selection required.</div>
+ </div>
 
-      <div class="pillar">
-        <div class="pillar-icon pred">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.07 7.07l4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.07-7.07l4.24-4.24"/></svg>
-        </div>
-        <div class="pillar-t">Predictive visibility</div>
-        <div class="pillar-d">Each persona sees what's coming at the right horizon — deliveries this week, approvals this month, invoices next month. Every prediction shows its confidence and reasoning.</div>
-      </div>
+ <div class="pillar">
+ <div class="pillar-icon pred">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.07 7.07l4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.07-7.07l4.24-4.24"/></svg>
+ </div>
+ <div class="pillar-t">Predictive visibility</div>
+ <div class="pillar-d">Each persona sees what's coming at the right horizon deliveries this week, approvals this month, invoices next month. Every prediction shows its confidence and reasoning.</div>
+ </div>
 
-      <div class="pillar">
-        <div class="pillar-icon audit">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-        </div>
-        <div class="pillar-t">Audit-traceable compliance</div>
-        <div class="pillar-d">12 checks run silently — sanctions, duplicates, banking, tax, grant compliance. Every agent action is timestamped and attributed, exportable for audit.</div>
-      </div>
+ <div class="pillar">
+ <div class="pillar-icon audit">
+ <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+ </div>
+ <div class="pillar-t">Audit-traceable compliance</div>
+ <div class="pillar-d">12 checks run silently sanctions, duplicates, banking, tax, grant compliance. Every agent action is timestamped and attributed, exportable for audit.</div>
+ </div>
 
-      <div class="pillar">
-        <div class="pillar-icon market">
-          <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-        </div>
-        <div class="pillar-t">Market awareness</div>
-        <div class="pillar-d">Commodity prices, FX moves, tariff changes, and supplier price notices automatically connect to your portfolio with quantified impact in dollars.</div>
-      </div>
+ <div class="pillar">
+ <div class="pillar-icon market">
+ <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+ </div>
+ <div class="pillar-t">Market awareness</div>
+ <div class="pillar-d">Commodity prices, FX moves, tariff changes, and supplier price notices automatically connect to your portfolio with quantified impact in dollars.</div>
+ </div>
 
-      <div class="pillar">
-        <div class="pillar-icon pattern">
-          <svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 17V9M13 17v-5M17 17V5"/></svg>
-        </div>
-        <div class="pillar-t">Pattern intelligence</div>
-        <div class="pillar-d">The agent learns from history — benchmarking new contracts against similar past ones, detecting threshold-avoidance, forecasting close-out rushes and month-end batches.</div>
-      </div>
+ <div class="pillar">
+ <div class="pillar-icon pattern">
+ <svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 17V9M13 17v-5M17 17V5"/></svg>
+ </div>
+ <div class="pillar-t">Pattern intelligence</div>
+ <div class="pillar-d">The agent learns from history benchmarking new contracts against similar past ones, detecting threshold-avoidance, forecasting close-out rushes and month-end batches.</div>
+ </div>
 
-      <div class="pillar">
-        <div class="pillar-icon behavior">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div class="pillar-t">Behavioral feedback</div>
-        <div class="pillar-d">Where a user's action helps downstream operations, the system says so — turning invisible work into recognized contribution. Good behavior gets reinforced, not just enforced.</div>
-      </div>
-    </div>
+ <div class="pillar">
+ <div class="pillar-icon behavior">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ <div class="pillar-t">Behavioral feedback</div>
+ <div class="pillar-d">Where a user's action helps downstream operations, the system says so turning invisible work into recognized contribution. Good behavior gets reinforced, not just enforced.</div>
+ </div>
+ </div>
 
-    <!-- CONCEPT ARCHITECTURE VISUAL -->
-    <div class="concept-wrap">
-      <svg class="concept-svg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg">
-        <!-- INPUTS -->
-        <g>
-          <text x="100" y="20" font-size="10" font-weight="700" fill="#8A8A88" text-anchor="middle" letter-spacing="1">INPUTS</text>
-          <rect x="30" y="40" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
-          <text x="100" y="63" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Plain language</text>
-          <rect x="30" y="90" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
-          <text x="100" y="113" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Supplier document</text>
-          <rect x="30" y="140" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
-          <text x="100" y="163" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Forwarded email</text>
-          <rect x="30" y="190" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
-          <text x="100" y="213" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Past pattern</text>
-          <rect x="30" y="240" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
-          <text x="100" y="263" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Market signal</text>
-        </g>
+ <!-- CONCEPT ARCHITECTURE VISUAL -->
+ <div class="concept-wrap">
+ <svg class="concept-svg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg">
+ <!-- INPUTS -->
+ <g>
+ <text x="100" y="20" font-size="10" font-weight="700" fill="#8A8A88" text-anchor="middle" letter-spacing="1">INPUTS</text>
+ <rect x="30" y="40" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
+ <text x="100" y="63" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Plain language</text>
+ <rect x="30" y="90" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
+ <text x="100" y="113" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Supplier document</text>
+ <rect x="30" y="140" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
+ <text x="100" y="163" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Forwarded email</text>
+ <rect x="30" y="190" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
+ <text x="100" y="213" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Past pattern</text>
+ <rect x="30" y="240" width="140" height="38" rx="8" fill="#FFFFFF" stroke="#E8E6E0"/>
+ <text x="100" y="263" font-size="12" font-weight="500" fill="#1A1A1A" text-anchor="middle">Market signal</text>
+ </g>
 
-        <!-- ARROWS TO AGENT -->
-        <g stroke="#D9D6CE" stroke-width="1.5" fill="none">
-          <path d="M 175 59 L 320 130" />
-          <path d="M 175 109 L 320 140" />
-          <path d="M 175 159 L 320 160" />
-          <path d="M 175 209 L 320 180" />
-          <path d="M 175 259 L 320 190" />
-        </g>
+ <!-- ARROWS TO AGENT -->
+ <g stroke="#D9D6CE" stroke-width="1.5" fill="none">
+ <path d="M 175 59 L 320 130" />
+ <path d="M 175 109 L 320 140" />
+ <path d="M 175 159 L 320 160" />
+ <path d="M 175 209 L 320 180" />
+ <path d="M 175 259 L 320 190" />
+ </g>
 
-        <!-- AGENT -->
-        <g>
-          <text x="400" y="20" font-size="10" font-weight="700" fill="#8A8A88" text-anchor="middle" letter-spacing="1">AGENT</text>
-          <defs>
-            <linearGradient id="agentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#3C1239"/>
-              <stop offset="100%" style="stop-color:#2B0828"/>
-            </linearGradient>
-          </defs>
-          <rect x="325" y="100" width="150" height="120" rx="12" fill="url(#agentGrad)"/>
-          <text x="400" y="135" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">AI</text>
-          <text x="400" y="155" font-size="11" fill="#C5B5C8" text-anchor="middle">Classifies intent</text>
-          <text x="400" y="172" font-size="11" fill="#C5B5C8" text-anchor="middle">Looks up context</text>
-          <text x="400" y="189" font-size="11" fill="#C5B5C8" text-anchor="middle">Runs checks</text>
-          <text x="400" y="206" font-size="11" fill="#C5B5C8" text-anchor="middle">Predicts what's next</text>
-          <circle cx="466" cy="115" r="3" fill="#7C3AED"/>
-          <circle cx="466" cy="115" r="6" fill="none" stroke="#7C3AED" stroke-opacity="0.5"/>
-        </g>
+ <!-- AGENT -->
+ <g>
+ <text x="400" y="20" font-size="10" font-weight="700" fill="#8A8A88" text-anchor="middle" letter-spacing="1">AGENT</text>
+ <defs>
+ <linearGradient id="agentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+ <stop offset="0%" style="stop-color:#3C1239"/>
+ <stop offset="100%" style="stop-color:#2B0828"/>
+ </linearGradient>
+ </defs>
+ <rect x="325" y="100" width="150" height="120" rx="12" fill="url(#agentGrad)"/>
+ <text x="400" y="135" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">AI</text>
+ <text x="400" y="155" font-size="11" fill="#C5B5C8" text-anchor="middle">Classifies intent</text>
+ <text x="400" y="172" font-size="11" fill="#C5B5C8" text-anchor="middle">Looks up context</text>
+ <text x="400" y="189" font-size="11" fill="#C5B5C8" text-anchor="middle">Runs checks</text>
+ <text x="400" y="206" font-size="11" fill="#C5B5C8" text-anchor="middle">Predicts what's next</text>
+ <circle cx="466" cy="115" r="3" fill="#7C3AED"/>
+ <circle cx="466" cy="115" r="6" fill="none" stroke="#7C3AED" stroke-opacity="0.5"/>
+ </g>
 
-        <!-- ARROWS TO OUTPUTS -->
-        <g stroke="#D9D6CE" stroke-width="1.5" fill="none">
-          <path d="M 480 130 L 620 60" />
-          <path d="M 480 145 L 620 110" />
-          <path d="M 480 160 L 620 160" />
-          <path d="M 480 175 L 620 210" />
-          <path d="M 480 190 L 620 260" />
-        </g>
+ <!-- ARROWS TO OUTPUTS -->
+ <g stroke="#D9D6CE" stroke-width="1.5" fill="none">
+ <path d="M 480 130 L 620 60" />
+ <path d="M 480 145 L 620 110" />
+ <path d="M 480 160 L 620 160" />
+ <path d="M 480 175 L 620 210" />
+ <path d="M 480 190 L 620 260" />
+ </g>
 
-        <!-- OUTPUTS -->
-        <g>
-          <text x="700" y="20" font-size="10" font-weight="700" fill="#8A8A88" text-anchor="middle" letter-spacing="1">OUTPUTS</text>
-          <rect x="625" y="40" width="160" height="38" rx="8" fill="#E4F1EB" stroke="#2E7D5B" stroke-opacity="0.3"/>
-          <text x="705" y="63" font-size="12" font-weight="500" fill="#2E7D5B" text-anchor="middle">Cart · Catalog</text>
-          <rect x="625" y="90" width="160" height="38" rx="8" fill="#E7ECF3" stroke="#1E3A5F" stroke-opacity="0.3"/>
-          <text x="705" y="113" font-size="12" font-weight="500" fill="#1E3A5F" text-anchor="middle">Requisition · Services</text>
-          <rect x="625" y="140" width="160" height="38" rx="8" fill="#EFE8F5" stroke="#6B4C9A" stroke-opacity="0.3"/>
-          <text x="705" y="163" font-size="12" font-weight="500" fill="#6B4C9A" text-anchor="middle">Contract + PO bundle</text>
-          <rect x="625" y="190" width="160" height="38" rx="8" fill="#E0EDEE" stroke="#2A6F73" stroke-opacity="0.3"/>
-          <text x="705" y="213" font-size="12" font-weight="500" fill="#2A6F73" text-anchor="middle">3-way match · Invoice</text>
-          <rect x="625" y="240" width="160" height="38" rx="8" fill="#E7E9F5" stroke="#4A5BB8" stroke-opacity="0.3"/>
-          <text x="705" y="263" font-size="12" font-weight="500" fill="#4A5BB8" text-anchor="middle">Predictions · Audit trail</text>
-        </g>
+ <!-- OUTPUTS -->
+ <g>
+ <text x="700" y="20" font-size="10" font-weight="700" fill="#8A8A88" text-anchor="middle" letter-spacing="1">OUTPUTS</text>
+ <rect x="625" y="40" width="160" height="38" rx="8" fill="#E4F1EB" stroke="#2E7D5B" stroke-opacity="0.3"/>
+ <text x="705" y="63" font-size="12" font-weight="500" fill="#2E7D5B" text-anchor="middle">Cart · Catalog</text>
+ <rect x="625" y="90" width="160" height="38" rx="8" fill="#E7ECF3" stroke="#1E3A5F" stroke-opacity="0.3"/>
+ <text x="705" y="113" font-size="12" font-weight="500" fill="#1E3A5F" text-anchor="middle">Requisition · Services</text>
+ <rect x="625" y="140" width="160" height="38" rx="8" fill="#EFE8F5" stroke="#6B4C9A" stroke-opacity="0.3"/>
+ <text x="705" y="163" font-size="12" font-weight="500" fill="#6B4C9A" text-anchor="middle">Contract + PO bundle</text>
+ <rect x="625" y="190" width="160" height="38" rx="8" fill="#E0EDEE" stroke="#2A6F73" stroke-opacity="0.3"/>
+ <text x="705" y="213" font-size="12" font-weight="500" fill="#2A6F73" text-anchor="middle">3-way match · Invoice</text>
+ <rect x="625" y="240" width="160" height="38" rx="8" fill="#E7E9F5" stroke="#4A5BB8" stroke-opacity="0.3"/>
+ <text x="705" y="263" font-size="12" font-weight="500" fill="#4A5BB8" text-anchor="middle">Predictions · Audit trail</text>
+ </g>
 
-        <!-- AUDIENCES -->
-        <text x="450" y="305" font-size="11" fill="#8A8A88" text-anchor="middle">delivered to <tspan font-weight="600" fill="#4A4A48">Requesters · Leaders · AP</tspan> at their natural time horizons</text>
-      </svg>
-      <div class="concept-cap">One agent, one composer, one audit trail — adapting its outputs to whatever the user actually needs.</div>
-    </div>
-  </div>
+ <!-- AUDIENCES -->
+ <text x="450" y="305" font-size="11" fill="#8A8A88" text-anchor="middle">delivered to <tspan font-weight="600" fill="#4A4A48">Requesters · Leaders · AP</tspan> at their natural time horizons</text>
+ </svg>
+ <div class="concept-cap">One agent, one composer, one audit trail adapting its outputs to whatever the user actually needs.</div>
+ </div>
+ </div>
 </section>
 
-
 <!-- ====== CATEGORY MANAGEMENT ====== -->
-<section class="section catmgmt-section" id="category">
-  <div class="orb orb-catmgmt-1"></div>
-  <div class="orb orb-catmgmt-2"></div>
-  <div class="wrap">
+<section class="section" id="category">
+ <div class="wrap">
+ <div class="section-h">
+ <div class="section-eyebrow">Strategic category management</div>
+ <h2>Beyond transactions. Managing spend as a portfolio.</h2>
+ <p class="lead">Procurement systems handle execution well. The strategic layer spend positioning, category plans, supplier strategy still lives in spreadsheets. Procurello closes that gap.</p>
+ </div>
 
-    <div class="section-h">
-      <div class="section-eyebrow">Strategic category management</div>
-      <h2>From buying transactions to portfolio strategy.</h2>
-      <p class="lead">Procurement systems handle execution. The strategic layer — spend positioning, category plans, supplier strategy — lives in spreadsheets, disconnected from the data that should feed it. Procurello makes strategy live.</p>
-    </div>
+ <div style="display:grid;grid-template-columns:1fr 380px;gap:60px;align-items:start;margin-bottom:60px">
+ <div>
+ <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:400;color:var(--ink);margin-bottom:12px">The gap most platforms leave open</h3>
+ <p style="font-size:.9375rem;color:var(--ink-2);line-height:1.7;margin-bottom:28px">When strategy and execution live in separate tools, strategy loses. Category plans go stale the moment they&#39;re written. Managed spend targets miss because buyers never see them. Closing the gap means putting the strategic layer in the same platform as the requisition, the contract, and the invoice.</p>
+ <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:400;color:var(--ink);margin-bottom:12px">A fourth persona: the Category Manager</h3>
+ <p style="font-size:.9375rem;color:var(--ink-2);line-height:1.7">Category managers get a dedicated strategic layer category plans, sourcing events, contracts, and spend data all in one workspace, connected to the same buying flows that requesters, leaders, and AP teams operate within.</p>
+ </div>
+ <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:2px 2px 0 var(--line)">
+ <div style="font-family:var(--font-mono);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-2);margin-bottom:6px">Category Compass™</div>
+ <div style="font-size:.8125rem;color:var(--ink-3);margin-bottom:16px">Strategic action layer built on Kraljic positioning</div>
+ <svg viewBox="0 0 300 290" width="100%" xmlns="http://www.w3.org/2000/svg">
+ <rect x="6" y="6" width="136" height="128" rx="8" fill="rgba(124,58,237,.07)" stroke="rgba(124,58,237,.15)" stroke-width="1"/>
+ <rect x="150" y="6" width="144" height="128" rx="8" fill="rgba(122,92,30,.06)" stroke="rgba(122,92,30,.12)" stroke-width="1"/>
+ <rect x="6" y="142" width="136" height="128" rx="8" fill="rgba(61,107,74,.06)" stroke="rgba(61,107,74,.12)" stroke-width="1"/>
+ <rect x="150" y="142" width="144" height="128" rx="8" fill="rgba(122,44,30,.06)" stroke="rgba(122,44,30,.12)" stroke-width="1"/>
+ <text x="74" y="28" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" font-weight="600" fill="rgba(124,58,237,.85)" letter-spacing=".06em">CONSOLIDATE</text>
+ <text x="222" y="28" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" font-weight="600" fill="rgba(122,92,30,.85)" letter-spacing=".06em">PARTNER</text>
+ <text x="74" y="164" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" font-weight="600" fill="rgba(61,107,74,.85)" letter-spacing=".06em">STREAMLINE</text>
+ <text x="222" y="164" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" font-weight="600" fill="rgba(122,44,30,.85)" letter-spacing=".06em">SECURE</text>
+ <circle cx="68" cy="88" r="26" fill="rgba(124,58,237,.18)" stroke="rgba(124,58,237,.4)" stroke-width="1.5"/>
+ <text x="68" y="92" text-anchor="middle" font-family="Karla,sans-serif" font-size="8" font-weight="600" fill="#5D1E58">MRO</text>
+ <circle cx="100" cy="65" r="18" fill="rgba(124,58,237,.12)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+ <text x="100" y="69" text-anchor="middle" font-family="Karla,sans-serif" font-size="8" font-weight="600" fill="#5D1E58">IT</text>
+ <circle cx="38" cy="72" r="20" fill="rgba(124,58,237,.12)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+ <text x="38" y="76" text-anchor="middle" font-family="Karla,sans-serif" font-size="8" font-weight="600" fill="#5D1E58">Lab</text>
+ <circle cx="215" cy="80" r="18" fill="rgba(122,92,30,.18)" stroke="rgba(122,92,30,.4)" stroke-width="1.5"/>
+ <text x="215" y="84" text-anchor="middle" font-family="Karla,sans-serif" font-size="8" font-weight="600" fill="#7A5C1E">Sci.</text>
+ <circle cx="40" cy="208" r="13" fill="rgba(61,107,74,.16)" stroke="rgba(61,107,74,.4)" stroke-width="1"/>
+ <text x="40" y="212" text-anchor="middle" font-family="Karla,sans-serif" font-size="8" font-weight="600" fill="#3D6B4A">Off.</text>
+ <circle cx="80" cy="196" r="14" fill="rgba(61,107,74,.12)" stroke="rgba(61,107,74,.3)" stroke-width="1"/>
+ <text x="80" y="200" text-anchor="middle" font-family="Karla,sans-serif" font-size="8" font-weight="600" fill="#3D6B4A">Pack.</text>
+ <circle cx="185" cy="210" r="16" fill="rgba(122,44,30,.14)" stroke="rgba(122,44,30,.35)" stroke-width="1"/>
+ <text x="185" y="214" text-anchor="middle" font-family="Karla,sans-serif" font-size="8" font-weight="600" fill="#7A2C1E">Chem.</text>
+ <text x="150" y="284" text-anchor="middle" font-family="DM Mono,monospace" font-size="7.5" fill="rgba(122,104,93,.6)" letter-spacing=".05em">MARKET HOLDS LEVERAGE →</text>
+ </svg>
+ <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
+ <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-2)"><span style="width:9px;height:9px;border-radius:50%;background:rgba(124,58,237,.5);display:inline-block"></span>Consolidate</span>
+ <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-2)"><span style="width:9px;height:9px;border-radius:50%;background:rgba(122,92,30,.5);display:inline-block"></span>Partner</span>
+ <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-2)"><span style="width:9px;height:9px;border-radius:50%;background:rgba(61,107,74,.5);display:inline-block"></span>Streamline</span>
+ <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-2)"><span style="width:9px;height:9px;border-radius:50%;background:rgba(122,44,30,.5);display:inline-block"></span>Secure</span>
+ </div>
+ </div>
+ </div>
 
-    <div class="catmgmt-split">
-      <div>
-        <p class="catmgmt-p">When strategy and execution live in separate tools, strategy loses. Category plans go stale the moment they're written. Managed spend targets miss because buyers never see them. The gap isn't a people problem — it's a structural one. Closing it means putting the strategic layer in the same platform as the requisition, the contract, and the invoice.</p>
-        <p class="catmgmt-p">The category management module extends Procurello into that strategic layer. A fourth persona — the category manager — operates across the full portfolio: positioning spend, running sourcing events, tracking plans against KPIs, and watching managed spend move in real time as buying behaviour changes below.</p>
-      </div>
-
-      <div class="catmgmt-compass">
-        <div class="compass-title">Category Compass™</div>
-        <div class="compass-sub">Strategic action layer — built on Kraljic positioning</div>
-        <svg class="compass-svg" viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg">
-          <!-- Quadrant fills -->
-          <rect x="6" y="6" width="136" height="128" rx="7" fill="rgba(124,58,237,.07)" stroke="rgba(124,58,237,.15)" stroke-width="1"/>
-          <rect x="150" y="6" width="144" height="128" rx="7" fill="rgba(185,122,14,.06)" stroke="rgba(185,122,14,.12)" stroke-width="1"/>
-          <rect x="6" y="142" width="136" height="128" rx="7" fill="rgba(46,125,91,.06)" stroke="rgba(46,125,91,.12)" stroke-width="1"/>
-          <rect x="150" y="142" width="144" height="128" rx="7" fill="rgba(168,53,31,.06)" stroke="rgba(168,53,31,.12)" stroke-width="1"/>
-          <!-- Quadrant labels -->
-          <text x="74" y="28" text-anchor="middle" font-family="Inter,system-ui" font-size="9.5" font-weight="700" fill="rgba(109,40,217,.85)" letter-spacing=".07em">CONSOLIDATE</text>
-          <text x="222" y="28" text-anchor="middle" font-family="Inter,system-ui" font-size="9.5" font-weight="700" fill="rgba(146,84,10,.85)" letter-spacing=".07em">PARTNER</text>
-          <text x="74" y="164" text-anchor="middle" font-family="Inter,system-ui" font-size="9.5" font-weight="700" fill="rgba(46,125,91,.85)" letter-spacing=".07em">STREAMLINE</text>
-          <text x="222" y="164" text-anchor="middle" font-family="Inter,system-ui" font-size="9.5" font-weight="700" fill="rgba(168,53,31,.85)" letter-spacing=".07em">SECURE</text>
-          <!-- Sub-labels -->
-          <text x="74" y="41" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.65)">Aggregate · enforce compliance</text>
-          <text x="222" y="41" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.65)">Invest · deepen relationship</text>
-          <text x="74" y="177" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.65)">Automate · catalog-enable</text>
-          <text x="222" y="177" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.65)">Dual-source · secure supply</text>
-          <!-- Portfolio bubbles -->
-          <circle cx="68" cy="88" r="24" fill="rgba(124,58,237,.18)" stroke="rgba(124,58,237,.4)" stroke-width="1.5"/>
-          <text x="68" y="92" text-anchor="middle" font-family="Inter,system-ui" font-size="8.5" font-weight="600" fill="rgba(109,40,217,.9)">MRO</text>
-          <circle cx="98" cy="65" r="17" fill="rgba(124,58,237,.13)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
-          <text x="98" y="69" text-anchor="middle" font-family="Inter,system-ui" font-size="8" font-weight="600" fill="rgba(109,40,217,.8)">IT</text>
-          <circle cx="38" cy="72" r="19" fill="rgba(124,58,237,.13)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
-          <text x="38" y="76" text-anchor="middle" font-family="Inter,system-ui" font-size="8" font-weight="600" fill="rgba(109,40,217,.8)">Lab</text>
-          <circle cx="215" cy="80" r="18" fill="rgba(185,122,14,.18)" stroke="rgba(185,122,14,.4)" stroke-width="1.5"/>
-          <text x="215" y="84" text-anchor="middle" font-family="Inter,system-ui" font-size="8" font-weight="600" fill="rgba(146,84,10,.9)">Sci. Inst.</text>
-          <circle cx="180" cy="100" r="16" fill="rgba(168,53,31,.14)" stroke="rgba(168,53,31,.35)" stroke-width="1"/>
-          <text x="180" y="104" text-anchor="middle" font-family="Inter,system-ui" font-size="7.5" font-weight="600" fill="rgba(168,53,31,.85)">Chem.</text>
-          <circle cx="40" cy="208" r="13" fill="rgba(46,125,91,.16)" stroke="rgba(46,125,91,.4)" stroke-width="1"/>
-          <text x="40" y="212" text-anchor="middle" font-family="Inter,system-ui" font-size="7.5" font-weight="600" fill="rgba(46,125,91,.9)">Office</text>
-          <circle cx="76" cy="196" r="14" fill="rgba(46,125,91,.13)" stroke="rgba(46,125,91,.3)" stroke-width="1"/>
-          <text x="76" y="200" text-anchor="middle" font-family="Inter,system-ui" font-size="7.5" font-weight="600" fill="rgba(46,125,91,.8)">Pack.</text>
-          <!-- Axis labels -->
-          <text x="150" y="284" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.55)" letter-spacing=".05em">MARKET HOLDS LEVERAGE →</text>
-          <text x="9" y="142" text-anchor="middle" font-family="Inter,system-ui" font-size="8" fill="rgba(107,114,128,.55)" letter-spacing=".05em" writing-mode="vertical-rl" transform="rotate(180,9,142)">MISSION-CRITICAL ↑</text>
-        </svg>
-        <div class="compass-legend">
-          <div class="cl-item"><div class="cl-dot" style="background:rgba(124,58,237,.6)"></div>Consolidate</div>
-          <div class="cl-item"><div class="cl-dot" style="background:rgba(185,122,14,.6)"></div>Partner</div>
-          <div class="cl-item"><div class="cl-dot" style="background:rgba(46,125,91,.6)"></div>Streamline</div>
-          <div class="cl-item"><div class="cl-dot" style="background:rgba(168,53,31,.6)"></div>Secure</div>
-          <div class="cl-item" style="color:var(--ink-3);margin-left:auto;font-size:10px">Bubble size = spend</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="catmgmt-caps">
-      <a class="catmgmt-cap" href="category-portfolio.html">
-        <div class="catmgmt-cap-icon port">
-          <svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="16" cy="13" r="2.5"/><circle cx="6" cy="17" r="2"/><circle cx="14" cy="6" r="2"/></svg>
-        </div>
-        <div class="catmgmt-cap-t">Category portfolio</div>
-        <div class="catmgmt-cap-d">The full spend portfolio mapped onto the Category Compass™ — bubbles sized by spend, positioned by supply risk and business criticality. Toggle between Kraljic and Compass views. Click any category to open its workspace.</div>
-      </a>
-      <a class="catmgmt-cap" href="mro-category-workspace.html">
-        <div class="catmgmt-cap-icon plan">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
-        </div>
-        <div class="catmgmt-cap-t">Living category plans</div>
-        <div class="catmgmt-cap-d">Strategy documents that stay connected to real data. Structured plans with KPI dashboards, methodology milestone boards, sourcing event linkage, and AI-generated category briefs — updated as spend and contracts move.</div>
-      </a>
-      <a class="catmgmt-cap" href="mro-subcategory-grid.html">
-        <div class="catmgmt-cap-icon spend">
-          <svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 17V9M13 17v-5M17 17V5"/></svg>
-        </div>
-        <div class="catmgmt-cap-t">Spend intelligence</div>
-        <div class="catmgmt-cap-d">Managed versus unmanaged breakdowns by category and sub-category. Sourcing event coverage gaps, supplier concentration, and AI-identified opportunities — surfaced where the category manager can act on them.</div>
-      </a>
-    </div>
-
-  </div>
+ <!-- 3 capability links -->
+ <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+ <a href="category-portfolio.html" style="text-decoration:none;color:inherit;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);transition:all .2s;display:block">
+ <div style="width:38px;height:38px;border-radius:var(--rs);background:var(--brand-soft);display:grid;place-items:center;margin-bottom:14px">
+ <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8"><circle cx="7" cy="8" r="3"/><circle cx="16" cy="13" r="2.5"/><circle cx="6" cy="17" r="2"/><circle cx="15" cy="5" r="2"/></svg>
+ </div>
+ <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:400;margin-bottom:8px">Category portfolio</div>
+ <div style="font-size:.8125rem;color:var(--ink-2);line-height:1.6">Full spend portfolio on the Category Compass™ bubbles sized by spend, positioned by supply risk and criticality.</div>
+ </a>
+ <a href="mro-category-workspace.html" style="text-decoration:none;color:inherit;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);transition:all .2s;display:block">
+ <div style="width:38px;height:38px;border-radius:var(--rs);background:var(--purple-soft);display:grid;place-items:center;margin-bottom:14px">
+ <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
+ </div>
+ <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:400;margin-bottom:8px">Living category plans</div>
+ <div style="font-size:.8125rem;color:var(--ink-2);line-height:1.6">Strategy documents connected to real data KPI dashboards, milestone boards, and AI-generated category briefs.</div>
+ </a>
+ <a href="mro-subcategory-grid.html" style="text-decoration:none;color:inherit;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);transition:all .2s;display:block">
+ <div style="width:38px;height:38px;border-radius:var(--rs);background:var(--green-soft);display:grid;place-items:center;margin-bottom:14px">
+ <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8"><path d="M3 3v18h18M9 17V9M13 17v-5M17 17V5"/></svg>
+ </div>
+ <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:400;margin-bottom:8px">Spend intelligence</div>
+ <div style="font-size:.8125rem;color:var(--ink-2);line-height:1.6">Managed vs. unmanaged breakdowns, sourcing coverage gaps, and AI-identified savings opportunities by sub-category.</div>
+ </a>
+ </div>
+ </div>
 </section>
 
 <!-- ====== DEMOS ====== -->
 <section class="section demos" id="demos">
-  <div class="orb orb-demos-1"></div>
-  <div class="orb orb-demos-2"></div>
-  <div class="wrap">
-    <div class="section-h">
-      <div class="section-eyebrow">Interactive demos</div>
-      <h2>Many personas. One unified experience.</h2>
-      <p class="lead">Each demo is a fully designed prototype showing how the concept works for a specific user. Click any tile to open the live demo.</p>
-    </div>
+ <div class="orb orb-demos-1"></div>
+ <div class="orb orb-demos-2"></div>
+ <div class="wrap">
+ <div class="section-h">
+ <div class="section-eyebrow">Interactive demos</div>
+ <h2>Many personas. One unified experience.</h2>
+ <p class="lead">Each demo is a fully designed prototype. Click any tile to open the live demo.</p>
+ </div>
 
-    <div class="demo-grid four">
+ <div class="demo-grid four">
 
-      <a href="leader-dashboard.html" class="demo">
-        <div class="demo-img leader">
-          <div class="demo-icon-big leader">
-            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
-          </div>
-        </div>
-        <div class="demo-body">
-          <div class="demo-persona">Dr. Sarah Reyes · Assoc. Dean, Research</div>
-          <div class="demo-t">Leader</div>
-          <div class="demo-d">PI leaderboard, grant health, market intelligence feed, anomaly detection, and a 14-day approval pipeline preview.</div>
-          <div class="demo-foot">
-            <span class="demo-time">For <b>executive sponsors</b></span>
-            <span class="demo-arrow">→</span>
-          </div>
-        </div>
-      </a>
+ <a href="leader-dashboard.html" class="demo">
+ <div class="demo-img leader">
+ <div class="demo-icon-big leader">
+ <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+ </div>
+ </div>
+ <div class="demo-body">
+ <div class="demo-t">Strategic Leader</div>
+ <div class="demo-d">PI leaderboard with grant health, market intelligence feed, anomaly detection, and a 14-day approval pipeline preview.</div>
+ <div class="demo-foot"><span class="demo-time">For <b>executive sponsors</b></span><span class="demo-arrow">→</span></div>
+ </div>
+ </a>
 
-      <a href="category-portfolio.html" class="demo">
-        <div class="demo-img catport">
-          <div class="demo-icon-big catport">
-            <svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="16" cy="13" r="2.5"/><circle cx="6" cy="17" r="2"/><circle cx="14" cy="6" r="2"/></svg>
-          </div>
-        </div>
-        <div class="demo-body">
-          <div class="demo-persona">Marcus Chen · Category Manager</div>
-          <div class="demo-t">Categories</div>
-          <div class="demo-d">Spend portfolio mapped on the Category Compass™, living category plans, sourcing events, contracts, and spend intelligence.</div>
-          <div class="demo-foot">
-            <span class="demo-time">For <b>category managers</b></span>
-            <span class="demo-arrow">→</span>
-          </div>
-        </div>
-      </a>
+ <a href="category-portfolio.html" class="demo">
+ <div class="demo-img cat">
+ <div class="demo-icon-big cat">
+ <svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="16" cy="13" r="2.5"/><circle cx="6" cy="17" r="2"/><circle cx="15" cy="5" r="2"/></svg>
+ </div>
+ </div>
+ <div class="demo-body">
+ <div class="demo-t">Category Manager</div>
+ <div class="demo-d">Spend portfolio on the Category Compass™, living category plans, sourcing events, contracts, and spend intelligence.</div>
+ <div class="demo-foot"><span class="demo-time">For <b>category managers</b></span><span class="demo-arrow">→</span></div>
+ </div>
+ </a>
 
-      <a href="requester-home.html" class="demo">
-        <div class="demo-img req">
-          <div class="demo-icon-big req">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-        </div>
-        <div class="demo-body">
-          <div class="demo-persona">Jamie Mendez · Lab Manager</div>
-          <div class="demo-t">Requester</div>
-          <div class="demo-d">Conversational buying agent, savings command centre, grant health tracking, predictive KPIs, and guided buying scenarios.</div>
-          <div class="demo-foot">
-            <span class="demo-time">Best <b>starting point</b></span>
-            <span class="demo-arrow">→</span>
-          </div>
-        </div>
-      </a>
+ <a href="requester-home.html" class="demo">
+ <div class="demo-img req">
+ <div class="demo-icon-big req">
+ <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+ </div>
+ </div>
+ <div class="demo-body">
+ <div class="demo-t">Procurement</div>
+ <div class="demo-d">Conversational buying agent, savings command centre, grant health tracking, predictive KPIs, and guided buying scenarios.</div>
+ <div class="demo-foot"><span class="demo-time">Best <b>starting point</b></span><span class="demo-arrow">→</span></div>
+ </div>
+ </a>
 
-      <a href="ap-operations.html" class="demo">
-        <div class="demo-img ap">
-          <div class="demo-icon-big ap">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-        </div>
-        <div class="demo-body">
-          <div class="demo-persona">David Kwan · AP Operations Manager</div>
-          <div class="demo-t">AP Operations</div>
-          <div class="demo-d">30-day invoice pipeline, exception triage, 3-way match queue, payment run preview, and supplier risk monitoring.</div>
-          <div class="demo-foot">
-            <span class="demo-time">For <b>AP teams</b></span>
-            <span class="demo-arrow">→</span>
-          </div>
-        </div>
-      </a>
+ <a href="ap-operations.html" class="demo">
+ <div class="demo-img ap">
+ <div class="demo-icon-big ap">
+ <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+ </div>
+ </div>
+ <div class="demo-body">
+ <div class="demo-t">Payables &amp; Cash Management</div>
+ <div class="demo-d">30-day invoice pipeline, exception triage, 3-way match queue, payment run preview, and supplier risk monitoring.</div>
+ <div class="demo-foot"><span class="demo-time">For <b>AP teams</b></span><span class="demo-arrow">→</span></div>
+ </div>
+ </a>
 
-    </div>
-  </div>
+ </div>
+ </div>
 </section>
 
 <!-- ====== DIFFERENTIATORS ====== -->
 <section class="section differentiators-section" id="different">
-  <div class="orb orb-diff-1"></div>
-  <div class="orb orb-diff-2"></div>
-  <div class="wrap">
-    <div class="section-h">
-      <div class="section-eyebrow">What's different</div>
-      <h2>Five things you won't find in market today.</h2>
-      <p class="lead">Modern procurement vendors have improved transaction processing. This concept tackles the systemic failures that those improvements still leave in place.</p>
-    </div>
+ <div class="orb orb-diff-1"></div>
+ <div class="orb orb-diff-2"></div>
+ <div class="wrap">
+ <div class="section-h">
+ <div class="section-eyebrow">What's different</div>
+ <h2>Five things you won't find in market today.</h2>
+ <p class="lead">Modern procurement vendors have improved transaction processing. This concept tackles the systemic failures that those improvements still leave in place.</p>
+ </div>
 
-    <div class="diff-list">
+ <div class="diff-list">
 
-      <div class="diff-item">
-        <div class="diff-i indigo">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6"/></svg>
-        </div>
-        <div>
-          <div class="diff-t">Predictive AP — "Telepathy" for invoices not yet sent</div>
-          <div class="diff-d">AP sees a 30-day projection built from drafts, recurring patterns, pending receipts, contract milestones, and behavioral history. No procurement vendor surfaces this today.</div>
-        </div>
-        <div class="diff-st"><b>Unique to this concept</b><br/>Closes the AP-surprise gap</div>
-      </div>
+ <div class="diff-item">
+ <div class="diff-i indigo">
+ <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6"/></svg>
+ </div>
+ <div>
+ <div class="diff-t">Predictive AP "Telepathy" for invoices not yet sent</div>
+ <div class="diff-d">AP sees a 30-day projection built from drafts, recurring patterns, pending receipts, contract milestones, and behavioral history. No procurement vendor surfaces this today.</div>
+ </div>
+ <div class="diff-st"><b>Unique to this concept</b><br/>Closes the AP-surprise gap</div>
+ </div>
 
-      <div class="diff-item">
-        <div class="diff-i brand">
-          <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-        </div>
-        <div>
-          <div class="diff-t">Market intelligence connected to your portfolio</div>
-          <div class="diff-d">Commodity prices, FX moves, tariff changes — each tied to specific PIs, suppliers, and quantified dollar impact. Replaces what category analysts do in spreadsheets today.</div>
-        </div>
-        <div class="diff-st"><b>Treasury & CFO appeal</b><br/>Forward-buy savings</div>
-      </div>
+ <div class="diff-item">
+ <div class="diff-i brand">
+ <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+ </div>
+ <div>
+ <div class="diff-t">Market intelligence connected to your portfolio</div>
+ <div class="diff-d">Commodity prices, FX moves, tariff changes each tied to specific PIs, suppliers, and quantified dollar impact. Replaces what category analysts do in spreadsheets today.</div>
+ </div>
+ <div class="diff-st"><b>Treasury & CFO appeal</b><br/>Forward-buy savings</div>
+ </div>
 
-      <div class="diff-item">
-        <div class="diff-i purple">
-          <svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 17V9M13 17v-5M17 17V5"/></svg>
-        </div>
-        <div>
-          <div class="diff-t">Pattern-match contract benchmarking from your history</div>
-          <div class="diff-d">New supplier proposal? The agent compares it to N similar past contracts — median price, term, clause deltas, outcome history with that supplier. No more flying blind in negotiations.</div>
-        </div>
-        <div class="diff-st"><b>Sourcing leverage</b><br/>Data the negotiator needs</div>
-      </div>
+ <div class="diff-item">
+ <div class="diff-i purple">
+ <svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 17V9M13 17v-5M17 17V5"/></svg>
+ </div>
+ <div>
+ <div class="diff-t">Pattern-match contract benchmarking from your history</div>
+ <div class="diff-d">New supplier proposal? The agent compares it to N similar past contracts median price, term, clause deltas, outcome history with that supplier. No more flying blind in negotiations.</div>
+ </div>
+ <div class="diff-st"><b>Sourcing leverage</b><br/>Data the negotiator needs</div>
+ </div>
 
-      <div class="diff-item">
-        <div class="diff-i green">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div>
-          <div class="diff-t">Behavioral feedback loops for casual users</div>
-          <div class="diff-d">Fast receipt confirmation? The user hears about it — "top 10% response time, AP doesn't chase, lab captures the discount." Today, the absence of complaint is the only signal.</div>
-        </div>
-        <div class="diff-st"><b>Adoption flywheel</b><br/>Reinforces good behavior</div>
-      </div>
+ <div class="diff-item">
+ <div class="diff-i green">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ <div>
+ <div class="diff-t">Behavioral feedback loops for casual users</div>
+ <div class="diff-d">Fast receipt confirmation? The user hears about it "top 10% response time, AP doesn't chase, lab captures the discount." Today, the absence of complaint is the only signal.</div>
+ </div>
+ <div class="diff-st"><b>Adoption flywheel</b><br/>Reinforces good behavior</div>
+ </div>
 
-      <div class="diff-item">
-        <div class="diff-i teal">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div>
-          <div class="diff-t">Calm compliance with auditable transparency</div>
-          <div class="diff-d">12 checks pass silently for 99% of transactions. The summary is a single green status; the detail is one click away for auditors. Production audit-grade by design.</div>
-        </div>
-        <div class="diff-st"><b>Audit-defensible</b><br/>Internal & external</div>
-      </div>
+ <div class="diff-item">
+ <div class="diff-i teal">
+ <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+ </div>
+ <div>
+ <div class="diff-t">Calm compliance with auditable transparency</div>
+ <div class="diff-d">12 checks pass silently for 99% of transactions. The summary is a single green status; the detail is one click away for auditors. Production audit-grade by design.</div>
+ </div>
+ <div class="diff-st"><b>Audit-defensible</b><br/>Internal & external</div>
+ </div>
 
-    </div>
-  </div>
+ </div>
+ </div>
 </section>
 
 <!-- ====== FOOTER ====== -->
 <footer class="footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="brand-mark">
-          <div class="brand-dot">P</div>
-          <div class="brand-name">Procurello</div>
-          <span class="brand-tag">Concept</span>
-        </div>
-        <div class="footer-tag">A conceptual prototype demonstrating how agentic AI could transform procurement and accounts payable in decentralized environments such as research universities, academic medical centers, and large public institutions.</div>
-      </div>
+ <div class="wrap">
+ <div class="footer-grid">
+ <div class="footer-brand">
+ <div class="brand-mark">
+ <div class="brand-dot">P</div>
+ <div class="brand-name">Procurello</div>
+ <span class="brand-tag">Concept</span>
+ </div>
+ <div class="footer-tag">A conceptual prototype demonstrating how agentic AI could transform procurement and accounts payable in decentralized environments such as research universities, academic medical centers, and large public institutions.</div>
+ </div>
 
-      <div class="footer-col">
-        <h4>Demos</h4>
-        <a href="requester-home.html">Requester home</a>
-        <a href="leader-dashboard.html">Leader dashboard</a>
-        <a href="ap-operations.html">AP operations</a>
-        <a href="catalog-guided-buying.html">Catalog buying</a>
-        <a href="guided-buying-concept.html">Non-catalog services</a>
-        <a href="invoice-guided-buying.html">Invoice receiving</a>
-        <a href="contract-quote-guided-buying.html">Contract handling</a>
-      <a href="category-portfolio.html">Category portfolio</a>
-      <a href="mro-category-workspace.html">Category workspace</a>
-      <a href="mro-subcategory-grid.html">Sub-category grid</a>
-      </div>
+ <div class="footer-col">
+ <h4>Demos</h4>
+ <a href="requester-home.html">Requester home</a>
+ <a href="leader-dashboard.html">Leader dashboard</a>
+ <a href="ap-operations.html">AP operations</a>
+ <a href="catalog-guided-buying.html">Catalog buying</a>
+ <a href="guided-buying-concept.html">Non-catalog services</a>
+ <a href="invoice-guided-buying.html">Invoice receiving</a>
+ <a href="contract-quote-guided-buying.html">Contract handling</a>
+ </div>
 
-      <div class="footer-col">
-        <h4>Resources</h4>
-        <a href="requirements.md">Requirements document</a>
-        <a href="#concept">Core concepts</a>
-        <a href="#different">What's different</a>
-        <a href="#demos">All demos</a>
-      </div>
-    </div>
+ <div class="footer-col">
+ <h4>Resources</h4>
+ <a href="#concept">Core concepts</a>
+ <a href="#different">What's different</a>
+ <a href="#demos">All demos</a>
+ </div>
+ </div>
 
-    <div class="footer-bottom">
-      <div>Concept prototype · Not affiliated with any vendor · Built for demonstration purposes</div>
-      <div class="legal">
-        <span>v1.0 · May 2026</span>
-      </div>
-    </div>
-  </div>
+ <div class="footer-bottom">
+ <div>Concept prototype · Not affiliated with any vendor · Built for demonstration purposes</div>
+ <div class="legal">
+ <span>v1.0 · May 2026</span>
+ </div>
+ </div>
+ </div>
 </footer>
 
 </body>

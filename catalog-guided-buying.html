@@ -3,571 +3,634 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Procurello — Catalog Guided Buying</title>
+<title>Procurello Catalog Guided Buying</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F4F3EF;
-    --ink:#1A1A1A; --ink-2:#4A4A48; --ink-3:#8A8A88;
-    --line:#E8E6E0; --line-2:#D9D6CE;
-    --brand:#7C3AED; --brand-soft:#EDE9FE;
-    --accent:#1E3A5F; --accent-soft:#E7ECF3;
-    --green:#2E7D5B; --green-soft:#E4F1EB;
-    --amber:#B97A0E; --amber-soft:#FBF1DC;
-    --r:10px; --rs:6px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
+ :root {
+ /* Brand palette DS v2 */
+ --ink: #1A1016;
+ --aubergine: #3C1239;
+ --plum: #5D1E58;
+ --brand: #7C3AED;
+ --brand-light: #A87CE8;
+ --violet-dim: #2D1B4E;
 
-  /* SIDEBAR */
-  .sb{background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:2px}
-  .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rs);color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
-  .nav:hover{background:var(--surface-2);color:var(--ink)}
-  .nav.active{background:var(--brand-soft);color:var(--brand)}
-  .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
-  .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600}
-  .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);padding:18px 10px 6px;font-weight:600}
-  .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
-  .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
-  .av-i{flex:1;min-width:0}
-  .av-n{font-size:12px;font-weight:600}
-  .av-r{font-size:11px;color:var(--ink-3)}
+ /* Earth neutrals */
+ --bg: #F5F2EF;
+ --surface: #FFFFFF;
+ --surface-2: #EDE8E3;
+ --line: #D9D2CB;
+ --line-2: #B8AFA6;
+ --border: #D9D2CB;
 
-  /* MAIN */
-  .main{padding:32px 40px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
-  .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
-  .crumb .s{color:var(--line-2)}
-  h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
-  .lede{color:var(--ink-2);font-size:14px;margin-bottom:24px;max-width:620px}
+ /* Text */
+ --text-primary: #1F1A17;
+ --text-secondary: #7A6E65;
+ --text-muted: #B8AFA6;
 
-  /* COMPOSER */
-  .composer{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
-  .c-in{padding:16px 18px 12px}
-  .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-  .spk{width:12px;height:12px;color:var(--brand)}
-  .c-txt{font-size:15px;color:var(--ink);min-height:20px}
-  .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
-  .c-acts{display:flex;gap:4px;flex-wrap:wrap}
-  .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
-  .chip:hover{border-color:var(--line-2);color:var(--ink)}
-  .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
-  .btn{padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
-  .btn:hover{background:var(--surface-2)}
-  .btn-p{background:var(--ink);color:#fff;border-color:var(--ink)}
-  .btn-p:hover{background:#000}
-  .btn-g{background:var(--green);color:#fff;border-color:var(--green)}
-  .btn-g:hover{background:#256749}
+ /* Semantic status muted, not neon */
+ --green: #3D6B4A;
+ --amber: #7A5C1E;
+ --red: #7A2C1E;
 
-  /* THREAD */
-  .thread{margin-top:24px}
-  .turn{margin-bottom:22px}
-  .t-user{display:flex;justify-content:flex-end;margin-bottom:14px}
-  .t-user-b{background:var(--accent);color:#fff;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:14px;max-width:80%;line-height:1.5}
-  .t-agent{display:flex;gap:12px}
-  .a-dot{width:28px;height:28px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
-  .a-body{flex:1;min-width:0}
-  .a-name{font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-  .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);display:inline-block}
-  .a-msg{font-size:14px;color:var(--ink);line-height:1.6}
-  .a-msg p{margin-bottom:10px}
-  .a-msg strong{font-weight:600}
+ /* Soft tints */
+ --brand-soft: #EDE9FE;
+ --green-soft: #E4F1EB;
+ --amber-soft: #F5EDD8;
+ --red-soft: #FBEBE8;
 
-  /* INLINE CARDS */
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin:10px 0;overflow:hidden}
-  .card-h{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
-  .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
-  .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-  .card-b{padding:12px 14px}
+ /* Typography */
+ --font-display: 'DM Serif Display', Georgia, serif;
+ --font-body: 'Karla', 'Helvetica Neue', sans-serif;
+ --font-mono: 'DM Mono', 'Courier New', monospace;
 
-  /* PRODUCT CARDS */
-  .prod-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-  .prod{border:1px solid var(--line);border-radius:var(--rs);background:var(--surface);display:flex;flex-direction:column;transition:all .15s;cursor:pointer;position:relative;overflow:hidden}
-  .prod:hover{border-color:var(--line-2);transform:translateY(-1px);box-shadow:0 4px 12px -6px rgba(0,0,0,.08)}
-  .prod.best{border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
-  .prod-flag{position:absolute;top:0;left:0;right:0;background:var(--green);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;text-align:center;letter-spacing:.04em;text-transform:uppercase}
-  .prod-img{height:80px;background:var(--surface-2);display:grid;place-items:center;border-bottom:1px solid var(--line);position:relative}
-  .prod.best .prod-img{margin-top:18px}
-  .prod-img svg{width:42px;height:42px;color:var(--ink-3);opacity:.7}
-  .prod-img img{max-width:80%;max-height:64px;object-fit:contain;display:block}
-  .prod-body{padding:10px 12px;flex:1;display:flex;flex-direction:column}
-  .prod-sup{font-size:10px;color:var(--ink-3);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px}
-  .sup-dot{width:14px;height:14px;border-radius:3px;background:var(--surface-2);display:grid;place-items:center;font-size:8px;font-weight:700;color:var(--ink-2);border:1px solid var(--line)}
-  .prod-n{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:3px}
-  .prod-m{font-size:11px;color:var(--ink-3);margin-bottom:8px;line-height:1.4;flex:1}
-  .prod-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:auto}
-  .prod-price-w{display:flex;flex-direction:column}
-  .prod-price{font-size:14px;font-weight:700;line-height:1}
-  .prod-list{font-size:10px;color:var(--ink-3);text-decoration:line-through;margin-top:2px}
-  .prod-save{font-size:10px;color:var(--green);font-weight:600;margin-top:2px}
-  .add-btn{background:var(--ink);color:#fff;border:none;border-radius:var(--rs);padding:6px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px}
-  .add-btn:hover{background:#000}
-  .add-btn svg{width:10px;height:10px;stroke:currentColor;stroke-width:2.5;fill:none}
-  .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;margin-bottom:6px}
-  .b-g{background:var(--green-soft);color:var(--green)}
-  .b-a{background:var(--amber-soft);color:var(--amber)}
-  .b-n{background:var(--surface-2);color:var(--ink-2)}
-  .b-b{background:var(--accent-soft);color:var(--accent)}
+ /* Radius: intentionally minimal */
+ --r: 0px;
+ --rs: 2px;
+ --rl: 0px;
 
-  /* PRODUCT INTELLIGENCE - market awareness */
-  .prod-intel{display:flex;gap:10px;font-size:10px;color:var(--ink-3);margin:6px 0 8px;padding:6px 0;border-top:1px dashed var(--line);flex-wrap:wrap}
-  .prod-intel span{display:inline-flex;align-items:center;gap:4px}
-  .prod-intel svg{width:9px;height:9px;stroke:currentColor;stroke-width:2;fill:none;flex-shrink:0}
-  .prod-intel b{color:var(--ink-2);font-weight:600}
-  .prod-intel .pos{color:var(--green);font-weight:600}
-  .prod-intel .neg{color:var(--brand);font-weight:600}
+ /* Shadows: crisp offset, no blur */
+ --shadow-sm: 2px 2px 0px #D9D2CB;
+ --shadow-md: 4px 4px 0px #D9D2CB;
+ --shadow-brand: 4px 4px 0px rgba(92,30,88,0.25);
+}
+ *{box-sizing:border-box;margin:0;padding:0}
+ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+ .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
 
-  /* PUNCHOUT CARD */
-  .punch{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(90deg,var(--surface-2) 0%,var(--surface) 100%);border:1px dashed var(--line-2);border-radius:var(--rs);margin-top:10px;cursor:pointer;transition:all .15s}
-  .punch:hover{border-color:var(--ink-3);background:var(--surface-2)}
-  .punch-i{width:36px;height:36px;border-radius:7px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:10px;color:var(--ink-2);flex-shrink:0}
-  .punch-b{flex:1;min-width:0}
-  .punch-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
-  .punch-d{font-size:11px;color:var(--ink-3);margin-top:2px}
-  .punch-a{font-size:11px;color:var(--ink-2);font-weight:600;display:flex;align-items:center;gap:4px;flex-shrink:0}
-  .punch-a svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
+ /* SIDEBAR */
+ .sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%);border-right:none;padding:20px 14px;display:flex;flex-direction:column;gap:2px}
+ .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:2px;color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
+ .nav:hover{background:rgba(255,255,255,0.07);color:var(--ink)}
+ .nav.active{background:var(--brand-soft);color:var(--brand)}
+ .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
+ .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:0;font-weight:600}
+ .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.35);padding:18px 10px 6px;font-weight:600}
+ .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
+ .av{width:30px;height:30px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
+ .av-i{flex:1;min-width:0}
+ .av-n{font-size:12px;font-weight:600}
+ .av-r{font-size:11px;color:var(--ink-3)}
 
-  /* FOLLOWUP */
-  .fu{background:var(--surface);border:1px dashed var(--line-2);border-radius:var(--r);padding:13px;margin:10px 0}
-  .fu-q{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink-2)}
-  .fu-opts{display:flex;flex-wrap:wrap;gap:6px}
-  .opt{padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;cursor:pointer;background:var(--surface);transition:all .15s}
-  .opt:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+ /* MAIN */
+ .main{padding:32px 40px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
+ .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
+ .crumb .s{color:var(--line-2)}
+ h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+ .lede{color:var(--ink-2);font-size:14px;margin-bottom:24px;max-width:620px}
 
-  /* HISTORY HINT */
-  .hint{background:var(--accent-soft);border:1px solid #C7D2E0;border-radius:var(--r);padding:12px 14px;margin:10px 0;display:flex;align-items:flex-start;gap:10px}
-  .hint-i{width:24px;height:24px;border-radius:6px;background:var(--accent);color:#fff;display:grid;place-items:center;flex-shrink:0;font-size:11px;font-weight:700}
-  .hint-b{flex:1;font-size:13px;color:var(--ink)}
-  .hint-b b{font-weight:600}
-  .hint-a{display:flex;gap:6px;margin-top:8px}
+ /* COMPOSER */
+ .composer{background:var(--surface);border:1px solid var(--line);border-radius:0;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
+ .c-in{padding:16px 18px 12px}
+ .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+ .spk{width:12px;height:12px;color:var(--brand)}
+ .c-txt{font-size:15px;color:var(--ink);min-height:20px}
+ .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
+ .c-acts{display:flex;gap:4px;flex-wrap:wrap}
+ .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
+ .chip:hover{border-color:var(--line-2);color:var(--ink)}
+ .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
+ .btn{padding:8px 14px;border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
+ .btn:hover{background:var(--surface-2)}
+ .btn-p{background:var(--aubergine);color:rgba(255,255,255,.92);box-shadow:var(--shadow-brand)}
+ .btn-p:hover{background:var(--plum)}
+ .btn-g{background:var(--green);color:#fff;border-color:var(--green)}
+ .btn-g:hover{background:#256749}
 
-  /* INLINE COMPOSER */
-  .icomp{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
-  .icomp input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:10px 0}
-  .icomp input::placeholder{color:var(--ink-3)}
+ /* THREAD */
+ .thread{margin-top:24px}
+ .turn{margin-bottom:22px}
+ .t-user{display:flex;justify-content:flex-end;margin-bottom:14px}
+ .t-user-b{background:var(--accent);color:#fff;padding:10px 14px;border-radius:0 14px 4px 14px;font-size:14px;max-width:80%;line-height:1.5}
+ .t-agent{display:flex;gap:12px}
+ .a-dot{width:28px;height:28px;border-radius:0;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+ .a-body{flex:1;min-width:0}
+ .a-name{font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+ .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);display:inline-block}
+ .a-msg{font-size:14px;color:var(--ink);line-height:1.6}
+ .a-msg p{margin-bottom:10px}
+ .a-msg strong{font-weight:600}
 
-  /* RIGHT — CART */
-  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
-  .sum-s{margin-bottom:22px}
-  .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
-  .sum-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em}
-  .sum-h .count{font-size:11px;color:var(--ink-2);background:var(--surface-2);padding:2px 8px;border-radius:10px;font-weight:600;text-transform:none;letter-spacing:0}
+ /* INLINE CARDS */
+ .card{background:var(--surface);border:1px solid var(--line);border-radius:0;margin:10px 0;overflow:hidden}
+ .card-h{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
+ .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+ .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+ .card-b{padding:12px 14px}
 
-  /* CART ITEMS */
-  .cart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-  .ci{padding:11px 12px;display:flex;gap:10px;border-bottom:1px solid var(--line)}
-  .ci:last-child{border-bottom:none}
-  .ci-img{width:38px;height:38px;border-radius:6px;background:var(--surface-2);display:grid;place-items:center;flex-shrink:0;border:1px solid var(--line)}
-  .ci-img svg{width:18px;height:18px;color:var(--ink-3);opacity:.7}
-  .ci-b{flex:1;min-width:0}
-  .ci-n{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:2px}
-  .ci-m{font-size:11px;color:var(--ink-3)}
-  .ci-q{display:flex;align-items:center;gap:6px;margin-top:6px}
-  .qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:5px;overflow:hidden}
-  .qty button{background:var(--surface);border:none;width:18px;height:18px;font-size:12px;cursor:pointer;color:var(--ink-2)}
-  .qty button:hover{background:var(--surface-2)}
-  .qty span{font-size:11px;font-weight:600;padding:0 6px;min-width:20px;text-align:center}
-  .ci-p{font-size:13px;font-weight:700;flex-shrink:0;text-align:right}
-  .ci-p-s{font-size:10px;color:var(--green);font-weight:600;margin-top:2px}
+ /* PRODUCT CARDS */
+ .prod-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+ .prod{border:1px solid var(--line);border-radius:2px;background:var(--surface);display:flex;flex-direction:column;transition:all .15s;cursor:pointer;position:relative;overflow:hidden}
+ .prod:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
+ .prod.best{border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+ .prod-flag{position:absolute;top:0;left:0;right:0;background:var(--green);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;text-align:center;letter-spacing:.04em;text-transform:uppercase}
+ .prod-img{height:80px;background:var(--surface-2);display:grid;place-items:center;border-bottom:1px solid var(--line);position:relative}
+ .prod.best .prod-img{margin-top:18px}
+ .prod-img svg{width:42px;height:42px;color:var(--ink-3);opacity:.7}
+ .prod-img img{max-width:80%;max-height:64px;object-fit:contain;display:block}
+ .prod-body{padding:10px 12px;flex:1;display:flex;flex-direction:column}
+ .prod-sup{font-size:10px;color:var(--ink-3);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+ .sup-dot{width:14px;height:14px;border-radius:2px;background:var(--surface-2);display:grid;place-items:center;font-size:8px;font-weight:700;color:var(--ink-2);border:1px solid var(--line)}
+ .prod-n{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:3px}
+ .prod-m{font-size:11px;color:var(--ink-3);margin-bottom:8px;line-height:1.4;flex:1}
+ .prod-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:auto}
+ .prod-price-w{display:flex;flex-direction:column}
+ .prod-price{font-size:14px;font-weight:700;line-height:1}
+ .prod-list{font-size:10px;color:var(--ink-3);text-decoration:line-through;margin-top:2px}
+ .prod-save{font-size:10px;color:var(--green);font-weight:600;margin-top:2px}
+ .add-btn{background:var(--ink);color:#fff;border:none;border-radius:2px;padding:6px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px}
+ .add-btn:hover{background:#000}
+ .add-btn svg{width:10px;height:10px;stroke:currentColor;stroke-width:2.5;fill:none}
+ .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:2px;font-size:10px;font-weight:600;margin-bottom:6px}
+ .b-g{background:var(--green-soft);color:var(--green)}
+ .b-a{background:var(--amber-soft);color:var(--amber)}
+ .b-n{background:var(--surface-2);color:var(--ink-2)}
+ .b-b{background:var(--accent-soft);color:var(--accent)}
 
-  /* CART TOTALS */
-  .totals{padding:12px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
-  .tt{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}
-  .tt-k{color:var(--ink-3)}
-  .tt-v{font-weight:500}
-  .tt.grand{padding-top:8px;margin-top:6px;border-top:1px solid var(--line-2);font-size:14px}
-  .tt.grand .tt-k{color:var(--ink);font-weight:600}
-  .tt.grand .tt-v{font-weight:700}
-  .tt.save .tt-v{color:var(--green);font-weight:600}
+ /* PRODUCT INTELLIGENCE - market awareness */
+ .prod-intel{display:flex;gap:10px;font-size:10px;color:var(--ink-3);margin:6px 0 8px;padding:6px 0;border-top:1px dashed var(--line);flex-wrap:wrap}
+ .prod-intel span{display:inline-flex;align-items:center;gap:4px}
+ .prod-intel svg{width:9px;height:9px;stroke:currentColor;stroke-width:2;fill:none;flex-shrink:0}
+ .prod-intel b{color:var(--ink-2);font-weight:600}
+ .prod-intel .pos{color:var(--green);font-weight:600}
+ .prod-intel .neg{color:var(--brand);font-weight:600}
 
-  /* CHECKS */
-  .chk{display:flex;align-items:flex-start;gap:8px;padding:7px 0;font-size:12px}
-  .chk-i{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
-  .chk-i.ok{background:var(--green);color:#fff}
-  .chk-i.info{background:var(--accent);color:#fff}
-  .chk-i svg{width:8px;height:8px;stroke:currentColor;stroke-width:3;fill:none}
-  .chk-t{color:var(--ink-2)}
-  .chk-t b{color:var(--ink);font-weight:600}
+ /* PUNCHOUT CARD */
+ .punch{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(90deg,var(--surface-2) 0%,var(--surface) 100%);border:1px dashed var(--line-2);border-radius:2px;margin-top:10px;cursor:pointer;transition:all .15s}
+ .punch:hover{border-color:var(--ink-3);background:var(--surface-2)}
+ .punch-i{width:36px;height:36px;border-radius:2px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:10px;color:var(--ink-2);flex-shrink:0}
+ .punch-b{flex:1;min-width:0}
+ .punch-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+ .punch-d{font-size:11px;color:var(--ink-3);margin-top:2px}
+ .punch-a{font-size:11px;color:var(--ink-2);font-weight:600;display:flex;align-items:center;gap:4px;flex-shrink:0}
+ .punch-a svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
 
-  .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:20px}
-  .actions .btn{width:100%;text-align:center;padding:10px}
+ /* FOLLOWUP */
+ .fu{background:var(--surface);border:1px dashed var(--line-2);border-radius:0;padding:13px;margin:10px 0}
+ .fu-q{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink-2)}
+ .fu-opts{display:flex;flex-wrap:wrap;gap:6px}
+ .opt{padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;cursor:pointer;background:var(--surface);transition:all .15s}
+ .opt:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-  /* ── Topbar (cross-page nav) ─────────────────────────────── */
-  .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
-  .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.25) 30%,rgba(60,18,57,.25) 70%,transparent);pointer-events:none}
-  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
-  .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
-  .tb-dot{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--brand),var(--aubergine));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:0 4px 12px -4px rgba(124,58,237,.4)}
-  .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
-  .tb-sub{font-size:11px;color:var(--ink-3)}
-  .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
-  .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
-  .tb-links a:hover{color:var(--ink)}
-  .tb-links a.tb-active{color:var(--brand);font-weight:600}
-  .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
-  .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
-  .tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
+ /* HISTORY HINT */
+ .hint{background:var(--accent-soft);border:1px solid #C7D2E0;border-radius:0;padding:12px 14px;margin:10px 0;display:flex;align-items:flex-start;gap:10px}
+ .hint-i{width:24px;height:24px;border-radius:2px;background:var(--accent);color:#fff;display:grid;place-items:center;flex-shrink:0;font-size:11px;font-weight:700}
+ .hint-b{flex:1;font-size:13px;color:var(--ink)}
+ .hint-b b{font-weight:600}
+ .hint-a{display:flex;gap:6px;margin-top:8px}
 
-  </style>
+ /* INLINE COMPOSER */
+ .icomp{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:0;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
+ .icomp input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:10px 0}
+ .icomp input::placeholder{color:var(--ink-3)}
+
+ /* RIGHT CART */
+ .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
+ .sum-s{margin-bottom:22px}
+ .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+ .sum-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em}
+ .sum-h .count{font-size:11px;color:var(--ink-2);background:var(--surface-2);padding:2px 8px;border-radius:0;font-weight:600;text-transform:none;letter-spacing:0}
+
+ /* CART ITEMS */
+ .cart{background:var(--surface);border:1px solid var(--line);border-radius:0;overflow:hidden}
+ .ci{padding:11px 12px;display:flex;gap:10px;border-bottom:1px solid var(--line)}
+ .ci:last-child{border-bottom:none}
+ .ci-img{width:38px;height:38px;border-radius:2px;background:var(--surface-2);display:grid;place-items:center;flex-shrink:0;border:1px solid var(--line)}
+ .ci-img svg{width:18px;height:18px;color:var(--ink-3);opacity:.7}
+ .ci-b{flex:1;min-width:0}
+ .ci-n{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:2px}
+ .ci-m{font-size:11px;color:var(--ink-3)}
+ .ci-q{display:flex;align-items:center;gap:6px;margin-top:6px}
+ .qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:2px;overflow:hidden}
+ .qty button{background:var(--surface);border:none;width:18px;height:18px;font-size:12px;cursor:pointer;color:var(--ink-2)}
+ .qty button:hover{background:var(--surface-2)}
+ .qty span{font-size:11px;font-weight:600;padding:0 6px;min-width:20px;text-align:center}
+ .ci-p{font-size:13px;font-weight:700;flex-shrink:0;text-align:right}
+ .ci-p-s{font-size:10px;color:var(--green);font-weight:600;margin-top:2px}
+
+ /* CART TOTALS */
+ .totals{padding:12px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
+ .tt{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}
+ .tt-k{color:var(--ink-3)}
+ .tt-v{font-weight:500}
+ .tt.grand{padding-top:8px;margin-top:6px;border-top:1px solid var(--line-2);font-size:14px}
+ .tt.grand .tt-k{color:var(--ink);font-weight:600}
+ .tt.grand .tt-v{font-weight:700}
+ .tt.save .tt-v{color:var(--green);font-weight:600}
+
+ /* CHECKS */
+ .chk{display:flex;align-items:flex-start;gap:8px;padding:7px 0;font-size:12px}
+ .chk-i{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+ .chk-i.ok{background:var(--green);color:#fff}
+ .chk-i.info{background:var(--accent);color:#fff}
+ .chk-i svg{width:8px;height:8px;stroke:currentColor;stroke-width:3;fill:none}
+ .chk-t{color:var(--ink-2)}
+ .chk-t b{color:var(--ink);font-weight:600}
+
+ .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:20px}
+ .actions .btn{width:100%;text-align:center;padding:10px}
+
+ /* ── Topbar (cross-page nav) ─────────────────────────────── */
+ .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+ .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
+ .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
+ .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
+ .tb-dot{width:28px;height:28px;border-radius:2px;background:var(--aubergine);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:var(--shadow-sm)}
+ .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+ .tb-sub{font-size:11px;color:var(--ink-3)}
+ .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
+ .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
+ .tb-links a:hover{color:var(--ink)}
+ .tb-links a.tb-active{color:var(--plum);font-weight:600;border-bottom:2px solid var(--plum)}
+ .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
+ .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
+ .tb-av{width:28px;height:28px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
+
+ 
+ /* Sidebar nav light text on dark aubergine */
+ .sb .nav{color:rgba(255,255,255,.75)}
+ .sb .nav svg{stroke:rgba(255,255,255,.55)}
+ .sb .nav:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92)}
+ .sb .nav:hover svg{stroke:rgba(255,255,255,.8)}
+ .sb .nav.active{color:#fff;background:rgba(168,124,232,.2);border-left-color:var(--brand-light)}
+ .sb .nav.active svg{stroke:var(--brand-light)}
+ .sb .nav-h{color:rgba(255,255,255,.35)}
+ .sb .pill{background:rgba(168,124,232,.25);color:var(--brand-light)}
+ .sb .pill.amber{background:rgba(122,92,30,.35);color:#FBBF24}
+
+ 
+ /* Sidebar gradient + guaranteed light text (placed last, high specificity) */
+ aside.sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%)}
+ aside.sb .nav{color:rgba(255,255,255,.75)!important}
+ aside.sb .nav svg{stroke:rgba(255,255,255,.5)!important}
+ aside.sb .nav:hover{background:rgba(255,255,255,.07)!important;color:rgba(255,255,255,.92)!important}
+ aside.sb .nav:hover svg{stroke:rgba(255,255,255,.8)!important}
+ aside.sb .nav.active{color:#fff!important;background:rgba(168,124,232,.2)!important;border-left:2px solid var(--brand-light)!important}
+ aside.sb .nav.active svg{stroke:var(--brand-light)!important}
+ aside.sb .nav-h{color:rgba(255,255,255,.3)!important}
+ aside.sb .pill{background:rgba(168,124,232,.25)!important;color:var(--brand-light)!important}
+ aside.sb .pill.amber{background:rgba(122,92,30,.4)!important;color:#FBBF24!important}
+
+ </style>
 </head>
 <body>
 
 
 <!-- ── Topbar ── -->
 <nav class="topbar">
-  <div class="topbar-inner">
-    <a href="index.html" class="tb-brand">
-      <div class="tb-dot">P</div>
-      <div>
-        <div class="tb-name">Procurello</div>
-        <div class="tb-sub">Guided buying</div>
-      </div>
-    </a>
-    <div class="tb-links">
-      <a href="index.html#concept">Concept</a>
-      <a href="index.html#different">Why It Matters</a>
-      <a href="index.html#demos">Demos</a>
-    </div>
-    <div class="tb-user">
-      <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
-      <div class="tb-av">JM</div>
-    </div>
-  </div>
+ <div class="topbar-inner">
+ <a href="index.html" class="tb-brand">
+ <div class="tb-dot">P</div>
+ <div>
+ <div class="tb-name">Procurello</div>
+ <div class="tb-sub">Guided buying</div>
+ </div>
+ </a>
+ <div class="tb-links">
+ <a href="index.html#concept">Concept</a>
+ <a href="index.html#different">Why It Matters</a>
+ <a href="index.html#demos">Demos</a>
+ </div>
+ <div class="tb-user">
+ <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
+ <div class="tb-av">JM</div>
+ </div>
+ </div>
 </nav>
 
 <div class="app">
 
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sb">
+ <!-- ===== SIDEBAR ===== -->
+ <aside class="sb">
 
-    <div class="nav active">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      Buy something
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
-      My requests
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      Approvals <span class="pill">3</span>
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-      Orders
-    </div>
+ <div class="nav active">
+ <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+ Buy something
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
+ My requests
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+ Approvals <span class="pill">3</span>
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+ Orders
+ </div>
 
-    <div class="nav-h">Workspace</div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      Suppliers
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-      Contracts
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-      Spend insights
-    </div>
-    </aside>
+ <div class="nav-h">Workspace</div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+ Suppliers
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+ Contracts
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+ Spend insights
+ </div>
+ </aside>
 
-  <!-- ===== MAIN ===== -->
-  <main class="main">
-    <div class="crumb">
-      <span>Shop</span><span class="s">/</span><span>New request</span>
-    </div>
+ <!-- ===== MAIN ===== -->
+ <main class="main">
+ <div class="crumb">
+ <span>Shop</span><span class="s">/</span><span>New request</span>
+ </div>
 
-    <h1>What do you need to buy?</h1>
-    <p class="lede">Describe it in plain language — I'll find the best price across your catalogs and contracts, then build the cart.</p>
+ <h1>What do you need to buy?</h1>
+ <p class="lede">Describe it in plain language I'll find the best price across your catalogs and contracts, then build the cart.</p>
 
-    <!-- COMPOSER -->
-    <div class="composer">
-      <div class="c-in">
-        <div class="c-lbl">
-          <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
-          Ask your buying agent
-        </div>
-        <div class="c-txt">
-          I need a couple boxes of nitrile exam gloves, medium, powder-free for the lab.
-        </div>
-      </div>
-      <div class="c-row">
-        <div class="c-acts">
-          <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Attach quote</span>
-          <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Need-by date</span>
-          <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
-        </div>
-        <button class="btn btn-p">Continue →</button>
-      </div>
-    </div>
+ <!-- COMPOSER -->
+ <div class="composer">
+ <div class="c-in">
+ <div class="c-lbl">
+ <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
+ Ask your buying agent
+ </div>
+ <div class="c-txt">
+ I need a couple boxes of nitrile exam gloves, medium, powder-free for the lab.
+ </div>
+ </div>
+ <div class="c-row">
+ <div class="c-acts">
+ <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Attach quote</span>
+ <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Need-by date</span>
+ <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
+ </div>
+ <button class="btn btn-p">Continue →</button>
+ </div>
+ </div>
 
-    <!-- THREAD -->
-    <div class="thread">
+ <!-- THREAD -->
+ <div class="thread">
 
-      <!-- Turn 1: Agent recognizes catalog item -->
-      <div class="turn">
-        <div class="t-agent">
-          <div class="a-dot">AI</div>
-          <div class="a-body">
-            <div class="a-name">Buying agent <span class="live"></span> found 4 matches</div>
-            <div class="a-msg">
-              <p>This is a stocked item — no quote or non-catalog form needed. I checked your three glove suppliers and surfaced the best matches based on <strong>active contract pricing</strong> and lab compatibility.</p>
+ <!-- Turn 1: Agent recognizes catalog item -->
+ <div class="turn">
+ <div class="t-agent">
+ <div class="a-dot">AI</div>
+ <div class="a-body">
+ <div class="a-name">Buying agent <span class="live"></span> found 4 matches</div>
+ <div class="a-msg">
+ <p>This is a stocked item no quote or non-catalog form needed. I checked your three glove suppliers and surfaced the best matches based on <strong>active contract pricing</strong> and lab compatibility.</p>
 
-              <div class="card">
-                <div class="card-h">
-                  <div class="card-t">Top picks <span class="ai">Contract-priced</span></div>
-                  <span style="font-size:11px;color:var(--ink-3)">Sorted by total cost</span>
-                </div>
-                <div class="card-b">
-                  <div class="prod-grid">
-                    <!-- BEST -->
-                    <div class="prod best">
-                      <div class="prod-flag">★ Best value · Contract</div>
-                      <div class="prod-img">
-                        <img src="images/microflex.png" alt="Microflex MidKnight Nitrile Exam Gloves" loading="lazy">
-                      </div>
-                      <div class="prod-body">
-                        <div class="prod-sup"><span class="sup-dot">FS</span>Fisher Scientific</div>
-                        <span class="badge b-g">Contract C-2024-118</span>
-                        <div class="prod-n">Microflex MidKnight Nitrile Exam Gloves, M</div>
-                        <div class="prod-m">Powder-free · 100/box · Chemo-rated</div>
-                        <div class="prod-intel">
-                          <span><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><b>Price locked</b> · MSA Dec</span>
-                          <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>2–3d</b> · <span class="pos">98%</span> on-time</span>
-                        </div>
-                        <div class="prod-foot">
-                          <div class="prod-price-w">
-                            <div class="prod-price">$11.40</div>
-                            <div class="prod-list">$14.25 list</div>
-                            <div class="prod-save">Save 20%</div>
-                          </div>
-                          <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
-                        </div>
-                      </div>
-                    </div>
+ <div class="card">
+ <div class="card-h">
+ <div class="card-t">Top picks <span class="ai">Contract-priced</span></div>
+ <span style="font-size:11px;color:var(--ink-3)">Sorted by total cost</span>
+ </div>
+ <div class="card-b">
+ <div class="prod-grid">
+ <!-- BEST -->
+ <div class="prod best">
+ <div class="prod-flag">★ Best value · Contract</div>
+ <div class="prod-img">
+ <img src="images/microflex.png" alt="Microflex MidKnight Nitrile Exam Gloves" loading="lazy">
+ </div>
+ <div class="prod-body">
+ <div class="prod-sup"><span class="sup-dot">FS</span>Fisher Scientific</div>
+ <span class="badge b-g">Contract C-2024-118</span>
+ <div class="prod-n">Microflex MidKnight Nitrile Exam Gloves, M</div>
+ <div class="prod-m">Powder-free · 100/box · Chemo-rated</div>
+ <div class="prod-intel">
+ <span><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><b>Price locked</b> · MSA Dec</span>
+ <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>2 3d</b> · <span class="pos">98%</span> on-time</span>
+ </div>
+ <div class="prod-foot">
+ <div class="prod-price-w">
+ <div class="prod-price">$11.40</div>
+ <div class="prod-list">$14.25 list</div>
+ <div class="prod-save">Save 20%</div>
+ </div>
+ <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
+ </div>
+ </div>
+ </div>
 
-                    <!-- VWR -->
-                    <div class="prod">
-                      <div class="prod-img">
-                        <img src="images/vwr.jpg" alt="VWR Signature Nitrile Exam Gloves" loading="lazy">
-                      </div>
-                      <div class="prod-body">
-                        <div class="prod-sup"><span class="sup-dot">VW</span>VWR International</div>
-                        <span class="badge b-n">List price</span>
-                        <div class="prod-n">VWR Signature Nitrile Exam, M</div>
-                        <div class="prod-m">Powder-free · 100/box · 4 mil</div>
-                        <div class="prod-intel">
-                          <span><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>Price <span class="neg">+2.1%</span> · 90d</span>
-                          <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>4–6d</b> · <span style="color:var(--amber);font-weight:600">94%</span> on-time</span>
-                        </div>
-                        <div class="prod-foot">
-                          <div class="prod-price-w">
-                            <div class="prod-price">$13.80</div>
-                            <div class="prod-list" style="visibility:hidden">.</div>
-                          </div>
-                          <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
-                        </div>
-                      </div>
-                    </div>
+ <!-- VWR -->
+ <div class="prod">
+ <div class="prod-img">
+ <img src="images/vwr.jpg" alt="VWR Signature Nitrile Exam Gloves" loading="lazy">
+ </div>
+ <div class="prod-body">
+ <div class="prod-sup"><span class="sup-dot">VW</span>VWR International</div>
+ <span class="badge b-n">List price</span>
+ <div class="prod-n">VWR Signature Nitrile Exam, M</div>
+ <div class="prod-m">Powder-free · 100/box · 4 mil</div>
+ <div class="prod-intel">
+ <span><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>Price <span class="neg">+2.1%</span> · 90d</span>
+ <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>4 6d</b> · <span style="color:var(--amber);font-weight:600">94%</span> on-time</span>
+ </div>
+ <div class="prod-foot">
+ <div class="prod-price-w">
+ <div class="prod-price">$13.80</div>
+ <div class="prod-list" style="visibility:hidden">.</div>
+ </div>
+ <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
+ </div>
+ </div>
+ </div>
 
-                    <!-- Grainger -->
-                    <div class="prod">
-                      <div class="prod-img">
-                        <img src="images/ansell.png" alt="Ansell TouchNTuff Nitrile Gloves" loading="lazy">
-                      </div>
-                      <div class="prod-body">
-                        <div class="prod-sup"><span class="sup-dot">GR</span>Grainger</div>
-                        <span class="badge b-g">Contract C-2023-091</span>
-                        <div class="prod-n">Ansell TouchNTuff Nitrile, M</div>
-                        <div class="prod-m">Powder-free · 100/box · 5 mil heavy-duty</div>
-                        <div class="prod-intel">
-                          <span><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>Price held</span>
-                          <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>1–2d</b> · <span class="pos">96%</span> on-time</span>
-                        </div>
-                        <div class="prod-foot">
-                          <div class="prod-price-w">
-                            <div class="prod-price">$15.60</div>
-                            <div class="prod-list">$18.40 list</div>
-                            <div class="prod-save">Save 15%</div>
-                          </div>
-                          <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+ <!-- Grainger -->
+ <div class="prod">
+ <div class="prod-img">
+ <img src="images/ansell.png" alt="Ansell TouchNTuff Nitrile Gloves" loading="lazy">
+ </div>
+ <div class="prod-body">
+ <div class="prod-sup"><span class="sup-dot">GR</span>Grainger</div>
+ <span class="badge b-g">Contract C-2023-091</span>
+ <div class="prod-n">Ansell TouchNTuff Nitrile, M</div>
+ <div class="prod-m">Powder-free · 100/box · 5 mil heavy-duty</div>
+ <div class="prod-intel">
+ <span><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>Price held</span>
+ <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>1 2d</b> · <span class="pos">96%</span> on-time</span>
+ </div>
+ <div class="prod-foot">
+ <div class="prod-price-w">
+ <div class="prod-price">$15.60</div>
+ <div class="prod-list">$18.40 list</div>
+ <div class="prod-save">Save 15%</div>
+ </div>
+ <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
+ </div>
+ </div>
+ </div>
+ </div>
 
-                  <!-- Punchout option -->
-                  <div class="punch">
-                    <div class="punch-i">FS</div>
-                    <div class="punch-b">
-                      <div class="punch-t">More options on Fisher Scientific <span class="badge b-b" style="margin:0">Punchout</span></div>
-                      <div class="punch-d">Browse 240+ glove SKUs with your contract pricing applied · returns directly to this cart</div>
-                    </div>
-                    <div class="punch-a">Open
-                      <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
+ <!-- Punchout option -->
+ <div class="punch">
+ <div class="punch-i">FS</div>
+ <div class="punch-b">
+ <div class="punch-t">More options on Fisher Scientific <span class="badge b-b" style="margin:0">Punchout</span></div>
+ <div class="punch-d">Browse 240+ glove SKUs with your contract pricing applied · returns directly to this cart</div>
+ </div>
+ <div class="punch-a">Open
+ <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+ </div>
+ </div>
+ </div>
+ </div>
 
-              <!-- Smart restock hint -->
-              <div class="hint">
-                <div class="hint-i">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-6.219-8.56M21 4v6h-6"/></svg>
-                </div>
-                <div class="hint-b">
-                  Your lab ordered <b>Microflex MidKnight gloves</b> 6 times in the last year — about every 7 weeks. Last order was 8 weeks ago, so stock is likely low.
-                  <div class="hint-a">
-                    <button class="btn" style="padding:5px 10px;font-size:11px">Match last order (4 boxes)</button>
-                    <button class="btn" style="padding:5px 10px;font-size:11px">Set up auto-reorder</button>
-                  </div>
-                </div>
-              </div>
+ <!-- Smart restock hint -->
+ <div class="hint">
+ <div class="hint-i">
+ <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-6.219-8.56M21 4v6h-6"/></svg>
+ </div>
+ <div class="hint-b">
+ Your lab ordered <b>Microflex MidKnight gloves</b> 6 times in the last year about every 7 weeks. Last order was 8 weeks ago, so stock is likely low.
+ <div class="hint-a">
+ <button class="btn" style="padding:5px 10px;font-size:11px">Match last order (4 boxes)</button>
+ <button class="btn" style="padding:5px 10px;font-size:11px">Set up auto-reorder</button>
+ </div>
+ </div>
+ </div>
 
-              <div class="fu">
-                <div class="fu-q">How many boxes do you need?</div>
-                <div class="fu-opts">
-                  <span class="opt">2 boxes</span>
-                  <span class="opt">4 boxes (typical)</span>
-                  <span class="opt">A case (10)</span>
-                  <span class="opt">Custom amount</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+ <div class="fu">
+ <div class="fu-q">How many boxes do you need?</div>
+ <div class="fu-opts">
+ <span class="opt">2 boxes</span>
+ <span class="opt">4 boxes (typical)</span>
+ <span class="opt">A case (10)</span>
+ <span class="opt">Custom amount</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-      <!-- Turn 2 -->
-      <div class="turn">
-        <div class="t-user">
-          <div class="t-user-b">Add 4 boxes of the Microflex. Also do we already have safety goggles in stock anywhere?</div>
-        </div>
+ <!-- Turn 2 -->
+ <div class="turn">
+ <div class="t-user">
+ <div class="t-user-b">Add 4 boxes of the Microflex. Also do we already have safety goggles in stock anywhere?</div>
+ </div>
 
-        <div class="t-agent">
-          <div class="a-dot">AI</div>
-          <div class="a-body">
-            <div class="a-name">Buying agent</div>
-            <div class="a-msg">
-              <p>Added 4 boxes of <strong>Microflex MidKnight Nitrile, M</strong> at $11.40/box — total $45.60. You're saving $11.40 versus list.</p>
+ <div class="t-agent">
+ <div class="a-dot">AI</div>
+ <div class="a-body">
+ <div class="a-name">Buying agent</div>
+ <div class="a-msg">
+ <p>Added 4 boxes of <strong>Microflex MidKnight Nitrile, M</strong> at $11.40/box total $45.60. You're saving $11.40 versus list.</p>
 
-              <p>On goggles — yes, <strong>Central Stores</strong> has 23 pairs of your standard ANSI Z87.1 indirect-vent goggles available now at $8.50 each (no shipping, picks up next-day). Worth checking before I order more.</p>
+ <p>On goggles yes, <strong>Central Stores</strong> has 23 pairs of your standard ANSI Z87.1 indirect-vent goggles available now at $8.50 each (no shipping, picks up next-day). Worth checking before I order more.</p>
 
-              <div class="card">
-                <div class="card-h">
-                  <div class="card-t">Internal stock first <span class="ai">Inventory check</span></div>
-                </div>
-                <div class="card-b" style="padding:6px 14px">
-                  <div class="chk">
-                    <div class="chk-i info"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/></svg></div>
-                    <div class="chk-t"><b>Central Stores · Building 4</b> — 23 in stock · $8.50/pair · pickup by tomorrow 10am</div>
-                  </div>
-                  <div class="chk">
-                    <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                    <div class="chk-t">Cheaper than Fisher ($12.95) and zero shipping</div>
-                  </div>
-                </div>
-              </div>
+ <div class="card">
+ <div class="card-h">
+ <div class="card-t">Internal stock first <span class="ai">Inventory check</span></div>
+ </div>
+ <div class="card-b" style="padding:6px 14px">
+ <div class="chk">
+ <div class="chk-i info"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/></svg></div>
+ <div class="chk-t"><b>Central Stores · Building 4</b> 23 in stock · $8.50/pair · pickup by tomorrow 10am</div>
+ </div>
+ <div class="chk">
+ <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="chk-t">Cheaper than Fisher ($12.95) and zero shipping</div>
+ </div>
+ </div>
+ </div>
 
-              <div class="fu">
-                <div class="fu-q">Want me to add goggles from Central Stores?</div>
-                <div class="fu-opts">
-                  <span class="opt">Yes, add 6 pairs</span>
-                  <span class="opt">Add a different quantity</span>
-                  <span class="opt">No, just the gloves</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+ <div class="fu">
+ <div class="fu-q">Want me to add goggles from Central Stores?</div>
+ <div class="fu-opts">
+ <span class="opt">Yes, add 6 pairs</span>
+ <span class="opt">Add a different quantity</span>
+ <span class="opt">No, just the gloves</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-    </div>
+ </div>
 
-    <!-- INLINE CHAT INPUT -->
-    <div class="icomp">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      <input placeholder="Reply, ask a question, or change something…" />
-      <button class="btn btn-p" style="padding:7px 14px">Send</button>
-    </div>
+ <!-- INLINE CHAT INPUT -->
+ <div class="icomp">
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+ <input placeholder="Reply, ask a question, or change something…" />
+ <button class="btn btn-p" style="padding:7px 14px">Send</button>
+ </div>
 
-  </main>
+ </main>
 
-  <!-- ===== RIGHT — CART ===== -->
-  <aside class="sum">
+ <!-- ===== RIGHT CART ===== -->
+ <aside class="sum">
 
-    <div class="sum-s">
-      <div class="sum-h">
-        <span>Your cart</span>
-        <span class="count">1 item · 4 qty</span>
-      </div>
+ <div class="sum-s">
+ <div class="sum-h">
+ <span>Your cart</span>
+ <span class="count">1 item · 4 qty</span>
+ </div>
 
-      <div class="cart">
-        <div class="ci">
-          <div class="ci-img">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 11V5a2 2 0 014 0v6M12 11V3a2 2 0 014 0v8M16 11V5a2 2 0 014 0v10a7 7 0 01-7 7H9a4 4 0 01-4-4v-3a2 2 0 014-2"/></svg>
-          </div>
-          <div class="ci-b">
-            <div class="ci-n">Microflex MidKnight Nitrile, M</div>
-            <div class="ci-m">Fisher Scientific · 100/box · powder-free</div>
-            <div class="ci-q">
-              <div class="qty"><button>−</button><span>4</span><button>+</button></div>
-              <span style="font-size:11px;color:var(--ink-3)">@ $11.40</span>
-            </div>
-          </div>
-          <div>
-            <div class="ci-p">$45.60</div>
-            <div class="ci-p-s">−$11.40</div>
-          </div>
-        </div>
+ <div class="cart">
+ <div class="ci">
+ <div class="ci-img">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 11V5a2 2 0 014 0v6M12 11V3a2 2 0 014 0v8M16 11V5a2 2 0 014 0v10a7 7 0 01-7 7H9a4 4 0 01-4-4v-3a2 2 0 014-2"/></svg>
+ </div>
+ <div class="ci-b">
+ <div class="ci-n">Microflex MidKnight Nitrile, M</div>
+ <div class="ci-m">Fisher Scientific · 100/box · powder-free</div>
+ <div class="ci-q">
+ <div class="qty"><button>−</button><span>4</span><button>+</button></div>
+ <span style="font-size:11px;color:var(--ink-3)">@ $11.40</span>
+ </div>
+ </div>
+ <div>
+ <div class="ci-p">$45.60</div>
+ <div class="ci-p-s">−$11.40</div>
+ </div>
+ </div>
 
-        <!-- Pending suggestion -->
-        <div class="ci" style="background:var(--accent-soft);opacity:.85">
-          <div class="ci-img" style="background:#fff">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
-          </div>
-          <div class="ci-b">
-            <div class="ci-n" style="display:flex;align-items:center;gap:6px">ANSI Z87.1 Safety Goggles <span class="badge b-b" style="margin:0">Suggested</span></div>
-            <div class="ci-m">Central Stores · pickup tomorrow</div>
-            <div class="ci-q">
-              <button class="btn" style="padding:3px 8px;font-size:11px">Add 6 pairs · $51</button>
-            </div>
-          </div>
-        </div>
-      </div>
+ <!-- Pending suggestion -->
+ <div class="ci" style="background:var(--accent-soft);opacity:.85">
+ <div class="ci-img" style="background:#fff">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+ </div>
+ <div class="ci-b">
+ <div class="ci-n" style="display:flex;align-items:center;gap:6px">ANSI Z87.1 Safety Goggles <span class="badge b-b" style="margin:0">Suggested</span></div>
+ <div class="ci-m">Central Stores · pickup tomorrow</div>
+ <div class="ci-q">
+ <button class="btn" style="padding:3px 8px;font-size:11px">Add 6 pairs · $51</button>
+ </div>
+ </div>
+ </div>
+ </div>
 
-      <div class="totals">
-        <div class="tt"><span class="tt-k">Subtotal</span><span class="tt-v">$45.60</span></div>
-        <div class="tt save"><span class="tt-k">Contract savings</span><span class="tt-v">−$11.40</span></div>
-        <div class="tt"><span class="tt-k">Shipping</span><span class="tt-v">$4.95</span></div>
-        <div class="tt"><span class="tt-k">Est. tax (exempt)</span><span class="tt-v">$0.00</span></div>
-        <div class="tt grand"><span class="tt-k">Total</span><span class="tt-v">$50.55</span></div>
-      </div>
-    </div>
+ <div class="totals">
+ <div class="tt"><span class="tt-k">Subtotal</span><span class="tt-v">$45.60</span></div>
+ <div class="tt save"><span class="tt-k">Contract savings</span><span class="tt-v">−$11.40</span></div>
+ <div class="tt"><span class="tt-k">Shipping</span><span class="tt-v">$4.95</span></div>
+ <div class="tt"><span class="tt-k">Est. tax (exempt)</span><span class="tt-v">$0.00</span></div>
+ <div class="tt grand"><span class="tt-k">Total</span><span class="tt-v">$50.55</span></div>
+ </div>
+ </div>
 
-    <div class="sum-s">
-      <div class="sum-h"><span>Routing</span></div>
-      <div class="chk">
-        <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="chk-t"><b>Below approval threshold</b> ($1,000) — submits directly as a PO</div>
-      </div>
-      <div class="chk">
-        <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="chk-t"><b>Charging</b> Project WL-CAL-26 · $1,432 remaining</div>
-      </div>
-      <div class="chk">
-        <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="chk-t"><b>Ship to</b> Wellman Lab, Bldg 4 Rm 312</div>
-      </div>
-    </div>
+ <div class="sum-s">
+ <div class="sum-h"><span>Routing</span></div>
+ <div class="chk">
+ <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="chk-t"><b>Below approval threshold</b> ($1,000) submits directly as a PO</div>
+ </div>
+ <div class="chk">
+ <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="chk-t"><b>Charging</b> Project WL-CAL-26 · $1,432 remaining</div>
+ </div>
+ <div class="chk">
+ <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="chk-t"><b>Ship to</b> Wellman Lab, Bldg 4 Rm 312</div>
+ </div>
+ </div>
 
-    <div class="actions">
-      <button class="btn btn-g">Place order →</button>
-      <button class="btn">Keep shopping</button>
-    </div>
+ <div class="actions">
+ <button class="btn btn-g">Place order →</button>
+ <button class="btn">Keep shopping</button>
+ </div>
 
-  </aside>
+ </aside>
 
 </div>
 

@@ -3,762 +3,822 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Procurello — Invoice & Receiving</title>
+<title>Procurello Invoice & Receiving</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F4F3EF;
-    --ink:#1A1A1A; --ink-2:#4A4A48; --ink-3:#8A8A88;
-    --line:#E8E6E0; --line-2:#D9D6CE;
-    --brand:#7C3AED; --brand-soft:#EDE9FE;
-    --accent:#1E3A5F; --accent-soft:#E7ECF3;
-    --green:#2E7D5B; --green-soft:#E4F1EB;
-    --amber:#B97A0E; --amber-soft:#FBF1DC;
-    --purple:#6B4C9A; --purple-soft:#EFE8F5;
-    --teal:#2A6F73; --teal-soft:#E0EDEE;
-    --aubergine:#3C1239;
-    --r:10px; --rs:6px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
+ :root {
+ /* Brand palette DS v2 */
+ --ink: #1A1016;
+ --aubergine: #3C1239;
+ --plum: #5D1E58;
+ --brand: #7C3AED;
+ --brand-light: #A87CE8;
+ --violet-dim: #2D1B4E;
 
-  /* SIDEBAR */
-  .sb{background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:2px}
-  .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rs);color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
-  .nav:hover{background:var(--surface-2);color:var(--ink)}
-  .nav.active{background:var(--brand-soft);color:var(--brand)}
-  .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
-  .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600}
-  .nav .pill.teal{background:var(--teal)}
-  .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);padding:18px 10px 6px;font-weight:600}
-  .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
-  .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
-  .av-i{flex:1;min-width:0}
-  .av-n{font-size:12px;font-weight:600}
-  .av-r{font-size:11px;color:var(--ink-3)}
+ /* Earth neutrals */
+ --bg: #F5F2EF;
+ --surface: #FFFFFF;
+ --surface-2: #EDE8E3;
+ --line: #D9D2CB;
+ --line-2: #B8AFA6;
+ --border: #D9D2CB;
 
-  /* MAIN */
-  .main{padding:32px 40px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
-  .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
-  .crumb .s{color:var(--line-2)}
-  h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
-  .lede{color:var(--ink-2);font-size:14px;margin-bottom:24px;max-width:620px}
+ /* Text */
+ --text-primary: #1F1A17;
+ --text-secondary: #7A6E65;
+ --text-muted: #B8AFA6;
 
-  /* COMPOSER */
-  .composer{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
-  .c-in{padding:16px 18px 12px}
-  .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-  .spk{width:12px;height:12px;color:var(--brand)}
-  .c-txt{font-size:15px;color:var(--ink);min-height:20px;margin-bottom:10px}
-  .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
-  .c-acts{display:flex;gap:4px;flex-wrap:wrap}
-  .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
-  .chip:hover{border-color:var(--line-2);color:var(--ink)}
-  .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
-  .btn{padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
-  .btn:hover{background:var(--surface-2)}
-  .btn-p{background:var(--ink);color:#fff;border-color:var(--ink)}
-  .btn-p:hover{background:#000}
-  .btn-g{background:var(--green);color:#fff;border-color:var(--green)}
-  .btn-g:hover{background:#256749}
+ /* Semantic status muted, not neon */
+ --green: #3D6B4A;
+ --amber: #7A5C1E;
+ --red: #7A2C1E;
 
-  /* ATTACHED DOC */
-  .att{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--rs);margin-top:4px}
-  .att-i{width:32px;height:36px;border-radius:4px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:9px;font-weight:700;color:var(--brand);flex-shrink:0;position:relative}
-  .att-i::after{content:'';position:absolute;top:0;right:0;border-style:solid;border-width:0 6px 6px 0;border-color:transparent var(--line) transparent transparent}
-  .att-b{flex:1;min-width:0}
-  .att-n{font-size:12px;font-weight:600;line-height:1.3}
-  .att-m{font-size:11px;color:var(--ink-3);margin-top:1px}
-  .att-x{font-size:11px;color:var(--ink-3);cursor:pointer;padding:4px}
+ /* Soft tints */
+ --brand-soft: #EDE9FE;
+ --green-soft: #E4F1EB;
+ --amber-soft: #F5EDD8;
+ --red-soft: #FBEBE8;
 
-  /* THREAD */
-  .thread{margin-top:24px}
-  .turn{margin-bottom:22px}
-  .t-user{display:flex;justify-content:flex-end;margin-bottom:14px}
-  .t-user-b{background:var(--accent);color:#fff;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:14px;max-width:80%;line-height:1.5}
-  .t-agent{display:flex;gap:12px}
-  .a-dot{width:28px;height:28px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
-  .a-body{flex:1;min-width:0}
-  .a-name{font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-  .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);display:inline-block}
-  .a-msg{font-size:14px;color:var(--ink);line-height:1.6}
-  .a-msg p{margin-bottom:10px}
-  .a-msg strong{font-weight:600}
+ /* Typography */
+ --font-display: 'DM Serif Display', Georgia, serif;
+ --font-body: 'Karla', 'Helvetica Neue', sans-serif;
+ --font-mono: 'DM Mono', 'Courier New', monospace;
 
-  /* INLINE CARDS */
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin:10px 0;overflow:hidden}
-  .card-h{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
-  .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
-  .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-  .card-b{padding:14px}
+ /* Radius: intentionally minimal */
+ --r: 0px;
+ --rs: 2px;
+ --rl: 0px;
 
-  /* MATCH VISUALIZATION */
-  .match{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:10px;padding:8px 0}
-  .match-c{padding:14px;border:1px solid var(--line);border-radius:var(--rs);text-align:center;background:var(--surface)}
-  .match-c.ok{border-color:var(--green);background:var(--green-soft)}
-  .match-c.missing{border-color:var(--amber);background:var(--amber-soft)}
-  .match-i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;color:#fff;font-weight:700;font-size:13px}
-  .match-i.ok{background:var(--green)}
-  .match-i.missing{background:var(--amber)}
-  .match-l{font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
-  .match-v{font-size:13px;font-weight:600;line-height:1.2}
-  .match-s{font-size:11px;color:var(--ink-3);margin-top:3px}
-  .match-arrow{color:var(--line-2);font-size:18px;font-weight:300}
-  .match-c.ok .match-s{color:var(--green);font-weight:600}
-  .match-c.missing .match-s{color:var(--amber);font-weight:600}
+ /* Shadows: crisp offset, no blur */
+ --shadow-sm: 2px 2px 0px #D9D2CB;
+ --shadow-md: 4px 4px 0px #D9D2CB;
+ --shadow-brand: 4px 4px 0px rgba(92,30,88,0.25);
+}
+ *{box-sizing:border-box;margin:0;padding:0}
+ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+ .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
 
-  /* EXTRACT FIELDS */
-  .ext{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-radius:var(--rs);overflow:hidden;border:1px solid var(--line)}
-  .ext-c{background:var(--surface);padding:10px 12px}
-  .ext-l{font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
-  .ext-v{font-size:13px;font-weight:600;line-height:1.3}
-  .ext-v .sub{font-size:11px;color:var(--ink-3);font-weight:400;display:block;margin-top:2px}
+ /* SIDEBAR */
+ .sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%);border-right:none;padding:20px 14px;display:flex;flex-direction:column;gap:2px}
+ .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:2px;color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
+ .nav:hover{background:rgba(255,255,255,0.07);color:var(--ink)}
+ .nav.active{background:var(--brand-soft);color:var(--brand)}
+ .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
+ .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:0;font-weight:600}
+ .nav .pill.teal{background:var(--teal)}
+ .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.35);padding:18px 10px 6px;font-weight:600}
+ .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
+ .av{width:30px;height:30px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
+ .av-i{flex:1;min-width:0}
+ .av-n{font-size:12px;font-weight:600}
+ .av-r{font-size:11px;color:var(--ink-3)}
 
-  /* RECEIVING LINE ITEMS */
-  .recv{margin:0}
-  .recv-row{display:grid;grid-template-columns:24px 1fr 60px 70px 70px;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px}
-  .recv-row:last-child{border-bottom:none}
-  .recv-row.head{background:var(--surface-2);font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-  .recv-cb{width:18px;height:18px;border:2px solid var(--green);border-radius:4px;background:var(--green);display:grid;place-items:center;color:#fff;cursor:pointer}
-  .recv-cb svg{width:10px;height:10px;stroke:currentColor;stroke-width:3;fill:none}
-  .recv-cb.unchecked{background:#fff;border-color:var(--line-2)}
-  .recv-cb.unchecked svg{display:none}
-  .recv-n{font-weight:600;color:var(--ink)}
-  .recv-d{font-size:11px;color:var(--ink-3);margin-top:1px}
-  .recv-q{text-align:center;font-weight:600}
-  .recv-p{text-align:right;color:var(--ink-2)}
-  .recv-actions{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
-  .recv-summary{font-size:12px;color:var(--ink-2)}
-  .recv-summary b{font-weight:600}
-  .recv-btns{display:flex;gap:6px}
+ /* MAIN */
+ .main{padding:32px 40px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
+ .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
+ .crumb .s{color:var(--line-2)}
+ h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+ .lede{color:var(--ink-2);font-size:14px;margin-bottom:24px;max-width:620px}
 
-  /* COMPLIANCE STRIP */
-  .comp{display:flex;align-items:center;gap:12px;padding:11px 14px;background:linear-gradient(90deg,var(--green-soft) 0%,var(--surface) 100%);border:1px solid #BBD9CA;border-radius:var(--rs);margin:10px 0}
-  .comp-i{width:32px;height:32px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0}
-  .comp-i svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none}
-  .comp-b{flex:1;min-width:0}
-  .comp-t{font-size:13px;font-weight:600;color:var(--green)}
-  .comp-d{font-size:11px;color:var(--ink-3);margin-top:1px}
-  .comp-a{font-size:11px;color:var(--ink-2);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;flex-shrink:0}
-  .comp-a svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
+ /* COMPOSER */
+ .composer{background:var(--surface);border:1px solid var(--line);border-radius:0;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
+ .c-in{padding:16px 18px 12px}
+ .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+ .spk{width:12px;height:12px;color:var(--brand)}
+ .c-txt{font-size:15px;color:var(--ink);min-height:20px;margin-bottom:10px}
+ .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
+ .c-acts{display:flex;gap:4px;flex-wrap:wrap}
+ .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
+ .chip:hover{border-color:var(--line-2);color:var(--ink)}
+ .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
+ .btn{padding:8px 14px;border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
+ .btn:hover{background:var(--surface-2)}
+ .btn-p{background:var(--aubergine);color:rgba(255,255,255,.92);box-shadow:var(--shadow-brand)}
+ .btn-p:hover{background:var(--plum)}
+ .btn-g{background:var(--green);color:#fff;border-color:var(--green)}
+ .btn-g:hover{background:#256749}
 
-  /* FOLLOWUP */
-  .fu{background:var(--surface);border:1px dashed var(--line-2);border-radius:var(--r);padding:13px;margin:10px 0}
-  .fu-q{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink-2)}
-  .fu-opts{display:flex;flex-wrap:wrap;gap:6px}
-  .opt{padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;cursor:pointer;background:var(--surface);transition:all .15s}
-  .opt:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+ /* ATTACHED DOC */
+ .att{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--line);border-radius:2px;margin-top:4px}
+ .att-i{width:32px;height:36px;border-radius:2px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:9px;font-weight:700;color:var(--brand);flex-shrink:0;position:relative}
+ .att-i::after{content:'';position:absolute;top:0;right:0;border-style:solid;border-width:0 6px 6px 0;border-color:transparent var(--line) transparent transparent}
+ .att-b{flex:1;min-width:0}
+ .att-n{font-size:12px;font-weight:600;line-height:1.3}
+ .att-m{font-size:11px;color:var(--ink-3);margin-top:1px}
+ .att-x{font-size:11px;color:var(--ink-3);cursor:pointer;padding:4px}
 
-  /* INLINE COMPOSER */
-  .icomp{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
-  .icomp input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:10px 0}
-  .icomp input::placeholder{color:var(--ink-3)}
+ /* THREAD */
+ .thread{margin-top:24px}
+ .turn{margin-bottom:22px}
+ .t-user{display:flex;justify-content:flex-end;margin-bottom:14px}
+ .t-user-b{background:var(--accent);color:#fff;padding:10px 14px;border-radius:0 14px 4px 14px;font-size:14px;max-width:80%;line-height:1.5}
+ .t-agent{display:flex;gap:12px}
+ .a-dot{width:28px;height:28px;border-radius:0;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+ .a-body{flex:1;min-width:0}
+ .a-name{font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+ .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);display:inline-block}
+ .a-msg{font-size:14px;color:var(--ink);line-height:1.6}
+ .a-msg p{margin-bottom:10px}
+ .a-msg strong{font-weight:600}
 
-  /* RIGHT PANEL */
-  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
-  .sum-s{margin-bottom:22px}
-  .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
-  .sum-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em}
+ /* INLINE CARDS */
+ .card{background:var(--surface);border:1px solid var(--line);border-radius:0;margin:10px 0;overflow:hidden}
+ .card-h{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
+ .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+ .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+ .card-b{padding:14px}
 
-  /* INVOICE STATUS CARD */
-  .inv-card{border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-  .inv-head{padding:14px;background:linear-gradient(180deg,var(--teal-soft) 0%,var(--surface) 70%);border-bottom:1px solid var(--line)}
-  .inv-pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:600;background:#fff;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--teal)}
-  .inv-pill.ready{background:var(--green);color:#fff;border-color:var(--green)}
-  .inv-pill .d{width:5px;height:5px;border-radius:50%;background:currentColor}
-  .inv-t{font-size:15px;font-weight:600;line-height:1.3;margin-bottom:2px}
-  .inv-s{font-size:12px;color:var(--ink-3)}
+ /* MATCH VISUALIZATION */
+ .match{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:10px;padding:8px 0}
+ .match-c{padding:14px;border:1px solid var(--line);border-radius:2px;text-align:center;background:var(--surface)}
+ .match-c.ok{border-color:var(--green);background:var(--green-soft)}
+ .match-c.missing{border-color:var(--amber);background:var(--amber-soft)}
+ .match-i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;color:#fff;font-weight:700;font-size:13px}
+ .match-i.ok{background:var(--green)}
+ .match-i.missing{background:var(--amber)}
+ .match-l{font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+ .match-v{font-size:13px;font-weight:600;line-height:1.2}
+ .match-s{font-size:11px;color:var(--ink-3);margin-top:3px}
+ .match-arrow{color:var(--line-2);font-size:18px;font-weight:300}
+ .match-c.ok .match-s{color:var(--green);font-weight:600}
+ .match-c.missing .match-s{color:var(--amber);font-weight:600}
 
-  .kv{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px dashed var(--line);gap:10px}
-  .kv:last-child{border-bottom:none}
-  .kv-k{color:var(--ink-3);white-space:nowrap}
-  .kv-v{font-weight:500;color:var(--ink);text-align:right}
-  .kv-v.big{font-size:14px;font-weight:600}
-  .inv-body{padding:12px 14px}
+ /* EXTRACT FIELDS */
+ .ext{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-radius:2px;overflow:hidden;border:1px solid var(--line)}
+ .ext-c{background:var(--surface);padding:10px 12px}
+ .ext-l{font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+ .ext-v{font-size:13px;font-weight:600;line-height:1.3}
+ .ext-v .sub{font-size:11px;color:var(--ink-3);font-weight:400;display:block;margin-top:2px}
 
-  /* 3-WAY MATCH MINI */
-  .match-mini{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
-  .mm-step{flex:1;text-align:center;position:relative}
-  .mm-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;margin:0 auto 5px;font-size:12px;font-weight:700;color:#fff}
-  .mm-dot.ok{background:var(--green)}
-  .mm-dot.pend{background:var(--surface);color:var(--ink-3);border:1px dashed var(--line-2)}
-  .mm-l{font-size:10px;color:var(--ink-2);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-  .mm-sub{font-size:10px;color:var(--ink-3);margin-top:1px}
-  .mm-line{position:absolute;top:11px;right:-50%;width:100%;height:2px;background:var(--green);z-index:0}
-  .mm-line.pend{background:var(--line-2)}
+ /* RECEIVING LINE ITEMS */
+ .recv{margin:0}
+ .recv-row{display:grid;grid-template-columns:24px 1fr 60px 70px 70px;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px}
+ .recv-row:last-child{border-bottom:none}
+ .recv-row.head{background:var(--surface-2);font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+ .recv-cb{width:18px;height:18px;border:2px solid var(--green);border-radius:2px;background:var(--green);display:grid;place-items:center;color:#fff;cursor:pointer}
+ .recv-cb svg{width:10px;height:10px;stroke:currentColor;stroke-width:3;fill:none}
+ .recv-cb.unchecked{background:#fff;border-color:var(--line-2)}
+ .recv-cb.unchecked svg{display:none}
+ .recv-n{font-weight:600;color:var(--ink)}
+ .recv-d{font-size:11px;color:var(--ink-3);margin-top:1px}
+ .recv-q{text-align:center;font-weight:600}
+ .recv-p{text-align:right;color:var(--ink-2)}
+ .recv-actions{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
+ .recv-summary{font-size:12px;color:var(--ink-2)}
+ .recv-summary b{font-weight:600}
+ .recv-btns{display:flex;gap:6px}
 
-  /* COMPLIANCE PANEL */
-  .comp-panel{border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-  .comp-summary{padding:12px 14px;background:var(--surface);display:flex;align-items:center;gap:10px;cursor:pointer}
-  .comp-summary:hover{background:var(--surface-2)}
-  .comp-circle{width:32px;height:32px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0;position:relative}
-  .comp-circle svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.5;fill:none}
-  .comp-circle::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--green-soft);z-index:-1}
-  .comp-info{flex:1}
-  .comp-title{font-size:12px;font-weight:600}
-  .comp-meta{font-size:11px;color:var(--ink-3);margin-top:1px}
-  .comp-toggle{font-size:11px;color:var(--ink-3)}
-  .comp-list{padding:8px 14px 12px;border-top:1px solid var(--line);background:var(--surface-2)}
-  .comp-item{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px}
-  .comp-tick{width:14px;height:14px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0}
-  .comp-tick svg{width:7px;height:7px;stroke:currentColor;stroke-width:3.5;fill:none}
-  .comp-name{color:var(--ink-2);flex:1}
-  .comp-name b{color:var(--ink);font-weight:600}
-  .comp-val{color:var(--ink-3);font-size:10px}
+ /* COMPLIANCE STRIP */
+ .comp{display:flex;align-items:center;gap:12px;padding:11px 14px;background:linear-gradient(90deg,var(--green-soft) 0%,var(--surface) 100%);border:1px solid #BBD9CA;border-radius:2px;margin:10px 0}
+ .comp-i{width:32px;height:32px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0}
+ .comp-i svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none}
+ .comp-b{flex:1;min-width:0}
+ .comp-t{font-size:13px;font-weight:600;color:var(--green)}
+ .comp-d{font-size:11px;color:var(--ink-3);margin-top:1px}
+ .comp-a{font-size:11px;color:var(--ink-2);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;flex-shrink:0}
+ .comp-a svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
 
-  /* AUDIT TRAIL */
-  .audit{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
-  .audit-h{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-  .audit-t{font-size:11px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
-  .audit-x{font-size:11px;color:var(--ink-3);cursor:pointer}
-  .audit-list{max-height:200px;overflow-y:auto;padding:6px 0}
-  .audit-row{display:flex;gap:10px;padding:5px 14px;font-size:11px;font-family:'JetBrains Mono',monospace;line-height:1.5}
-  .audit-time{color:var(--ink-3);flex-shrink:0;font-size:10px}
-  .audit-evt{color:var(--ink-2)}
-  .audit-evt b{color:var(--ink);font-weight:600}
-  .audit-evt .actor{color:var(--accent);font-weight:500}
-  .audit-evt .ag{color:var(--brand);font-weight:500}
+ /* FOLLOWUP */
+ .fu{background:var(--surface);border:1px dashed var(--line-2);border-radius:0;padding:13px;margin:10px 0}
+ .fu-q{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink-2)}
+ .fu-opts{display:flex;flex-wrap:wrap;gap:6px}
+ .opt{padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;cursor:pointer;background:var(--surface);transition:all .15s}
+ .opt:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-  .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:20px}
-  .actions .btn{width:100%;text-align:center;padding:10px}
+ /* INLINE COMPOSER */
+ .icomp{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:0;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
+ .icomp input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:10px 0}
+ .icomp input::placeholder{color:var(--ink-3)}
 
-  /* HIGHLIGHT VARIANCE */
-  .var{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;background:var(--amber-soft);color:var(--amber);margin-left:6px}
+ /* RIGHT PANEL */
+ .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
+ .sum-s{margin-bottom:22px}
+ .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+ .sum-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em}
 
-  /* ── Topbar (cross-page nav) ─────────────────────────────── */
-  .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
-  .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.25) 30%,rgba(60,18,57,.25) 70%,transparent);pointer-events:none}
-  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
-  .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
-  .tb-dot{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--brand),var(--aubergine));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:0 4px 12px -4px rgba(124,58,237,.4)}
-  .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
-  .tb-sub{font-size:11px;color:var(--ink-3)}
-  .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
-  .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
-  .tb-links a:hover{color:var(--ink)}
-  .tb-links a.tb-active{color:var(--brand);font-weight:600}
-  .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
-  .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
-  .tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
+ /* INVOICE STATUS CARD */
+ .inv-card{border:1px solid var(--line);border-radius:0;overflow:hidden}
+ .inv-head{padding:14px;background:linear-gradient(180deg,var(--teal-soft) 0%,var(--surface) 70%);border-bottom:1px solid var(--line)}
+ .inv-pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:600;background:#fff;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--teal)}
+ .inv-pill.ready{background:var(--green);color:#fff;border-color:var(--green)}
+ .inv-pill .d{width:5px;height:5px;border-radius:50%;background:currentColor}
+ .inv-t{font-size:15px;font-weight:600;line-height:1.3;margin-bottom:2px}
+ .inv-s{font-size:12px;color:var(--ink-3)}
 
-  </style>
+ .kv{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px dashed var(--line);gap:10px}
+ .kv:last-child{border-bottom:none}
+ .kv-k{color:var(--ink-3);white-space:nowrap}
+ .kv-v{font-weight:500;color:var(--ink);text-align:right}
+ .kv-v.big{font-size:14px;font-weight:600}
+ .inv-body{padding:12px 14px}
+
+ /* 3-WAY MATCH MINI */
+ .match-mini{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
+ .mm-step{flex:1;text-align:center;position:relative}
+ .mm-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;margin:0 auto 5px;font-size:12px;font-weight:700;color:#fff}
+ .mm-dot.ok{background:var(--green)}
+ .mm-dot.pend{background:var(--surface);color:var(--ink-3);border:1px dashed var(--line-2)}
+ .mm-l{font-size:10px;color:var(--ink-2);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+ .mm-sub{font-size:10px;color:var(--ink-3);margin-top:1px}
+ .mm-line{position:absolute;top:11px;right:-50%;width:100%;height:2px;background:var(--green);z-index:0}
+ .mm-line.pend{background:var(--line-2)}
+
+ /* COMPLIANCE PANEL */
+ .comp-panel{border:1px solid var(--line);border-radius:0;overflow:hidden}
+ .comp-summary{padding:12px 14px;background:var(--surface);display:flex;align-items:center;gap:10px;cursor:pointer}
+ .comp-summary:hover{background:var(--surface-2)}
+ .comp-circle{width:32px;height:32px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0;position:relative}
+ .comp-circle svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.5;fill:none}
+ .comp-circle::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--green-soft);z-index:-1}
+ .comp-info{flex:1}
+ .comp-title{font-size:12px;font-weight:600}
+ .comp-meta{font-size:11px;color:var(--ink-3);margin-top:1px}
+ .comp-toggle{font-size:11px;color:var(--ink-3)}
+ .comp-list{padding:8px 14px 12px;border-top:1px solid var(--line);background:var(--surface-2)}
+ .comp-item{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px}
+ .comp-tick{width:14px;height:14px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0}
+ .comp-tick svg{width:7px;height:7px;stroke:currentColor;stroke-width:3.5;fill:none}
+ .comp-name{color:var(--ink-2);flex:1}
+ .comp-name b{color:var(--ink);font-weight:600}
+ .comp-val{color:var(--ink-3);font-size:10px}
+
+ /* AUDIT TRAIL */
+ .audit{border:1px solid var(--line);border-radius:0;overflow:hidden;background:var(--surface)}
+ .audit-h{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+ .audit-t{font-size:11px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+ .audit-x{font-size:11px;color:var(--ink-3);cursor:pointer}
+ .audit-list{max-height:200px;overflow-y:auto;padding:6px 0}
+ .audit-row{display:flex;gap:10px;padding:5px 14px;font-size:11px;font-family:'JetBrains Mono',monospace;line-height:1.5}
+ .audit-time{color:var(--ink-3);flex-shrink:0;font-size:10px}
+ .audit-evt{color:var(--ink-2)}
+ .audit-evt b{color:var(--ink);font-weight:600}
+ .audit-evt .actor{color:var(--accent);font-weight:500}
+ .audit-evt .ag{color:var(--brand);font-weight:500}
+
+ .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:20px}
+ .actions .btn{width:100%;text-align:center;padding:10px}
+
+ /* HIGHLIGHT VARIANCE */
+ .var{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:2px;font-size:10px;font-weight:600;background:var(--amber-soft);color:var(--amber);margin-left:6px}
+
+ /* ── Topbar (cross-page nav) ─────────────────────────────── */
+ .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+ .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
+ .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
+ .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
+ .tb-dot{width:28px;height:28px;border-radius:2px;background:var(--aubergine);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:var(--shadow-sm)}
+ .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+ .tb-sub{font-size:11px;color:var(--ink-3)}
+ .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
+ .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
+ .tb-links a:hover{color:var(--ink)}
+ .tb-links a.tb-active{color:var(--plum);font-weight:600;border-bottom:2px solid var(--plum)}
+ .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
+ .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
+ .tb-av{width:28px;height:28px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
+
+ 
+ /* Sidebar nav light text on dark aubergine */
+ .sb .nav{color:rgba(255,255,255,.75)}
+ .sb .nav svg{stroke:rgba(255,255,255,.55)}
+ .sb .nav:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92)}
+ .sb .nav:hover svg{stroke:rgba(255,255,255,.8)}
+ .sb .nav.active{color:#fff;background:rgba(168,124,232,.2);border-left-color:var(--brand-light)}
+ .sb .nav.active svg{stroke:var(--brand-light)}
+ .sb .nav-h{color:rgba(255,255,255,.35)}
+ .sb .pill{background:rgba(168,124,232,.25);color:var(--brand-light)}
+ .sb .pill.amber{background:rgba(122,92,30,.35);color:#FBBF24}
+
+ 
+ /* Sidebar gradient + guaranteed light text (placed last, high specificity) */
+ aside.sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%)}
+ aside.sb .nav{color:rgba(255,255,255,.75)!important}
+ aside.sb .nav svg{stroke:rgba(255,255,255,.5)!important}
+ aside.sb .nav:hover{background:rgba(255,255,255,.07)!important;color:rgba(255,255,255,.92)!important}
+ aside.sb .nav:hover svg{stroke:rgba(255,255,255,.8)!important}
+ aside.sb .nav.active{color:#fff!important;background:rgba(168,124,232,.2)!important;border-left:2px solid var(--brand-light)!important}
+ aside.sb .nav.active svg{stroke:var(--brand-light)!important}
+ aside.sb .nav-h{color:rgba(255,255,255,.3)!important}
+ aside.sb .pill{background:rgba(168,124,232,.25)!important;color:var(--brand-light)!important}
+ aside.sb .pill.amber{background:rgba(122,92,30,.4)!important;color:#FBBF24!important}
+
+ </style>
 </head>
 <body>
 
 
 <!-- ── Topbar ── -->
 <nav class="topbar">
-  <div class="topbar-inner">
-    <a href="index.html" class="tb-brand">
-      <div class="tb-dot">P</div>
-      <div>
-        <div class="tb-name">Procurello</div>
-        <div class="tb-sub">Invoice matching</div>
-      </div>
-    </a>
-    <div class="tb-links">
-      <a href="index.html#concept">Concept</a>
-      <a href="index.html#different">Why It Matters</a>
-      <a href="index.html#demos">Demos</a>
-    </div>
-    <div class="tb-user">
-      <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
-      <div class="tb-av">JM</div>
-    </div>
-  </div>
+ <div class="topbar-inner">
+ <a href="index.html" class="tb-brand">
+ <div class="tb-dot">P</div>
+ <div>
+ <div class="tb-name">Procurello</div>
+ <div class="tb-sub">Invoice matching</div>
+ </div>
+ </a>
+ <div class="tb-links">
+ <a href="index.html#concept">Concept</a>
+ <a href="index.html#different">Why It Matters</a>
+ <a href="index.html#demos">Demos</a>
+ </div>
+ <div class="tb-user">
+ <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
+ <div class="tb-av">JM</div>
+ </div>
+ </div>
 </nav>
 
 <div class="app">
 
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sb">
+ <!-- ===== SIDEBAR ===== -->
+ <aside class="sb">
 
-    <div class="nav active">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      Buy something
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
-      My requests
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      Approvals <span class="pill">3</span>
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-      Orders & invoices <span class="pill teal">1</span>
-    </div>
+ <div class="nav active">
+ <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+ Buy something
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
+ My requests
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+ Approvals <span class="pill">3</span>
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+ Orders & invoices <span class="pill teal">1</span>
+ </div>
 
-    <div class="nav-h">Workspace</div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      Suppliers
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-      Contracts
-    </div>
-    <div class="nav">
-      <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-      Spend insights
-    </div>
-    </aside>
+ <div class="nav-h">Workspace</div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+ Suppliers
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+ Contracts
+ </div>
+ <div class="nav">
+ <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+ Spend insights
+ </div>
+ </aside>
 
-  <!-- ===== MAIN ===== -->
-  <main class="main">
-    <div class="crumb">
-      <span>Orders & invoices</span><span class="s">/</span><span>New invoice</span>
-    </div>
+ <!-- ===== MAIN ===== -->
+ <main class="main">
+ <div class="crumb">
+ <span>Orders & invoices</span><span class="s">/</span><span>New invoice</span>
+ </div>
 
-    <h1>Got an invoice — let's close the loop</h1>
-    <p class="lede">Forward an invoice or drop the PDF here. I'll match it to your purchase order, confirm what arrived, and run the compliance checks so AP can release payment.</p>
+ <h1>Got an invoice let's close the loop</h1>
+ <p class="lede">Forward an invoice or drop the PDF here. I'll match it to your purchase order, confirm what arrived, and run the compliance checks so AP can release payment.</p>
 
-    <!-- COMPOSER WITH INVOICE ATTACHED -->
-    <div class="composer">
-      <div class="c-in">
-        <div class="c-lbl">
-          <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
-          Ask your buying agent
-        </div>
-        <div class="c-txt">
-          Got this invoice in my inbox from Sigma — looks like for the reagent order from last month?
-        </div>
-        <div class="att">
-          <div class="att-i">PDF</div>
-          <div class="att-b">
-            <div class="att-n">Sigma_Invoice_INV-2026-4471.pdf</div>
-            <div class="att-m">2 pages · 412 KB · forwarded from jamie.mendez@mu.edu</div>
-          </div>
-          <span class="att-x">✕</span>
-        </div>
-      </div>
-      <div class="c-row">
-        <div class="c-acts">
-          <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Add another file</span>
-          <span class="chip"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Forward from email</span>
-        </div>
-        <button class="btn btn-p">Continue →</button>
-      </div>
-    </div>
+ <!-- COMPOSER WITH INVOICE ATTACHED -->
+ <div class="composer">
+ <div class="c-in">
+ <div class="c-lbl">
+ <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
+ Ask your buying agent
+ </div>
+ <div class="c-txt">
+ Got this invoice in my inbox from Sigma looks like for the reagent order from last month?
+ </div>
+ <div class="att">
+ <div class="att-i">PDF</div>
+ <div class="att-b">
+ <div class="att-n">Sigma_Invoice_INV-2026-4471.pdf</div>
+ <div class="att-m">2 pages · 412 KB · forwarded from jamie.mendez@mu.edu</div>
+ </div>
+ <span class="att-x">✕</span>
+ </div>
+ </div>
+ <div class="c-row">
+ <div class="c-acts">
+ <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Add another file</span>
+ <span class="chip"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Forward from email</span>
+ </div>
+ <button class="btn btn-p">Continue →</button>
+ </div>
+ </div>
 
-    <!-- THREAD -->
-    <div class="thread">
+ <!-- THREAD -->
+ <div class="thread">
 
-      <!-- Turn 1: Agent parses & matches -->
-      <div class="turn">
-        <div class="t-agent">
-          <div class="a-dot">AI</div>
-          <div class="a-body">
-            <div class="a-name">Buying agent <span class="live"></span> matched invoice to PO</div>
-            <div class="a-msg">
-              <p>Good catch — yes, this invoice matches <strong>PO-2026-0312</strong> from April 18 for the antibody and reagent order. I parsed both documents and lined everything up:</p>
+ <!-- Turn 1: Agent parses & matches -->
+ <div class="turn">
+ <div class="t-agent">
+ <div class="a-dot">AI</div>
+ <div class="a-body">
+ <div class="a-name">Buying agent <span class="live"></span> matched invoice to PO</div>
+ <div class="a-msg">
+ <p>Good catch yes, this invoice matches <strong>PO-2026-0312</strong> from April 18 for the antibody and reagent order. I parsed both documents and lined everything up:</p>
 
-              <div class="card">
-                <div class="card-h">
-                  <div class="card-t">Invoice details <span class="ai">Extracted</span></div>
-                  <span style="font-size:11px;color:var(--ink-3)">From Sigma_Invoice_INV-2026-4471.pdf</span>
-                </div>
-                <div class="card-b">
-                  <div class="ext">
-                    <div class="ext-c">
-                      <div class="ext-l">Supplier</div>
-                      <div class="ext-v">Sigma-Aldrich<span class="sub">Vendor #V-00284</span></div>
-                    </div>
-                    <div class="ext-c">
-                      <div class="ext-l">Invoice #</div>
-                      <div class="ext-v">INV-2026-4471<span class="sub">Dated May 12, 2026</span></div>
-                    </div>
-                    <div class="ext-c">
-                      <div class="ext-l">Amount</div>
-                      <div class="ext-v">$1,840.00<span class="sub">Matches PO total</span></div>
-                    </div>
-                    <div class="ext-c">
-                      <div class="ext-l">PO reference</div>
-                      <div class="ext-v">PO-2026-0312<span class="sub">Auto-detected on invoice</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+ <div class="card">
+ <div class="card-h">
+ <div class="card-t">Invoice details <span class="ai">Extracted</span></div>
+ <span style="font-size:11px;color:var(--ink-3)">From Sigma_Invoice_INV-2026-4471.pdf</span>
+ </div>
+ <div class="card-b">
+ <div class="ext">
+ <div class="ext-c">
+ <div class="ext-l">Supplier</div>
+ <div class="ext-v">Sigma-Aldrich<span class="sub">Vendor #V-00284</span></div>
+ </div>
+ <div class="ext-c">
+ <div class="ext-l">Invoice #</div>
+ <div class="ext-v">INV-2026-4471<span class="sub">Dated May 12, 2026</span></div>
+ </div>
+ <div class="ext-c">
+ <div class="ext-l">Amount</div>
+ <div class="ext-v">$1,840.00<span class="sub">Matches PO total</span></div>
+ </div>
+ <div class="ext-c">
+ <div class="ext-l">PO reference</div>
+ <div class="ext-v">PO-2026-0312<span class="sub">Auto-detected on invoice</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-              <!-- THREE-WAY MATCH STATUS -->
-              <div class="card">
-                <div class="card-h">
-                  <div class="card-t">Three-way match status <span class="ai">Real-time</span></div>
-                  <span style="font-size:11px;color:var(--amber);font-weight:600">1 of 3 complete</span>
-                </div>
-                <div class="card-b">
-                  <div class="match">
-                    <div class="match-c ok">
-                      <div class="match-i ok">✓</div>
-                      <div class="match-l">PO</div>
-                      <div class="match-v">PO-2026-0312</div>
-                      <div class="match-s">Authorized · Apr 18</div>
-                    </div>
-                    <div class="match-arrow">↔</div>
-                    <div class="match-c missing">
-                      <div class="match-i missing">?</div>
-                      <div class="match-l">Receipt</div>
-                      <div class="match-v">Not on file</div>
-                      <div class="match-s">Needs your help</div>
-                    </div>
-                    <div class="match-arrow">↔</div>
-                    <div class="match-c ok">
-                      <div class="match-i ok">✓</div>
-                      <div class="match-l">Invoice</div>
-                      <div class="match-v">INV-2026-4471</div>
-                      <div class="match-s">Received · just now</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+ <!-- THREE-WAY MATCH STATUS -->
+ <div class="card">
+ <div class="card-h">
+ <div class="card-t">Three-way match status <span class="ai">Real-time</span></div>
+ <span style="font-size:11px;color:var(--amber);font-weight:600">1 of 3 complete</span>
+ </div>
+ <div class="card-b">
+ <div class="match">
+ <div class="match-c ok">
+ <div class="match-i ok">✓</div>
+ <div class="match-l">PO</div>
+ <div class="match-v">PO-2026-0312</div>
+ <div class="match-s">Authorized · Apr 18</div>
+ </div>
+ <div class="match-arrow">↔</div>
+ <div class="match-c missing">
+ <div class="match-i missing">?</div>
+ <div class="match-l">Receipt</div>
+ <div class="match-v">Not on file</div>
+ <div class="match-s">Needs your help</div>
+ </div>
+ <div class="match-arrow">↔</div>
+ <div class="match-c ok">
+ <div class="match-i ok">✓</div>
+ <div class="match-l">Invoice</div>
+ <div class="match-v">INV-2026-4471</div>
+ <div class="match-s">Received · just now</div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-              <p><strong>One thing I need from you:</strong> there's no goods receipt on file for this PO yet — which means AP can't release payment, and Sigma's already at day 24 of their net-30 terms. Did the reagents arrive at the lab?</p>
+ <p><strong>One thing I need from you:</strong> there's no goods receipt on file for this PO yet which means AP can't release payment, and Sigma's already at day 24 of their net-30 terms. Did the reagents arrive at the lab?</p>
 
-              <!-- RECEIVING -->
-              <div class="card">
-                <div class="card-h">
-                  <div class="card-t">PO-2026-0312 line items <span class="ai">Confirm receipt</span></div>
-                  <span style="font-size:11px;color:var(--ink-3)">Tick what you received · partial OK</span>
-                </div>
-                <div class="recv">
-                  <div class="recv-row head">
-                    <span></span>
-                    <span>Item</span>
-                    <span style="text-align:center">Qty</span>
-                    <span style="text-align:right">Each</span>
-                    <span style="text-align:right">Total</span>
-                  </div>
-                  <div class="recv-row">
-                    <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                    <div>
-                      <div class="recv-n">Anti-CD3 Antibody, 100µg</div>
-                      <div class="recv-d">Cat# A-9384 · Lot 26B-441</div>
-                    </div>
-                    <div class="recv-q">1</div>
-                    <div class="recv-p">$420.00</div>
-                    <div class="recv-p">$420.00</div>
-                  </div>
-                  <div class="recv-row">
-                    <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                    <div>
-                      <div class="recv-n">Anti-CD8 Antibody, 100µg</div>
-                      <div class="recv-d">Cat# A-9388 · Lot 26B-441</div>
-                    </div>
-                    <div class="recv-q">1</div>
-                    <div class="recv-p">$385.00</div>
-                    <div class="recv-p">$385.00</div>
-                  </div>
-                  <div class="recv-row">
-                    <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                    <div>
-                      <div class="recv-n">Recombinant IL-2, 100µg</div>
-                      <div class="recv-d">Cat# R-2241 · Lot 26B-498</div>
-                    </div>
-                    <div class="recv-q">2</div>
-                    <div class="recv-p">$290.00</div>
-                    <div class="recv-p">$580.00</div>
-                  </div>
-                  <div class="recv-row">
-                    <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                    <div>
-                      <div class="recv-n">Cell Stimulation Cocktail, 2ml</div>
-                      <div class="recv-d">Cat# C-8847 · Lot 26C-102</div>
-                    </div>
-                    <div class="recv-q">1</div>
-                    <div class="recv-p">$455.00</div>
-                    <div class="recv-p">$455.00</div>
-                  </div>
-                  <div class="recv-actions">
-                    <div class="recv-summary">All 4 items selected · <b>$1,840.00</b> total · matches invoice</div>
-                    <div class="recv-btns">
-                      <button class="btn" style="padding:6px 12px;font-size:12px">Mark partial…</button>
-                      <button class="btn btn-g" style="padding:6px 12px;font-size:12px">Confirm receipt of all 4</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+ <!-- RECEIVING -->
+ <div class="card">
+ <div class="card-h">
+ <div class="card-t">PO-2026-0312 line items <span class="ai">Confirm receipt</span></div>
+ <span style="font-size:11px;color:var(--ink-3)">Tick what you received · partial OK</span>
+ </div>
+ <div class="recv">
+ <div class="recv-row head">
+ <span></span>
+ <span>Item</span>
+ <span style="text-align:center">Qty</span>
+ <span style="text-align:right">Each</span>
+ <span style="text-align:right">Total</span>
+ </div>
+ <div class="recv-row">
+ <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div>
+ <div class="recv-n">Anti-CD3 Antibody, 100µg</div>
+ <div class="recv-d">Cat# A-9384 · Lot 26B-441</div>
+ </div>
+ <div class="recv-q">1</div>
+ <div class="recv-p">$420.00</div>
+ <div class="recv-p">$420.00</div>
+ </div>
+ <div class="recv-row">
+ <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div>
+ <div class="recv-n">Anti-CD8 Antibody, 100µg</div>
+ <div class="recv-d">Cat# A-9388 · Lot 26B-441</div>
+ </div>
+ <div class="recv-q">1</div>
+ <div class="recv-p">$385.00</div>
+ <div class="recv-p">$385.00</div>
+ </div>
+ <div class="recv-row">
+ <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div>
+ <div class="recv-n">Recombinant IL-2, 100µg</div>
+ <div class="recv-d">Cat# R-2241 · Lot 26B-498</div>
+ </div>
+ <div class="recv-q">2</div>
+ <div class="recv-p">$290.00</div>
+ <div class="recv-p">$580.00</div>
+ </div>
+ <div class="recv-row">
+ <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div>
+ <div class="recv-n">Cell Stimulation Cocktail, 2ml</div>
+ <div class="recv-d">Cat# C-8847 · Lot 26C-102</div>
+ </div>
+ <div class="recv-q">1</div>
+ <div class="recv-p">$455.00</div>
+ <div class="recv-p">$455.00</div>
+ </div>
+ <div class="recv-actions">
+ <div class="recv-summary">All 4 items selected · <b>$1,840.00</b> total · matches invoice</div>
+ <div class="recv-btns">
+ <button class="btn" style="padding:6px 12px;font-size:12px">Mark partial…</button>
+ <button class="btn btn-g" style="padding:6px 12px;font-size:12px">Confirm receipt of all 4</button>
+ </div>
+ </div>
+ </div>
+ </div>
 
-              <p style="color:var(--ink-3);font-size:13px">If something's missing, damaged, or back-ordered, choose "Mark partial" and tell me what came in.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+ <p style="color:var(--ink-3);font-size:13px">If something's missing, damaged, or back-ordered, choose "Mark partial" and tell me what came in.</p>
+ </div>
+ </div>
+ </div>
+ </div>
 
-      <!-- Turn 2: User confirms -->
-      <div class="turn">
-        <div class="t-user">
-          <div class="t-user-b">Yes, everything arrived last week — boxes are on the bench. Confirm all four.</div>
-        </div>
+ <!-- Turn 2: User confirms -->
+ <div class="turn">
+ <div class="t-user">
+ <div class="t-user-b">Yes, everything arrived last week boxes are on the bench. Confirm all four.</div>
+ </div>
 
-        <div class="t-agent">
-          <div class="a-dot">AI</div>
-          <div class="a-body">
-            <div class="a-name">Buying agent <span class="live"></span> finalizing</div>
-            <div class="a-msg">
-              <p>Receipt confirmed and logged against PO-2026-0312. The three-way match is complete — PO, receipt, and invoice all reconcile to <strong>$1,840.00</strong>.</p>
+ <div class="t-agent">
+ <div class="a-dot">AI</div>
+ <div class="a-body">
+ <div class="a-name">Buying agent <span class="live"></span> finalizing</div>
+ <div class="a-msg">
+ <p>Receipt confirmed and logged against PO-2026-0312. The three-way match is complete PO, receipt, and invoice all reconcile to <strong>$1,840.00</strong>.</p>
 
-              <!-- COMPLIANCE CONFIRMATION -->
-              <div class="comp">
-                <div class="comp-i">
-                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <div class="comp-b">
-                  <div class="comp-t">12 AP compliance checks passed</div>
-                  <div class="comp-d">Sanctions, duplicate, tax, banking, vendor master — all green · ran in 1.4 seconds</div>
-                </div>
-                <div class="comp-a">View audit trail
-                  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-                </div>
-              </div>
+ <!-- COMPLIANCE CONFIRMATION -->
+ <div class="comp">
+ <div class="comp-i">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ <div class="comp-b">
+ <div class="comp-t">12 AP compliance checks passed</div>
+ <div class="comp-d">Sanctions, duplicate, tax, banking, vendor master all green · ran in 1.4 seconds</div>
+ </div>
+ <div class="comp-a">View audit trail
+ <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+ </div>
+ </div>
 
-              <p>I checked all the things AP normally has to verify by hand. Nothing flagged. The invoice is ready for AP to release payment on the next disbursement cycle (this Friday).</p>
+ <p>I checked all the things AP normally has to verify by hand. Nothing flagged. The invoice is ready for AP to release payment on the next disbursement cycle (this Friday).</p>
 
-              <p><strong>One small note:</strong> Sigma offers a 2% early-pay discount if paid within 10 days of invoice date. We're at day 3 — if AP releases today instead of waiting for the standard cycle, we save $36.80. Worth flagging?</p>
+ <p><strong>One small note:</strong> Sigma offers a 2% early-pay discount if paid within 10 days of invoice date. We're at day 3 if AP releases today instead of waiting for the standard cycle, we save $36.80. Worth flagging?</p>
 
-              <div class="fu">
-                <div class="fu-q">Anything else, or should I route this to AP?</div>
-                <div class="fu-opts">
-                  <span class="opt">Send to AP for Friday cycle</span>
-                  <span class="opt">Request early-pay (save $36.80)</span>
-                  <span class="opt">Hold — I need to check something</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+ <div class="fu">
+ <div class="fu-q">Anything else, or should I route this to AP?</div>
+ <div class="fu-opts">
+ <span class="opt">Send to AP for Friday cycle</span>
+ <span class="opt">Request early-pay (save $36.80)</span>
+ <span class="opt">Hold I need to check something</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-    </div>
+ </div>
 
-    <!-- INLINE CHAT INPUT -->
-    <div class="icomp">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      <input placeholder="Reply, ask a question, or change something…" />
-      <button class="btn btn-p" style="padding:7px 14px">Send</button>
-    </div>
+ <!-- INLINE CHAT INPUT -->
+ <div class="icomp">
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+ <input placeholder="Reply, ask a question, or change something…" />
+ <button class="btn btn-p" style="padding:7px 14px">Send</button>
+ </div>
 
-  </main>
+ </main>
 
-  <!-- ===== RIGHT — PAYMENT READINESS ===== -->
-  <aside class="sum">
+ <!-- ===== RIGHT PAYMENT READINESS ===== -->
+ <aside class="sum">
 
-    <div class="sum-s">
-      <div class="sum-h">
-        <span>Payment readiness</span>
-        <span class="ai">Live</span>
-      </div>
+ <div class="sum-s">
+ <div class="sum-h">
+ <span>Payment readiness</span>
+ <span class="ai">Live</span>
+ </div>
 
-      <div class="inv-card">
-        <div class="inv-head">
-          <span class="inv-pill ready"><span class="d"></span>Ready for AP</span>
-          <div class="inv-t">Sigma-Aldrich<br/>INV-2026-4471</div>
-          <div class="inv-s">Matched to PO-2026-0312</div>
-        </div>
+ <div class="inv-card">
+ <div class="inv-head">
+ <span class="inv-pill ready"><span class="d"></span>Ready for AP</span>
+ <div class="inv-t">Sigma-Aldrich<br/>INV-2026-4471</div>
+ <div class="inv-s">Matched to PO-2026-0312</div>
+ </div>
 
-        <div class="inv-body">
-          <div class="kv"><span class="kv-k">Invoice amount</span><span class="kv-v big">$1,840.00</span></div>
-          <div class="kv"><span class="kv-k">PO amount</span><span class="kv-v">$1,840.00 ✓</span></div>
-          <div class="kv"><span class="kv-k">Received</span><span class="kv-v">$1,840.00 ✓</span></div>
-          <div class="kv"><span class="kv-k">Payment terms</span><span class="kv-v">Net 30 · due Jun 11</span></div>
-          <div class="kv"><span class="kv-k">Method</span><span class="kv-v">ACH · on file</span></div>
-        </div>
+ <div class="inv-body">
+ <div class="kv"><span class="kv-k">Invoice amount</span><span class="kv-v big">$1,840.00</span></div>
+ <div class="kv"><span class="kv-k">PO amount</span><span class="kv-v">$1,840.00 ✓</span></div>
+ <div class="kv"><span class="kv-k">Received</span><span class="kv-v">$1,840.00 ✓</span></div>
+ <div class="kv"><span class="kv-k">Payment terms</span><span class="kv-v">Net 30 · due Jun 11</span></div>
+ <div class="kv"><span class="kv-k">Method</span><span class="kv-v">ACH · on file</span></div>
+ </div>
 
-        <div class="match-mini">
-          <div class="mm-step">
-            <div class="mm-line"></div>
-            <div class="mm-dot ok">✓</div>
-            <div class="mm-l">PO</div>
-            <div class="mm-sub">Apr 18</div>
-          </div>
-          <div class="mm-step">
-            <div class="mm-line"></div>
-            <div class="mm-dot ok">✓</div>
-            <div class="mm-l">Receipt</div>
-            <div class="mm-sub">Just now</div>
-          </div>
-          <div class="mm-step">
-            <div class="mm-dot ok">✓</div>
-            <div class="mm-l">Invoice</div>
-            <div class="mm-sub">May 12</div>
-          </div>
-        </div>
-      </div>
-    </div>
+ <div class="match-mini">
+ <div class="mm-step">
+ <div class="mm-line"></div>
+ <div class="mm-dot ok">✓</div>
+ <div class="mm-l">PO</div>
+ <div class="mm-sub">Apr 18</div>
+ </div>
+ <div class="mm-step">
+ <div class="mm-line"></div>
+ <div class="mm-dot ok">✓</div>
+ <div class="mm-l">Receipt</div>
+ <div class="mm-sub">Just now</div>
+ </div>
+ <div class="mm-step">
+ <div class="mm-dot ok">✓</div>
+ <div class="mm-l">Invoice</div>
+ <div class="mm-sub">May 12</div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-    <!-- COMPLIANCE PANEL -->
-    <div class="sum-s">
-      <div class="sum-h"><span>Compliance checks</span><span style="font-size:11px;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0">All clear</span></div>
+ <!-- COMPLIANCE PANEL -->
+ <div class="sum-s">
+ <div class="sum-h"><span>Compliance checks</span><span style="font-size:11px;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0">All clear</span></div>
 
-      <div class="comp-panel">
-        <div class="comp-summary">
-          <div class="comp-circle">
-            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div class="comp-info">
-            <div class="comp-title">12 checks passed</div>
-            <div class="comp-meta">Ran in 1.4s · no exceptions</div>
-          </div>
-          <div class="comp-toggle">▼</div>
-        </div>
-        <div class="comp-list">
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>OFAC / sanctions</b> screen</div>
-            <div class="comp-val">Clear</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Duplicate invoice</b> check</div>
-            <div class="comp-val">No match · 90 days</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Vendor master</b> current</div>
-            <div class="comp-val">Active · TIN verified</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Banking</b> validated</div>
-            <div class="comp-val">ACH · no change</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Tax classification</b></div>
-            <div class="comp-val">Corp · no 1099</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Use-tax</b> determination</div>
-            <div class="comp-val">Exempt · research</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Budget</b> availability</div>
-            <div class="comp-val">WL-AB-26 funded</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Grant compliance</b> (Uniform Guidance)</div>
-            <div class="comp-val">Allowable</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Price variance</b> vs PO</div>
-            <div class="comp-val">0.0%</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Quantity variance</b> vs PO</div>
-            <div class="comp-val">Match</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Segregation of duties</b></div>
-            <div class="comp-val">Requester ≠ approver</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <div class="comp-name"><b>Document retention</b> tagged</div>
-            <div class="comp-val">7yr · grant</div>
-          </div>
-        </div>
-      </div>
-    </div>
+ <div class="comp-panel">
+ <div class="comp-summary">
+ <div class="comp-circle">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ <div class="comp-info">
+ <div class="comp-title">12 checks passed</div>
+ <div class="comp-meta">Ran in 1.4s · no exceptions</div>
+ </div>
+ <div class="comp-toggle">▼</div>
+ </div>
+ <div class="comp-list">
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>OFAC / sanctions</b> screen</div>
+ <div class="comp-val">Clear</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Duplicate invoice</b> check</div>
+ <div class="comp-val">No match · 90 days</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Vendor master</b> current</div>
+ <div class="comp-val">Active · TIN verified</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Banking</b> validated</div>
+ <div class="comp-val">ACH · no change</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Tax classification</b></div>
+ <div class="comp-val">Corp · no 1099</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Use-tax</b> determination</div>
+ <div class="comp-val">Exempt · research</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Budget</b> availability</div>
+ <div class="comp-val">WL-AB-26 funded</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Grant compliance</b> (Uniform Guidance)</div>
+ <div class="comp-val">Allowable</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Price variance</b> vs PO</div>
+ <div class="comp-val">0.0%</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Quantity variance</b> vs PO</div>
+ <div class="comp-val">Match</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Segregation of duties</b></div>
+ <div class="comp-val">Requester ≠ approver</div>
+ </div>
+ <div class="comp-item">
+ <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+ <div class="comp-name"><b>Document retention</b> tagged</div>
+ <div class="comp-val">7yr · grant</div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-    <!-- AUDIT TRAIL -->
-    <div class="sum-s">
-      <div class="sum-h"><span>Audit trail</span><span style="font-size:11px;color:var(--ink-3);text-transform:none;letter-spacing:0">Auto-recorded</span></div>
-      <div class="audit">
-        <div class="audit-h">
-          <div class="audit-t">Event log · INV-2026-4471</div>
-          <div class="audit-x">Export</div>
-        </div>
-        <div class="audit-list">
-          <div class="audit-row">
-            <div class="audit-time">10:42:18</div>
-            <div class="audit-evt"><b>Invoice received</b> · forwarded by <span class="actor">J. Mendez</span></div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:42:19</div>
-            <div class="audit-evt">OCR extraction · 14 fields · <span class="ag">agent</span></div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:42:20</div>
-            <div class="audit-evt">Matched to <b>PO-2026-0312</b> · 99.2% conf</div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:42:21</div>
-            <div class="audit-evt">Duplicate check · no match</div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:42:21</div>
-            <div class="audit-evt">OFAC screen · clear</div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:42:22</div>
-            <div class="audit-evt">Tax & banking verified</div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:42:22</div>
-            <div class="audit-evt">Awaiting receipt confirmation</div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:45:32</div>
-            <div class="audit-evt"><b>Receipt confirmed</b> · 4/4 lines · <span class="actor">J. Mendez</span></div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:45:33</div>
-            <div class="audit-evt">3-way match complete · $1,840.00</div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:45:33</div>
-            <div class="audit-evt">Grant compliance verified</div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:45:34</div>
-            <div class="audit-evt">Doc retention tagged · 7yr</div>
-          </div>
-          <div class="audit-row">
-            <div class="audit-time">10:45:34</div>
-            <div class="audit-evt">Ready for <span class="actor">AP queue</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
+ <!-- AUDIT TRAIL -->
+ <div class="sum-s">
+ <div class="sum-h"><span>Audit trail</span><span style="font-size:11px;color:var(--ink-3);text-transform:none;letter-spacing:0">Auto-recorded</span></div>
+ <div class="audit">
+ <div class="audit-h">
+ <div class="audit-t">Event log · INV-2026-4471</div>
+ <div class="audit-x">Export</div>
+ </div>
+ <div class="audit-list">
+ <div class="audit-row">
+ <div class="audit-time">10:42:18</div>
+ <div class="audit-evt"><b>Invoice received</b> · forwarded by <span class="actor">J. Mendez</span></div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:42:19</div>
+ <div class="audit-evt">OCR extraction · 14 fields · <span class="ag">agent</span></div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:42:20</div>
+ <div class="audit-evt">Matched to <b>PO-2026-0312</b> · 99.2% conf</div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:42:21</div>
+ <div class="audit-evt">Duplicate check · no match</div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:42:21</div>
+ <div class="audit-evt">OFAC screen · clear</div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:42:22</div>
+ <div class="audit-evt">Tax & banking verified</div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:42:22</div>
+ <div class="audit-evt">Awaiting receipt confirmation</div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:45:32</div>
+ <div class="audit-evt"><b>Receipt confirmed</b> · 4/4 lines · <span class="actor">J. Mendez</span></div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:45:33</div>
+ <div class="audit-evt">3-way match complete · $1,840.00</div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:45:33</div>
+ <div class="audit-evt">Grant compliance verified</div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:45:34</div>
+ <div class="audit-evt">Doc retention tagged · 7yr</div>
+ </div>
+ <div class="audit-row">
+ <div class="audit-time">10:45:34</div>
+ <div class="audit-evt">Ready for <span class="actor">AP queue</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-    <!-- AP CONTEXT -->
-    <div class="sum-s">
-      <div class="sum-h"><span>AP context</span><span style="font-size:11px;color:var(--ink-3);text-transform:none;letter-spacing:0">What happens next</span></div>
-      <div style="background:linear-gradient(180deg,#E7E9F5 0%,var(--surface) 100%);border:1px solid #C7CBE5;border-radius:var(--rs);padding:13px;font-size:12px;line-height:1.5;color:var(--ink-2)">
-        <div style="font-weight:600;color:#4A5BB8;font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Your invoice in the pipeline</div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
-          <span style="color:var(--ink-3)">Position in today's queue</span>
-          <span style="font-weight:600;color:var(--ink)">3 of 47</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
-          <span style="color:var(--ink-3)">Est. payment release</span>
-          <span style="font-weight:600;color:var(--ink)">Today (early-pay)</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
-          <span style="color:var(--ink-3)">Sigma's typical invoice cadence</span>
-          <span style="font-weight:600;color:var(--ink)">~Day 5 post-delivery</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0">
-          <span style="color:var(--ink-3)">Your receipt response time</span>
-          <span style="font-weight:600;color:var(--green)">2.1 hrs · top 10%</span>
-        </div>
-        <div style="margin-top:8px;font-size:11px;color:var(--ink-3);line-height:1.5"><b style="color:var(--ink-2)">Thanks for confirming receipt quickly</b> — AP doesn't have to chase, supplier gets paid on time, and your lab captures the early-pay discount. The agent will flag the next Sigma invoice the same way.</div>
-      </div>
-    </div>
+ <!-- AP CONTEXT -->
+ <div class="sum-s">
+ <div class="sum-h"><span>AP context</span><span style="font-size:11px;color:var(--ink-3);text-transform:none;letter-spacing:0">What happens next</span></div>
+ <div style="background:linear-gradient(180deg,#E7E9F5 0%,var(--surface) 100%);border:1px solid #C7CBE5;border-radius:2px;padding:13px;font-size:12px;line-height:1.5;color:var(--ink-2)">
+ <div style="font-weight:600;color:#4A5BB8;font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Your invoice in the pipeline</div>
+ <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
+ <span style="color:var(--ink-3)">Position in today's queue</span>
+ <span style="font-weight:600;color:var(--ink)">3 of 47</span>
+ </div>
+ <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
+ <span style="color:var(--ink-3)">Est. payment release</span>
+ <span style="font-weight:600;color:var(--ink)">Today (early-pay)</span>
+ </div>
+ <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
+ <span style="color:var(--ink-3)">Sigma's typical invoice cadence</span>
+ <span style="font-weight:600;color:var(--ink)">~Day 5 post-delivery</span>
+ </div>
+ <div style="display:flex;justify-content:space-between;padding:5px 0">
+ <span style="color:var(--ink-3)">Your receipt response time</span>
+ <span style="font-weight:600;color:var(--green)">2.1 hrs · top 10%</span>
+ </div>
+ <div style="margin-top:8px;font-size:11px;color:var(--ink-3);line-height:1.5"><b style="color:var(--ink-2)">Thanks for confirming receipt quickly</b> AP doesn't have to chase, supplier gets paid on time, and your lab captures the early-pay discount. The agent will flag the next Sigma invoice the same way.</div>
+ </div>
+ </div>
 
-    <div class="actions">
-      <button class="btn btn-g">Send to AP</button>
-      <button class="btn">Hold for review</button>
-    </div>
+ <div class="actions">
+ <button class="btn btn-g">Send to AP</button>
+ <button class="btn">Hold for review</button>
+ </div>
 
-  </aside>
+ </aside>
 
 </div>
 
