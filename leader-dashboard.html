@@ -41,28 +41,28 @@
   .av-r{font-size:11px;color:var(--ink-3)}
 
   /* MAIN */
-  .main{padding:32px 36px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
+  .main{padding:36px 44px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
   .greeting{font-size:13px;color:var(--ink-3);margin-bottom:6px;font-weight:500;display:flex;align-items:center;gap:8px}
   .greeting .dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
-  h1{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px;line-height:1.15}
-  .lede{color:var(--ink-2);font-size:14px;margin-bottom:6px;max-width:620px}
+  h1{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:10px;line-height:1.15}
+  .lede{color:var(--ink-2);font-size:14px;margin-bottom:14px;max-width:620px}
 
   /* TIME / SCOPE TOGGLE */
-  .scope{display:flex;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap;font-size:12px}
+  .scope{display:flex;align-items:center;gap:14px;margin-bottom:36px;flex-wrap:wrap;font-size:12px}
   .scope-sel{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--surface);border:1px solid var(--line);border-radius:7px;font-weight:500;color:var(--ink);cursor:pointer}
   .scope-sel:hover{background:var(--surface-2)}
   .scope-sel svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
   .scope-sel .label{color:var(--ink-3);font-weight:500;margin-right:2px}
 
   /* SECTION HEADER */
-  .sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 14px}
+  .sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 20px}
   .sec-t{font-size:11px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em}
   .sec-sub{font-size:12px;color:var(--ink-3)}
   .sec-sub a{color:var(--accent);font-weight:500}
-  .sec-block{margin-bottom:30px}
+  .sec-block{margin-bottom:44px}
 
   /* KPI STRIP */
-  .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
   .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;position:relative;overflow:hidden}
   .kpi-l{font-size:11px;color:var(--ink-3);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px}
   .kpi-l svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
@@ -82,7 +82,7 @@
   .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
   .card-meta{font-size:11px;color:var(--ink-3);display:flex;align-items:center;gap:10px}
   .card-meta a{color:var(--accent);font-weight:500}
-  .card-b{padding:14px 16px}
+  .card-b{padding:20px}
   .tabs{display:flex;gap:2px;background:var(--surface-2);padding:3px;border-radius:7px}
   .tab{padding:5px 12px;border-radius:5px;font-size:12px;font-weight:500;color:var(--ink-3);cursor:pointer;border:none;background:transparent}
   .tab.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.05);font-weight:600}
@@ -103,7 +103,7 @@
 
   /* NEWS */
   .news-list{display:flex;flex-direction:column}
-  .nw{display:grid;grid-template-columns:auto 1fr auto;gap:14px;padding:13px 16px;border-bottom:1px solid var(--line);align-items:start;cursor:pointer}
+  .nw{display:grid;grid-template-columns:auto 1fr auto;gap:14px;padding:16px 16px;border-bottom:1px solid var(--line);align-items:start;cursor:pointer}
   .nw:last-child{border-bottom:none}
   .nw:hover{background:var(--surface-2)}
   .nw-cat{font-size:10px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em;padding:3px 7px;border-radius:4px;flex-shrink:0;margin-top:1px}
@@ -125,7 +125,7 @@
   /* LEADERBOARD */
   .lb-head{display:grid;grid-template-columns:30px 2fr 110px 110px 100px 90px 60px;gap:12px;padding:11px 16px;background:var(--surface-2);border-bottom:1px solid var(--line);font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);font-weight:600;align-items:center}
   .lb-head .right{text-align:right}
-  .lb-row{display:grid;grid-template-columns:30px 2fr 110px 110px 100px 90px 60px;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);align-items:center;cursor:pointer;font-size:12px}
+  .lb-row{display:grid;grid-template-columns:30px 2fr 110px 110px 100px 90px 60px;gap:12px;padding:16px 16px;border-bottom:1px solid var(--line);align-items:center;cursor:pointer;font-size:12px}
   .lb-row:last-child{border-bottom:none}
   .lb-row:hover{background:var(--surface-2)}
   .lb-rank{font-size:11px;font-weight:700;color:var(--ink-3);text-align:center;font-family:'JetBrains Mono',monospace}
@@ -171,8 +171,8 @@
   .pulse-foot b{color:var(--ink-2);font-weight:600}
 
   /* RIGHT PANEL */
-  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 22px 28px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
-  .sum-s{margin-bottom:22px}
+  .sum{background:var(--surface);border-left:1px solid var(--line);padding:36px 24px 28px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
+  .sum-s{margin-bottom:30px}
   .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
 
   /* APPROVAL QUEUE */
@@ -225,7 +225,7 @@
 
   /* FOOTER */
   /* PIPELINE PREVIEW */
-  .pipe-row{display:grid;grid-template-columns:80px 130px 1fr 130px 100px 30px;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);align-items:center;cursor:pointer;font-size:12px}
+  .pipe-row{display:grid;grid-template-columns:80px 130px 1fr 130px 100px 30px;gap:12px;padding:15px 16px;border-bottom:1px solid var(--line);align-items:center;cursor:pointer;font-size:12px}
   .pipe-row:hover{background:var(--surface-2)}
   .pipe-row:last-child{border-bottom:none}
   .pipe-head{display:grid;grid-template-columns:80px 130px 1fr 130px 100px 30px;gap:12px;padding:10px 16px;background:var(--surface-2);border-bottom:1px solid var(--line);font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);font-weight:600;align-items:center}
@@ -290,6 +290,15 @@
     .pulse-grid { grid-template-columns: 1fr; }
     .ticker     { grid-template-columns: repeat(2, 1fr); }
   }
+
+  
+  /* ── Actionable zone treatment ─────────────────────────────── */
+  .sec-action-wrap{background:linear-gradient(180deg,rgba(185,122,14,.03),transparent);border-left:3px solid var(--amber);padding:20px 20px 20px 18px;margin:0 -16px 44px;border-radius:0 var(--r) var(--r) 0}
+  .sec-action-wrap .sec-block{margin-bottom:0}
+  .action-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;vertical-align:middle;margin-left:8px;background:var(--amber-soft);color:var(--amber)}
+  .zone-divider{display:flex;align-items:center;gap:14px;margin:0 0 44px}
+  .zone-divider::before,.zone-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+  .zone-divider-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);white-space:nowrap;display:flex;align-items:center;gap:6px}
 
   </style>
 </head>
@@ -582,9 +591,9 @@
     </div>
 
     <!-- PIPELINE PREVIEW -->
-    <div class="sec-block collapsible">
+    <div class="sec-action-wrap"><div class="sec-block collapsible">
       <div class="sec-h">
-        <div class="sec-t">Heading to you · 14-day forecast <span class="ai-mark">Telepathy</span></div>
+        <div class="sec-t">Heading to you · 14-day forecast <span class="ai-mark">Telepathy</span><span class="action-badge">⚡ Review now</span></div>
         <div class="sec-sub">Approvals, contract events, and grant moments your office should see coming · <a href="#">Source data →</a></div>
       </div>
 
@@ -709,9 +718,18 @@
       </div>
     </div>
 
-    
-    </div><!-- /scroll-x -->
-    <!-- PI LEADERBOARD -->
+
+    </div><!-- /sec-action-wrap -->
+
+    <!-- ZONE DIVIDER -->
+    <div class="zone-divider">
+      <div class="zone-divider-lbl">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M12 2l10 10-10 10"/></svg>
+        Context &amp; trends
+      </div>
+    </div>
+
+        <!-- PI LEADERBOARD -->
     <div class="sec-block collapsible">
       <div class="sec-h">
         <div class="sec-t">PI & grant leaderboard</div>
@@ -962,7 +980,7 @@
     <div class="sum-s">
       <div class="sum-h">
         <span>Your approval queue</span>
-        <span style="font-size:11px;color:var(--brand);font-weight:600;text-transform:none;letter-spacing:0">11 pending</span>
+        <span style="font-size:11px;background:var(--amber-soft);color:var(--amber);font-weight:700;padding:2px 7px;border-radius:4px;text-transform:none;letter-spacing:0">11 pending</span>
       </div>
       <div class="aq">
 
