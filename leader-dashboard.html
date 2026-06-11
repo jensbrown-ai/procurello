@@ -47,8 +47,25 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--text-primary);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  /* ── TOPBAR (matches demo / authenticated page pattern) ── */
+  .topbar{position:sticky;top:0;background:rgba(245,242,239,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+  .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;margin:0 auto}
+  .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;transition:opacity .15s}
+  .tb-brand:hover{opacity:.85}
+  .tb-brand:hover .tb-dot{box-shadow:0 0 0 2px rgba(168,124,232,.35)}
+  .tb-dot{width:28px;height:28px;border-radius:2px;background:linear-gradient(135deg,var(--aubergine),var(--plum));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;font-family:var(--font-body)}
+  .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--text-primary)}
+  .tb-sub{font-size:11px;color:var(--text-secondary);margin-top:1px}
+  .tb-links{display:flex;gap:24px;font-size:13px}
+  .tb-links a{color:var(--text-secondary);text-decoration:none;transition:color .15s}
+  .tb-links a:hover{color:var(--text-primary)}
+  .tb-user{display:flex;align-items:center;gap:10px}
+  .tb-uname{font-size:12px;color:var(--text-secondary)}
+  .tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-light));color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
   a{text-decoration:none;color:inherit}
-  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:100vh}
+  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 56px)}
 
   /* SIDEBAR */
   /* ── SIDEBAR — Canonical v3 dark aubergine ── */
@@ -59,8 +76,11 @@
   }
   .brand{
     display:flex;align-items:center;gap:10px;padding:6px 10px 18px;
-    border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px
+    border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px;
+    cursor:pointer;transition:opacity .15s
   }
+  .brand:hover{opacity:.85}
+  .brand:hover .brand-d{box-shadow:0 0 0 2px rgba(168,124,232,.35)}
   .brand-d{
     width:28px;height:28px;border-radius:2px;
     background:linear-gradient(135deg,var(--aubergine),var(--plum));
@@ -420,18 +440,32 @@
 </head>
 <body>
 
+<!-- ── Topbar ── -->
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="tb-brand">
+      <div class="tb-dot">P</div>
+      <div>
+        <div class="tb-name">Procurello</div>
+        <div class="tb-sub">Leader workspace</div>
+      </div>
+    </a>
+    <div class="tb-links">
+      <a href="index.html#concept">Concept</a>
+      <a href="index.html#different">Why It Matters</a>
+      <a href="index.html#demos">Demos</a>
+    </div>
+    <div class="tb-user">
+      <span class="tb-uname">Dr. Sarah Reyes · Assoc. Dean, Research Ops</span>
+      <div class="tb-av">SR</div>
+    </div>
+  </div>
+</nav>
+
 <div class="app">
 
   <!-- ===== SIDEBAR ===== -->
   <aside class="sb">
-    <div class="brand">
-      <div class="brand-d">P</div>
-      <div>
-        <div class="brand-n">Procurello</div>
-        <div class="brand-s">Leader workspace</div>
-      </div>
-    </div>
-
     <div class="nav active">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       Dashboard
@@ -469,14 +503,6 @@
     <div class="nav">
       <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
       Compliance
-    </div>
-
-    <div class="sb-foot">
-      <div class="av">SR</div>
-      <div class="av-i">
-        <div class="av-n">Dr. Sarah Reyes</div>
-        <div class="av-r">Assoc. Dean, Research Ops</div>
-      </div>
     </div>
   </aside>
 

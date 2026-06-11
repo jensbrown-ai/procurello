@@ -3,1091 +3,1108 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Procurello Buyer workspace</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<title>Procurello — Buyer workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
- :root {
- /* Brand palette DS v2 */
- --ink: #1A1016;
- --aubergine: #3C1239;
- --plum: #5D1E58;
- --brand: #7C3AED;
- --brand-light: #A87CE8;
- --violet-dim: #2D1B4E;
+  :root {
+    --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F4F3EF;
+    --ink:#1A1A1A; --ink-2:#4A4A48; --ink-3:#8A8A88;
+    --line:#E8E6E0; --line-2:#D9D6CE;
+    --brand:#7C3AED; --brand-soft:#EDE9FE;
+    --aubergine:#3C1239; --plum:#5D1E58; --brand-light:#A87CE8; --violet-dim:#2D1B4E;
+    --accent:#1E3A5F; --accent-soft:#E7ECF3;
+    --green:#2E7D5B; --green-soft:#E4F1EB;
+    --amber:#B97A0E; --amber-soft:#FBF1DC;
+    --purple:#6B4C9A; --purple-soft:#EFE8F5;
+    --teal:#2A6F73; --teal-soft:#E0EDEE;
+    --r:10px; --rs:6px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
 
- /* Earth neutrals */
- --bg: #F5F2EF;
- --surface: #FFFFFF;
- --surface-2: #EDE8E3;
- --line: #D9D2CB;
- --line-2: #B8AFA6;
- --border: #D9D2CB;
+  /* ── TOPBAR (matches authenticated page pattern across the site) ── */
+  .topbar{position:sticky;top:0;background:rgba(245,242,239,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+  .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;margin:0 auto}
+  .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;transition:opacity .15s}
+  .tb-brand:hover{opacity:.85}
+  .tb-brand:hover .tb-dot{box-shadow:0 0 0 2px rgba(168,124,232,.35)}
+  .tb-dot{width:28px;height:28px;border-radius:2px;background:linear-gradient(135deg,var(--aubergine),var(--plum));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+  .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+  .tb-sub{font-size:11px;color:var(--ink-3);margin-top:1px}
+  .tb-links{display:flex;gap:24px;font-size:13px}
+  .tb-links a{color:var(--ink-2);text-decoration:none;transition:color .15s}
+  .tb-links a:hover{color:var(--ink)}
+  .tb-user{display:flex;align-items:center;gap:10px}
+  .tb-uname{font-size:12px;color:var(--ink-2)}
+  .tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-light));color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
+  a{text-decoration:none;color:inherit}
+  .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 56px)}
 
- /* Text */
- --text-primary: #1F1A17;
- --text-secondary: #7A6E65;
- --text-muted: #B8AFA6;
+  /* SIDEBAR */
+  /* ── SIDEBAR — Canonical v3 dark aubergine ── */
+  .sb{
+    background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%);
+    border-right:none;padding:20px 14px;
+    display:flex;flex-direction:column;gap:2px
+  }
+  .nav{
+    display:flex;align-items:center;gap:10px;padding:8px 10px;
+    color:rgba(255,255,255,.75);cursor:pointer;font-size:13px;font-weight:500;
+    border-left:2px solid transparent;border-radius:0;
+    transition:background .12s, color .12s
+  }
+  .nav:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92)}
+  .nav.active{
+    background:rgba(168,124,232,.2);color:#fff;
+    border-left:2px solid var(--brand-light)
+  }
+  .nav svg{width:16px;height:16px;stroke:rgba(255,255,255,.5);stroke-width:1.8;fill:none;flex-shrink:0;transition:stroke .12s}
+  .nav:hover svg{stroke:rgba(255,255,255,.8)}
+  .nav.active svg{stroke:var(--brand-light)}
+  .nav .pill{
+    margin-left:auto;background:rgba(168,124,232,.25);color:var(--brand-light);
+    font-size:10px;padding:1px 6px;border-radius:0;font-weight:600
+  }
+  .nav .pill.teal{background:rgba(42,111,115,.4);color:#7DD3D9}
+  .nav .pill.amber{background:rgba(122,92,30,.4);color:#FBBF24}
+  .nav-h{
+    font-size:10px;text-transform:uppercase;letter-spacing:.08em;
+    color:rgba(255,255,255,.3);padding:18px 10px 6px;font-weight:600
+  }
 
- /* Semantic status muted, not neon */
- --green: #3D6B4A;
- --amber: #7A5C1E;
- --red: #7A2C1E;
+  /* MAIN */
+  .main{padding:32px 36px 60px;overflow-y:auto;max-height:100vh}
+  .greeting{font-size:13px;color:var(--ink-3);margin-bottom:6px;font-weight:500;display:flex;align-items:center;gap:8px}
+  .greeting .dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+  h1{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px;line-height:1.15}
+  .lede{color:var(--ink-2);font-size:14px;margin-bottom:22px;max-width:580px}
 
- /* Soft tints */
- --brand-soft: #EDE9FE;
- --green-soft: #E4F1EB;
- --amber-soft: #F5EDD8;
- --red-soft: #FBEBE8;
+  /* COMPOSER */
+  .composer{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08);margin-bottom:32px}
+  .c-in{padding:16px 18px 12px}
+  .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .spk{width:12px;height:12px;color:var(--brand)}
+  .c-txt{font-size:15px;color:var(--ink-3);min-height:20px;line-height:1.5}
+  .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
+  .c-acts{display:flex;gap:4px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
+  .chip:hover{border-color:var(--line-2);color:var(--ink)}
+  .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
+  .btn{padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
+  .btn:hover{background:var(--surface-2)}
+  .btn-p{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn-p:hover{background:#000}
 
- /* Typography */
- --font-display: 'DM Serif Display', Georgia, serif;
- --font-body: 'Karla', 'Helvetica Neue', sans-serif;
- --font-mono: 'DM Mono', 'Courier New', monospace;
+  /* SECTION HEADER */
+  .sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 14px}
+  .sec-t{font-size:11px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em}
+  .sec-sub{font-size:12px;color:var(--ink-3)}
+  .sec-sub a{color:var(--accent);font-weight:500}
+  .sec-block{margin-bottom:30px}
 
- /* Radius: intentionally minimal */
- --r: 0px;
- --rs: 2px;
- --rl: 0px;
+  /* KPI STRIP */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;position:relative;overflow:hidden}
+  .kpi-l{font-size:11px;color:var(--ink-3);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .kpi-l svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
+  .kpi-v{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
+  .kpi-sub{font-size:11px;color:var(--ink-3);margin-top:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .kpi-tr{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:11px}
+  .kpi-tr.up{color:var(--green)}
+  .kpi-tr.down{color:var(--brand)}
+  .kpi-tr.flat{color:var(--ink-3)}
+  .kpi-tr svg{width:10px;height:10px;stroke:currentColor;stroke-width:2.5;fill:none}
+  .kpi-spark{position:absolute;bottom:0;right:0;width:80px;height:34px;opacity:.5}
 
- /* Shadows: crisp offset, no blur */
- --shadow-sm: 2px 2px 0px #D9D2CB;
- --shadow-md: 4px 4px 0px #D9D2CB;
- --shadow-brand: 4px 4px 0px rgba(92,30,88,0.25);
-}
- *{box-sizing:border-box;margin:0;padding:0}
- body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
- a{text-decoration:none;color:inherit}
- .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
+  /* TWO-COL */
+  .grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
 
- /* SIDEBAR */
- .sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%);border-right:none;padding:20px 14px;display:flex;flex-direction:column;gap:2px}
- .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:2px;color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
- .nav:hover{background:rgba(255,255,255,0.07);color:var(--ink)}
- .nav.active{background:var(--brand-soft);color:var(--brand)}
- .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
- .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:0;font-weight:600}
- .nav .pill.teal{background:var(--teal)}
- .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.35);padding:18px 10px 6px;font-weight:600}
- .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
- .av{width:30px;height:30px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
- .av-i{flex:1;min-width:0}
- .av-n{font-size:12px;font-weight:600}
- .av-r{font-size:11px;color:var(--ink-3)}
+  /* CARD */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .card-h{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--line)}
+  .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+  .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  .card-meta{font-size:11px;color:var(--ink-3)}
+  .card-b{padding:16px}
+  .tabs{display:flex;gap:2px;background:var(--surface-2);padding:3px;border-radius:7px}
+  .tab{padding:5px 12px;border-radius:5px;font-size:12px;font-weight:500;color:var(--ink-3);cursor:pointer;border:none;background:transparent}
+  .tab.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.05);font-weight:600}
 
- /* MAIN */
- .main{padding:32px 36px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
- .greeting{font-size:13px;color:var(--ink-3);margin-bottom:6px;font-weight:500;display:flex;align-items:center;gap:8px}
- .greeting .dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
- h1{font-size:28pxfont-family:var(--font-display);font-weight:400;;font-weight:600;letter-spacing:-.02em;margin-bottom:6px;line-height:1.15}
- .lede{color:var(--ink-2);font-size:14px;margin-bottom:22px;max-width:580px}
+  /* SAVINGS HERO */
+  .save-hero{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
+  .save-big{padding-right:24px;border-right:1px solid var(--line)}
+  .save-l{font-size:11px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .save-v{font-size:38px;font-weight:700;letter-spacing:-.025em;line-height:1;color:var(--green);margin-bottom:6px}
+  .save-sub{font-size:12px;color:var(--ink-2);margin-bottom:14px}
+  .save-sub b{color:var(--ink);font-weight:600}
+  .save-bar{height:36px;display:flex;border-radius:5px;overflow:hidden;background:var(--surface-2);margin-bottom:8px}
+  .save-seg{display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;cursor:default}
+  .save-seg.cat{background:var(--green)}
+  .save-seg.cont{background:var(--purple)}
+  .save-seg.pay{background:var(--teal)}
+  .save-seg.neg{background:var(--ink-3)}
+  .save-legend{display:flex;gap:14px;flex-wrap:wrap}
+  .lg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-2)}
+  .lg-d{width:8px;height:8px;border-radius:2px}
+  .lg-d.cat{background:var(--green)}
+  .lg-d.cont{background:var(--purple)}
+  .lg-d.pay{background:var(--teal)}
+  .lg-d.neg{background:var(--ink-3)}
 
- /* COMPOSER */
- .composer{background:var(--surface);border:1px solid var(--line);border-radius:0;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08);margin-bottom:32px}
- .c-in{padding:16px 18px 12px}
- .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
- .spk{width:12px;height:12px;color:var(--brand)}
- .c-txt{font-size:15px;color:var(--ink-3);min-height:20px;line-height:1.5}
- .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
- .c-acts{display:flex;gap:4px;flex-wrap:wrap}
- .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
- .chip:hover{border-color:var(--line-2);color:var(--ink)}
- .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
- .btn{padding:8px 14px;border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
- .btn:hover{background:var(--surface-2)}
- .btn-p{background:var(--aubergine);color:rgba(255,255,255,.92);box-shadow:var(--shadow-brand)}
- .btn-p:hover{background:var(--plum)}
+  /* TREND CHART */
+  .chart{width:100%;height:140px}
+  .chart-x{display:flex;justify-content:space-between;padding:0 4px;margin-top:6px;font-size:10px;color:var(--ink-3)}
 
- /* SECTION HEADER */
- .sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 14px}
- .sec-t{font-size:11px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08emfont-family:var(--font-mono);}
- .sec-sub{font-size:12px;color:var(--ink-3)}
- .sec-sub a{color:var(--accent);font-weight:500}
- .sec-block{margin-bottom:30px}
+  /* OBJECT CODES */
+  .oc{display:flex;flex-direction:column;gap:11px}
+  .oc-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+  .oc-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .oc-name{font-size:12px;color:var(--ink);font-weight:500}
+  .oc-code{font-size:10px;color:var(--ink-3);font-family:'JetBrains Mono',monospace;margin-right:6px}
+  .oc-bar-w{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+  .oc-bar{height:100%;background:linear-gradient(90deg,var(--accent),#3A5775);border-radius:3px}
+  .oc-amt{font-size:12px;font-weight:600;text-align:right;min-width:60px;white-space:nowrap}
+  .oc-pct{font-size:10px;color:var(--ink-3);font-weight:500;margin-left:8px}
 
- /* KPI STRIP */
- .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
- .kpi{background:var(--surface);border:1px solid var(--line);border-radius:0;padding:14px 16px;position:relative;overflow:hidden}
- .kpi-l{font-size:11px;color:var(--ink-3);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px}
- .kpi-l svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
- .kpi-v{font-size:24px;font-family:var(--font-display);font-weight:400;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
- .kpi-sub{font-size:11px;color:var(--ink-3);margin-top:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
- .kpi-tr{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:11px}
- .kpi-tr.up{color:var(--green)}
- .kpi-tr.down{color:var(--brand)}
- .kpi-tr.flat{color:var(--ink-3)}
- .kpi-tr svg{width:10px;height:10px;stroke:currentColor;stroke-width:2.5;fill:none}
- .kpi-spark{position:absolute;bottom:0;right:0;width:80px;height:34px;opacity:.5}
+  /* GRANTS */
+  .gr-list{display:flex;flex-direction:column;gap:14px}
+  .gr{padding:0}
+  .gr-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;gap:8px}
+  .gr-name{font-size:12px;font-weight:600;line-height:1.3}
+  .gr-id{font-size:10px;color:var(--ink-3);font-family:'JetBrains Mono',monospace;margin-top:2px}
+  .gr-status{font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0}
+  .gr-status.ok{background:var(--green-soft);color:var(--green)}
+  .gr-status.warn{background:var(--amber-soft);color:var(--amber)}
+  .gr-status.tight{background:#FBEBE8;color:#A8351F}
+  .gr-bar-w{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden;margin-bottom:6px}
+  .gr-bar{height:100%;border-radius:3px}
+  .gr-bar.ok{background:linear-gradient(90deg,var(--green),#3A9971)}
+  .gr-bar.warn{background:linear-gradient(90deg,var(--amber),#D89522)}
+  .gr-bar.tight{background:linear-gradient(90deg,#C44A2C,#A8351F)}
+  .gr-meta{font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between}
+  .gr-meta b{color:var(--ink-2);font-weight:600}
 
- /* TWO-COL */
- .grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+  /* ACTIVITY TABLE */
+  .act-row{display:grid;grid-template-columns:24px 1fr auto auto auto;gap:14px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);font-size:12px}
+  .act-row:last-child{border-bottom:none}
+  .act-row:hover{background:var(--surface-2);cursor:pointer}
+  .act-icon{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;flex-shrink:0;color:#fff}
+  .act-icon svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
+  .act-icon.catalog{background:var(--green)}
+  .act-icon.noncat{background:var(--accent)}
+  .act-icon.contract{background:var(--purple)}
+  .act-icon.invoice{background:var(--teal)}
+  .act-desc{min-width:0}
+  .act-t{font-weight:500;color:var(--ink);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .act-d{font-size:11px;color:var(--ink-3);margin-top:1px}
+  .act-actor{font-size:11px;color:var(--ink-2);min-width:90px}
+  .act-amt{font-weight:600;color:var(--ink);min-width:60px;text-align:right}
+  .act-st{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;text-align:center;min-width:60px}
+  .act-st.green{background:var(--green-soft);color:var(--green)}
+  .act-st.amber{background:var(--amber-soft);color:var(--amber)}
+  .act-st.gray{background:var(--surface-2);color:var(--ink-2)}
+  .act-st.purple{background:var(--purple-soft);color:var(--purple)}
 
- /* CARD */
- .card{background:var(--surface);border:1px solid var(--line);border-radius:0;overflow:hidden}
- .card-h{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--line)}
- .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
- .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
- .card-meta{font-size:11px;color:var(--ink-3)}
- .card-b{padding:16px}
- .tabs{display:flex;gap:2px;background:var(--surface-2);padding:3px;border-radius:2px}
- .tab{padding:5px 12px;border-radius:2px;font-size:12px;font-weight:500;color:var(--ink-3);cursor:pointer;border:none;background:transparent}
- .tab.active{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-sm);font-weight:600}
+  /* QUICK SCENARIOS */
+  /* SCENARIO TILES — v3, matches leader dashboard pattern */
+  .scenario-tiles{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px
+  }
+  .scenario-tile{
+    display:flex;flex-direction:column;
+    background:var(--surface);border:1px solid var(--line);
+    box-shadow:2px 2px 0 var(--line);
+    padding:18px 16px 16px;
+    transition:transform .12s, box-shadow .12s, border-color .12s, border-top-color .12s;
+    border-top:3px solid transparent;
+    cursor:pointer;text-decoration:none;color:inherit;
+    height:100%;border-radius:0
+  }
+  .scenario-tile:hover{
+    border-color:var(--aubergine);
+    border-top:3px solid var(--aubergine);
+    box-shadow:3px 3px 0 rgba(60,18,57,.5);
+    transform:translate(-1px,-1px)
+  }
+  .scenario-tile-icon{
+    width:36px;height:36px;
+    background:var(--surface-2);border:1px solid var(--line);
+    display:grid;place-items:center;flex-shrink:0;
+    color:var(--ink-2);
+    transition:background .12s, border-color .12s, color .12s;
+    margin-bottom:12px
+  }
+  .scenario-tile:hover .scenario-tile-icon{
+    background:var(--aubergine);border-color:var(--aubergine);
+    color:var(--brand-light)
+  }
+  .scenario-tile-icon svg{
+    width:18px;height:18px;
+    stroke:currentColor;
+    stroke-width:1.5;fill:none;stroke-linecap:square;stroke-linejoin:miter
+  }
+  .scenario-tile-icon svg polyline,
+  .scenario-tile-icon svg path,
+  .scenario-tile-icon svg circle,
+  .scenario-tile-icon svg rect,
+  .scenario-tile-icon svg line{
+    stroke:currentColor;fill:none
+  }
+  .scenario-tile-label{
+    font-family:'DM Mono','Courier New',monospace;
+    font-size:.6rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);
+    margin-bottom:5px;transition:color .12s
+  }
+  .scenario-tile:hover .scenario-tile-label{color:var(--aubergine)}
+  .scenario-tile-title{
+    font-family:'DM Serif Display',Georgia,serif;
+    font-size:1.0625rem;font-weight:400;line-height:1.2;color:var(--ink);
+    margin-bottom:8px;transition:color .12s
+  }
+  .scenario-tile:hover .scenario-tile-title{color:var(--aubergine)}
+  .scenario-tile-desc{
+    font-size:.78rem;color:var(--ink-3);line-height:1.55;flex:1;
+    margin-bottom:12px
+  }
+  .scenario-tile-foot{
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:'DM Mono','Courier New',monospace;
+    font-size:.65rem;color:var(--ink-3);
+    padding-top:10px;border-top:1px solid var(--line);
+    letter-spacing:.04em
+  }
+  .scenario-tile-foot b{color:var(--ink-2);font-weight:600;font-family:'DM Mono','Courier New',monospace}
+  .scenario-tile-arrow{font-size:.95rem;color:var(--ink-3);transition:all .15s}
+  .scenario-tile:hover .scenario-tile-arrow{color:var(--aubergine);transform:translateX(3px)}
 
- /* SAVINGS HERO */
- .save-hero{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
- .save-big{padding-right:24px;border-right:1px solid var(--line)}
- .save-l{font-size:11px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
- .save-v{font-size:38px;font-weight:700;letter-spacing:-.025em;line-height:1;color:var(--green);margin-bottom:6px}
- .save-sub{font-size:12px;color:var(--ink-2);margin-bottom:14px}
- .save-sub b{color:var(--ink);font-weight:600}
- .save-bar{height:36px;display:flex;border-radius:2px;overflow:hidden;background:var(--surface-2);margin-bottom:8px}
- .save-seg{display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;cursor:default}
- .save-seg.cat{background:var(--green)}
- .save-seg.cont{background:var(--purple)}
- .save-seg.pay{background:var(--teal)}
- .save-seg.neg{background:var(--ink-3)}
- .save-legend{display:flex;gap:14px;flex-wrap:wrap}
- .lg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-2)}
- .lg-d{width:8px;height:8px;border-radius:2px}
- .lg-d.cat{background:var(--green)}
- .lg-d.cont{background:var(--purple)}
- .lg-d.pay{background:var(--teal)}
- .lg-d.neg{background:var(--ink-3)}
+  @media (max-width:980px){
+    .scenario-tiles{grid-template-columns:repeat(2,1fr)}
+  }
 
- /* TREND CHART */
- .chart{width:100%;height:140px}
- .chart-x{display:flex;justify-content:space-between;padding:0 4px;margin-top:6px;font-size:10px;color:var(--ink-3)}
+  /* RIGHT PANEL */
+  .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 22px 28px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+  .sum-s{margin-bottom:22px}
+  .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
 
- /* OBJECT CODES */
- .oc{display:flex;flex-direction:column;gap:11px}
- .oc-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
- .oc-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
- .oc-name{font-size:12px;color:var(--ink);font-weight:500}
- .oc-code{font-size:10px;color:var(--ink-3);font-family:'JetBrains Mono',monospace;margin-right:6px}
- .oc-bar-w{height:6px;background:var(--surface-2);border-radius:2px;overflow:hidden}
- .oc-bar{height:100%;background:linear-gradient(90deg,var(--accent),#3A5775);border-radius:2px}
- .oc-amt{font-size:12px;font-weight:600;text-align:right;min-width:60px;white-space:nowrap}
- .oc-pct{font-size:10px;color:var(--ink-3);font-weight:500;margin-left:8px}
+  /* ATTENTION ITEMS */
+  .attn{background:var(--surface);border:1px solid var(--line);border-radius:var(--rs);overflow:hidden}
+  .at{display:flex;gap:10px;padding:11px 12px;border-bottom:1px solid var(--line);cursor:pointer;align-items:start}
+  .at:last-child{border-bottom:none}
+  .at:hover{background:var(--surface-2)}
+  .at-i{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;flex-shrink:0;color:#fff;margin-top:1px}
+  .at-i svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
+  .at-i.amber{background:var(--amber)}
+  .at-i.teal{background:var(--teal)}
+  .at-i.accent{background:var(--accent)}
+  .at-i.brand{background:var(--brand)}
+  .at-b{flex:1;min-width:0}
+  .at-t{font-size:12px;font-weight:600;line-height:1.3}
+  .at-d{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.4}
+  .at-action{font-size:11px;color:var(--accent);font-weight:600;margin-top:4px;display:inline-flex;align-items:center;gap:3px}
 
- /* GRANTS */
- .gr-list{display:flex;flex-direction:column;gap:14px}
- .gr{padding:0}
- .gr-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;gap:8px}
- .gr-name{font-size:12px;font-weight:600;line-height:1.3}
- .gr-id{font-size:10px;color:var(--ink-3);font-family:'JetBrains Mono',monospace;margin-top:2px}
- .gr-status{font-size:10px;font-weight:600;padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0}
- .gr-status.ok{background:var(--green-soft);color:var(--green)}
- .gr-status.warn{background:var(--amber-soft);color:var(--amber)}
- .gr-status.tight{background:#FBEBE8;color:#7A2C1E}
- .gr-bar-w{height:6px;background:var(--surface-2);border-radius:2px;overflow:hidden;margin-bottom:6px}
- .gr-bar{height:100%;border-radius:2px}
- .gr-bar.ok{background:linear-gradient(90deg,var(--green),#3A9971)}
- .gr-bar.warn{background:linear-gradient(90deg,var(--amber),#D89522)}
- .gr-bar.tight{background:linear-gradient(90deg,#C44A2C,#7A2C1E)}
- .gr-meta{font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between}
- .gr-meta b{color:var(--ink-2);font-weight:600}
+  /* PULSE */
+  .pulse-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12px}
+  .pulse-row:last-child{border-bottom:none}
+  .pulse-k{color:var(--ink-2)}
+  .pulse-k .sub{display:block;font-size:10px;color:var(--ink-3);margin-top:1px}
+  .pulse-v{font-weight:600;text-align:right}
+  .pulse-v .delta{display:block;font-size:10px;font-weight:600;margin-top:1px}
+  .delta.up{color:var(--green)}
+  .delta.down{color:var(--brand)}
+  .delta.flat{color:var(--ink-3)}
 
- /* ACTIVITY TABLE */
- .act-row{display:grid;grid-template-columns:24px 1fr auto auto auto;gap:14px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);font-size:12px}
- .act-row:last-child{border-bottom:none}
- .act-row:hover{background:var(--surface-2);cursor:pointer}
- .act-icon{width:22px;height:22px;border-radius:2px;display:grid;place-items:center;flex-shrink:0;color:#fff}
- .act-icon svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
- .act-icon.catalog{background:var(--green)}
- .act-icon.noncat{background:var(--accent)}
- .act-icon.contract{background:var(--purple)}
- .act-icon.invoice{background:var(--teal)}
- .act-desc{min-width:0}
- .act-t{font-weight:500;color:var(--ink);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
- .act-d{font-size:11px;color:var(--ink-3);margin-top:1px}
- .act-actor{font-size:11px;color:var(--ink-2);min-width:90px}
- .act-amt{font-weight:600;color:var(--ink);min-width:60px;text-align:right}
- .act-st{font-size:10px;font-weight:600;padding:2px 7px;border-radius:2px;text-align:center;min-width:60px}
- .act-st.green{background:var(--green-soft);color:var(--green)}
- .act-st.amber{background:var(--amber-soft);color:var(--amber)}
- .act-st.gray{background:var(--surface-2);color:var(--ink-2)}
- .act-st.purple{background:var(--purple-soft);color:var(--purple)}
+  /* TIP */
+  .tip{background:linear-gradient(180deg,var(--brand-soft) 0%,var(--surface) 100%);border:1px solid #D8CDF5;border-radius:var(--rs);padding:13px;font-size:12px;color:var(--ink-2);line-height:1.5}
+  .tip-t{font-size:12px;font-weight:600;color:var(--brand);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .tip-t svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+  .tip b{color:var(--ink);font-weight:600}
 
- /* QUICK SCENARIOS */
- .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
- .qs{display:flex;flex-direction:column;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:0;cursor:pointer;transition:all .2s;height:100%}
- .qs:hover{border-color:var(--ink-3);box-shadow:var(--shadow-sm)}
- .qs:hover .qs-arrow{transform:translateX(3px);color:var(--ink)}
- .qs-icon{width:32px;height:32px;border-radius:0;display:grid;place-items:center;margin-bottom:10px;color:#fff}
- .qs-icon svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none}
- .qs-icon.catalog{background:linear-gradient(135deg,#3D6B4A,#1F5840)}
- .qs-icon.noncat{background:linear-gradient(135deg,#1E3A5F,#0E2440)}
- .qs-icon.contract{background:linear-gradient(135deg,#5D1E58,#4D3473)}
- .qs-icon.invoice{background:linear-gradient(135deg,#2A6F73,#1A4F52)}
- .qs-pill{display:inline-block;font-size:9px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
- .qs-t{font-size:13px;font-weight:600;line-height:1.35;margin-bottom:4px;color:var(--ink)}
- .qs-d{font-size:11px;color:var(--ink-3);line-height:1.5;flex:1}
- .qs-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--ink-3)}
- .qs-foot b{color:var(--ink-2);font-weight:600}
- .qs-arrow{transition:all .2s;font-size:14px;color:var(--ink-3)}
+  /* PREDICTIVE / WHAT'S COMING */
+  --indigo:#4A5BB8; --indigo-soft:#E7E9F5;
+  .pred-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .pred-h{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--line)}
+  .pred-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+  .pred-t .new{font-size:9px;color:#4A5BB8;background:#E7E9F5;padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  .pred-row{display:grid;grid-template-columns:70px 110px 1fr 130px 80px 30px;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);align-items:center;cursor:pointer;font-size:12px}
+  .pred-row:hover{background:var(--surface-2)}
+  .pred-row:last-child{border-bottom:none}
+  .pr-conf{display:flex;align-items:center;gap:3px}
+  .pr-dot{width:6px;height:6px;border-radius:50%;background:var(--line-2)}
+  .pr-dot.on{background:#4A5BB8}
+  .pr-conf-l{font-size:10px;color:var(--ink-3);font-weight:600;margin-left:3px}
+  .pr-src{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 7px;border-radius:4px;text-align:center;white-space:nowrap;display:inline-block}
+  .pr-src.deliv{background:var(--green-soft);color:var(--green)}
+  .pr-src.appr{background:var(--accent-soft);color:var(--accent)}
+  .pr-src.restock{background:var(--teal-soft);color:var(--teal)}
+  .pr-src.market{background:var(--brand-soft);color:var(--brand)}
+  .pr-src.pattern{background:#E7E9F5;color:#4A5BB8}
+  .pr-src.expense{background:var(--amber-soft);color:var(--amber)}
+  .pr-desc{min-width:0}
+  .pr-t{font-weight:600;line-height:1.3;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pr-d{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pr-d b{color:var(--ink-2);font-weight:500}
+  .pr-when-d{font-weight:600;font-size:12px}
+  .pr-when-s{font-size:10px;color:var(--ink-3);margin-top:2px}
+  .pr-action{font-size:11px;font-weight:600;color:var(--accent);text-align:right}
+  .pr-arrow{color:var(--ink-3);font-size:14px;text-align:right}
 
- /* RIGHT PANEL */
- .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 22px 28px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
- .sum-s{margin-bottom:22px}
- .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+  /* COLLAPSIBLE SECTIONS */
+  .sec-block.collapsible .sec-h{cursor:pointer;user-select:none;transition:opacity .15s}
+  .sec-block.collapsible .sec-h:hover .sec-t{color:var(--ink-2)}
+  .sec-block.collapsible .sec-t::after{
+    content:'';display:inline-block;width:7px;height:7px;
+    border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);
+    transform:rotate(45deg);margin-left:10px;margin-bottom:3px;
+    transition:transform .2s;vertical-align:middle
+  }
+  .sec-block.collapsible.collapsed .sec-t::after{transform:rotate(-45deg);margin-bottom:0}
+  .sec-block.collapsible.collapsed > *:not(.sec-h){display:none}
+  .sec-block.collapsible.collapsed{margin-bottom:14px}
+  .sec-block.collapsible.collapsed .sec-sub{font-style:italic;opacity:.85}
 
- /* ATTENTION ITEMS */
- .attn{background:var(--surface);border:1px solid var(--line);border-radius:2px;overflow:hidden}
- .at{display:flex;gap:10px;padding:11px 12px;border-bottom:1px solid var(--line);cursor:pointer;align-items:start}
- .at:last-child{border-bottom:none}
- .at:hover{background:var(--surface-2)}
- .at-i{width:22px;height:22px;border-radius:2px;display:grid;place-items:center;flex-shrink:0;color:#fff;margin-top:1px}
- .at-i svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
- .at-i.amber{background:var(--amber)}
- .at-i.teal{background:var(--teal)}
- .at-i.accent{background:var(--accent)}
- .at-i
- .at-b{flex:1;min-width:0}
- .at-t{font-size:12px;font-weight:600;line-height:1.3}
- .at-d{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.4}
- .at-action{font-size:11px;color:var(--accent);font-weight:600;margin-top:4px;display:inline-flex;align-items:center;gap:3px}
-
- /* PULSE */
- .pulse-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12px}
- .pulse-row:last-child{border-bottom:none}
- .pulse-k{color:var(--ink-2)}
- .pulse-k .sub{display:block;font-size:10px;color:var(--ink-3);margin-top:1px}
- .pulse-v{font-weight:600;text-align:right}
- .pulse-v .delta{display:block;font-size:10px;font-weight:600;margin-top:1px}
- .delta.up{color:var(--green)}
- .delta.down{color:var(--brand)}
- .delta.flat{color:var(--ink-3)}
-
- /* TIP */
- .tip{background:linear-gradient(180deg,var(--brand-soft) 0%,var(--surface) 100%);border:1px solid #D8CDF5;border-radius:2px;padding:13px;font-size:12px;color:var(--ink-2);line-height:1.5}
- .tip-t{font-size:12px;font-weight:600;color:var(--brand);margin-bottom:6px;display:flex;align-items:center;gap:6px}
- .tip-t svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
- .tip b{color:var(--ink);font-weight:600}
-
- /* PREDICTIVE / WHAT'S COMING */
- --indigo:#4A5BB8; --indigo-soft:#E7E9F5;
- .pred-card{background:var(--surface);border:1px solid var(--line);border-radius:0;overflow:hidden}
- .pred-h{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--line)}
- .pred-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
- .pred-t .new{font-size:9px;color:#4A5BB8;background:#E7E9F5;padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
- .pred-row{display:grid;grid-template-columns:70px 110px 1fr 130px 80px 30px;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);align-items:center;cursor:pointer;font-size:12px}
- .pred-row:hover{background:var(--surface-2)}
- .pred-row:last-child{border-bottom:none}
- .pr-conf{display:flex;align-items:center;gap:3px}
- .pr-dot{width:6px;height:6px;border-radius:50%;background:var(--line-2)}
- .pr-dot.on{background:#4A5BB8}
- .pr-conf-l{font-size:10px;color:var(--ink-3);font-weight:600;margin-left:3px}
- .pr-src{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 7px;border-radius:2px;text-align:center;white-space:nowrap;display:inline-block}
- .pr-src.deliv{background:var(--green-soft);color:var(--green)}
- .pr-src.appr{background:var(--accent-soft);color:var(--accent)}
- .pr-src.restock{background:var(--teal-soft);color:var(--teal)}
- .pr-src.market{background:var(--brand-soft);color:var(--brand)}
- .pr-src.pattern{background:#E7E9F5;color:#4A5BB8}
- .pr-src.expense{background:var(--amber-soft);color:var(--amber)}
- .pr-desc{min-width:0}
- .pr-t{font-weight:600;line-height:1.3;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
- .pr-d{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
- .pr-d b{color:var(--ink-2);font-weight:500}
- .pr-when-d{font-weight:600;font-size:12px}
- .pr-when-s{font-size:10px;color:var(--ink-3);margin-top:2px}
- .pr-action{font-size:11px;font-weight:600;color:var(--accent);text-align:right}
- .pr-arrow{color:var(--ink-3);font-size:14px;text-align:right}
-
- /* COLLAPSIBLE SECTIONS */
- .sec-block.collapsible .sec-h{cursor:pointer;user-select:none;transition:opacity .15s}
- .sec-block.collapsible .sec-h:hover .sec-t{color:var(--ink-2)}
- .sec-block.collapsible .sec-t::after{
- content:'';display:inline-block;width:7px;height:7px;
- border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);
- transform:rotate(45deg);margin-left:10px;margin-bottom:3px;
- transition:transform .2s;vertical-align:middle
- }
- .sec-block.collapsible.collapsed .sec-t::after{transform:rotate(-45deg);margin-bottom:0}
- .sec-block.collapsible.collapsed > *:not(.sec-h){display:none}
- .sec-block.collapsible.collapsed{margin-bottom:14px}
- .sec-block.collapsible.collapsed .sec-sub{font-style:italic;opacity:.85}
-
- /* FOOTER NOTE */
- .footer-n{margin-top:auto;padding-top:18px;font-size:11px;color:var(--ink-3);line-height:1.5}
- .footer-n b{color:var(--ink-2)}
-
- /* ── Topbar (cross-page nav) ─────────────────────────────── */
- .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
- .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
- .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
- .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
- .tb-dot{width:28px;height:28px;border-radius:2px;background:var(--aubergine);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:var(--shadow-sm)}
- .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
- .tb-sub{font-size:11px;color:var(--ink-3)}
- .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
- .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
- .tb-links a:hover{color:var(--ink)}
- .tb-links a.tb-active{color:var(--plum);font-weight:600;border-bottom:2px solid var(--plum)}
- .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
- .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
- .tb-av{width:28px;height:28px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
-
- 
- .pi-grid { grid-template-columns: 1fr; }
- .quick { grid-template-columns: 1fr; }
- .pulse-grid { grid-template-columns: 1fr; }
- .ticker { grid-template-columns: repeat(2, 1fr); }
- }
-
- 
- /* Sidebar nav light text on dark aubergine */
- .sb .nav{color:rgba(255,255,255,.75)}
- .sb .nav svg{stroke:rgba(255,255,255,.55)}
- .sb .nav:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92)}
- .sb .nav:hover svg{stroke:rgba(255,255,255,.8)}
- .sb .nav.active{color:#fff;background:rgba(168,124,232,.2);border-left-color:var(--brand-light)}
- .sb .nav.active svg{stroke:var(--brand-light)}
- .sb .nav-h{color:rgba(255,255,255,.35)}
- .sb .pill{background:rgba(168,124,232,.25);color:var(--brand-light)}
- .sb .pill.amber{background:rgba(122,92,30,.35);color:#FBBF24}
-
- 
- /* Sidebar gradient + guaranteed light text (placed last, high specificity) */
- aside.sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%)}
- aside.sb .nav{color:rgba(255,255,255,.75)!important}
- aside.sb .nav svg{stroke:rgba(255,255,255,.5)!important}
- aside.sb .nav:hover{background:rgba(255,255,255,.07)!important;color:rgba(255,255,255,.92)!important}
- aside.sb .nav:hover svg{stroke:rgba(255,255,255,.8)!important}
- aside.sb .nav.active{color:#fff!important;background:rgba(168,124,232,.2)!important;border-left:2px solid var(--brand-light)!important}
- aside.sb .nav.active svg{stroke:var(--brand-light)!important}
- aside.sb .nav-h{color:rgba(255,255,255,.3)!important}
- aside.sb .pill{background:rgba(168,124,232,.25)!important;color:var(--brand-light)!important}
- aside.sb .pill.amber{background:rgba(122,92,30,.4)!important;color:#FBBF24!important}
-
- </style>
+  /* FOOTER NOTE */
+  .footer-n{margin-top:auto;padding-top:18px;font-size:11px;color:var(--ink-3);line-height:1.5}
+  .footer-n b{color:var(--ink-2)}
+</style>
 </head>
 <body>
 
-
 <!-- ── Topbar ── -->
 <nav class="topbar">
- <div class="topbar-inner">
- <a href="index.html" class="tb-brand">
- <div class="tb-dot">P</div>
- <div>
- <div class="tb-name">Procurello</div>
- <div class="tb-sub">Buyer workspace</div>
- </div>
- </a>
- <div class="tb-links">
- <a href="index.html#concept">Concept</a>
- <a href="index.html#different">Why It Matters</a>
- <a href="index.html#demos">Demos</a>
- </div>
- <div class="tb-user">
- <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
- <div class="tb-av">JM</div>
- </div>
- </div>
+  <div class="topbar-inner">
+    <a href="index.html" class="tb-brand">
+      <div class="tb-dot">P</div>
+      <div>
+        <div class="tb-name">Procurello</div>
+        <div class="tb-sub">Buyer workspace</div>
+      </div>
+    </a>
+    <div class="tb-links">
+      <a href="index.html#concept">Concept</a>
+      <a href="index.html#different">Why It Matters</a>
+      <a href="index.html#demos">Demos</a>
+    </div>
+    <div class="tb-user">
+      <span class="tb-uname">Jamie Mendez · Wellman Lab · 4421</span>
+      <div class="tb-av">JM</div>
+    </div>
+  </div>
 </nav>
 
 <div class="app">
 
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sb">
+    <div class="nav active">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      Buy something
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
+      My requests
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Approvals <span class="pill">3</span>
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Orders & invoices <span class="pill teal">1</span>
+    </div>
 
- <!-- ===== SIDEBAR ===== -->
- <aside class="sb">
+    <div class="nav-h">Workspace</div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Suppliers
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      Contracts
+    </div>
+    <div class="nav">
+      <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Spend insights
+    </div>
+  </aside>
 
- <div class="nav active">
- <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
- Home
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
- Buy something
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
- My requests
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
- Approvals <span class="pill">3</span>
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
- Orders & invoices <span class="pill teal">1</span>
- </div>
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+    <div class="greeting"><span class="dot"></span>Good morning, Jamie · Friday, May 15, 2026</div>
+    <h1>What do you need to buy?</h1>
+    <p class="lede">Start here — or scroll down to see how you, your lab, and your grants are tracking this fiscal year.</p>
 
- <div class="nav-h">Workspace</div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
- Suppliers
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
- Contracts
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
- Spend insights
- </div>
- </aside>
+    <!-- COMPOSER -->
+    <div class="composer">
+      <div class="c-in">
+        <div class="c-lbl">
+          <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
+          Ask your buying agent
+        </div>
+        <div class="c-txt">
+          Tell me what you need, paste a quote, drop a supplier proposal, or forward an invoice…
+        </div>
+      </div>
+      <div class="c-row">
+        <div class="c-acts">
+          <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Attach a file</span>
+          <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Need-by date</span>
+          <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
+        </div>
+        <button class="btn btn-p">Continue →</button>
+      </div>
+    </div>
 
- <!-- ===== MAIN ===== -->
- <main class="main">
- <div class="greeting"><span class="dot"></span>Good morning, Jamie · Friday, May 15, 2026</div>
- <h1>What do you need to buy?</h1>
- <p class="lede">Start here or scroll down to see how you, your lab, and your grants are tracking this fiscal year.</p>
+    <!-- QUICK SCENARIOS — moved above fiscal year for prominent demo launch -->
+    <div class="sec-block">
+      <div class="sec-h">
+        <div class="sec-t">Try a scenario</div>
+        <div class="sec-sub">Walk through each path the agent handles</div>
+      </div>
 
- <!-- COMPOSER -->
- <div class="composer">
- <div class="c-in">
- <div class="c-lbl">
- <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
- Ask your buying agent
- </div>
- <div class="c-txt">
- Tell me what you need, paste a quote, drop a supplier proposal, or forward an invoice…
- </div>
- </div>
- <div class="c-row">
- <div class="c-acts">
- <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Attach a file</span>
- <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Need-by date</span>
- <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
- </div>
- <button class="btn btn-p">Continue →</button>
- </div>
- </div>
+      <div class="scenario-tiles">
+        <a href="catalog-guided-buying.html" class="scenario-tile">
+          <div class="scenario-tile-icon">
+            <svg viewBox="0 0 16 16"><path d="M1 1h2l1.5 7.5h7l1.5-5H4"/><circle cx="6.5" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="scenario-tile-label">Scenario 01 · Catalog</div>
+          <div class="scenario-tile-title">Quick everyday buying</div>
+          <div class="scenario-tile-desc">Common items, contract pricing, internal stock check, supplier punchout — all in one cart.</div>
+          <div class="scenario-tile-foot">
+            <span><b>~30s</b> to cart</span>
+            <span class="scenario-tile-arrow">→</span>
+          </div>
+        </a>
 
- <div class="sec-block">
- <div class="sec-h">
- <div class="sec-t">Try a scenario</div>
- <div class="sec-sub">Walk through each path the agent handles</div>
- </div>
+        <a href="guided-buying-concept.html" class="scenario-tile">
+          <div class="scenario-tile-icon">
+            <svg viewBox="0 0 16 16"><path d="M13 1l-2 2 2 2 2-2-2-2z"/><path d="M11 3L3 11v2h2l8-8"/></svg>
+          </div>
+          <div class="scenario-tile-label">Scenario 02 · Non-catalog</div>
+          <div class="scenario-tile-title">One-off services &amp; equipment</div>
+          <div class="scenario-tile-desc">Plain-language request, supplier ranking, auto-filled requisition, shortest approval path.</div>
+          <div class="scenario-tile-foot">
+            <span><b>~2 min</b> to submit</span>
+            <span class="scenario-tile-arrow">→</span>
+          </div>
+        </a>
 
- <div class="quick">
- <a href="catalog-guided-buying.html" class="qs">
- <div class="qs-icon catalog">
- <svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
- </div>
- <div class="qs-pill">Catalog · Punchout</div>
- <div class="qs-t">Quick everyday buying</div>
- <div class="qs-d">Common items, contract pricing, internal stock check, supplier punchout all in one cart.</div>
- <div class="qs-foot"><span><b>~30s</b> to cart</span><span class="qs-arrow">→</span></div>
- </a>
+        <a href="invoice-guided-buying.html" class="scenario-tile">
+          <div class="scenario-tile-icon">
+            <svg viewBox="0 0 16 16"><rect x="3" y="2" width="10" height="13"/><path d="M5 5h6M5 8h6"/><path d="M9 11.5l1.5 1.5L13 10.5"/></svg>
+          </div>
+          <div class="scenario-tile-label">Scenario 03 · Invoice</div>
+          <div class="scenario-tile-title">Close the loop on a PO</div>
+          <div class="scenario-tile-desc">Drop an invoice, agent matches the PO, prompts receipt, runs 12 compliance checks silently.</div>
+          <div class="scenario-tile-foot">
+            <span><b>~45s</b> to clear AP</span>
+            <span class="scenario-tile-arrow">→</span>
+          </div>
+        </a>
 
- <a href="guided-buying-concept.html" class="qs">
- <div class="qs-icon noncat">
- <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
- </div>
- <div class="qs-pill">Non-catalog · Services</div>
- <div class="qs-t">One-off services & equipment</div>
- <div class="qs-d">Plain-language request, supplier ranking, auto-filled requisition, shortest approval path.</div>
- <div class="qs-foot"><span><b>~2 min</b> to submit</span><span class="qs-arrow">→</span></div>
- </a>
+        <a href="contract-quote-guided-buying.html" class="scenario-tile">
+          <div class="scenario-tile-icon">
+            <svg viewBox="0 0 16 16"><path d="M2 2h7l3 3v9H2V2z"/><path d="M9 2v3h3M4 8h6M4 10h5M4 12h4"/></svg>
+          </div>
+          <div class="scenario-tile-label">Scenario 04 · Contract</div>
+          <div class="scenario-tile-title">Vendor sent a proposal</div>
+          <div class="scenario-tile-desc">Drop a 14-page proposal — agent extracts, finds prior contract, offers three legal paths with timelines.</div>
+          <div class="scenario-tile-foot">
+            <span><b>~3 days</b> end-to-end</span>
+            <span class="scenario-tile-arrow">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
 
- <a href="invoice-guided-buying.html" class="qs">
- <div class="qs-icon invoice">
- <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
- </div>
- <div class="qs-pill">Invoice · 3-way match</div>
- <div class="qs-t">Close the loop on a PO</div>
- <div class="qs-d">Drop an invoice, agent matches the PO, prompts receipt, runs 12 compliance checks silently.</div>
- <div class="qs-foot"><span><b>~45s</b> to clear AP</span><span class="qs-arrow">→</span></div>
- </a>
+    <!-- KPI STRIP -->
+    <div class="sec-block">
+      <div class="sec-h">
+        <div class="sec-t">Your fiscal year, at a glance</div>
+        <div class="sec-sub">FY26 · through May 15 · <a href="#">View full report</a></div>
+      </div>
 
- <a href="contract-quote-guided-buying.html" class="qs">
- <div class="qs-icon contract">
- <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6M9 11h6"/></svg>
- </div>
- <div class="qs-pill">Supplier-led · Contract + PO</div>
- <div class="qs-t">Vendor sent a proposal</div>
- <div class="qs-d">Drop a 14-page proposal agent extracts, finds prior contract, offers three legal paths with timelines.</div>
- <div class="qs-foot"><span><b>~3 days</b> end-to-end</span><span class="qs-arrow">→</span></div>
- </a>
- </div>
- </div>
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-l"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Spend YTD</div>
+          <div class="kpi-v">$84.2K</div>
+          <div class="kpi-sub">
+            <span class="kpi-tr down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>23% under plan</span>
+          </div>
+          <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
+            <polyline fill="none" stroke="var(--accent)" stroke-width="1.5" points="0,28 10,22 20,18 30,20 40,14 50,16 60,10 70,12 80,8"/>
+            <polyline fill="rgba(30,58,95,0.08)" stroke="none" points="0,34 0,28 10,22 20,18 30,20 40,14 50,16 60,10 70,12 80,8 80,34"/>
+          </svg>
+        </div>
 
- <!-- KPI STRIP -->
- <div class="sec-block">
- <div class="sec-h">
- <div class="sec-t">Your fiscal year, at a glance</div>
- <div class="sec-sub">FY26 · through May 15 · <a href="#">View full report</a></div>
- </div>
+        <div class="kpi">
+          <div class="kpi-l"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Contract & catalog savings</div>
+          <div class="kpi-v" style="color:var(--green)">$11.4K</div>
+          <div class="kpi-sub">
+            <span class="kpi-tr up"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>+18% vs LFY</span>
+            <span style="color:var(--ink-3)">· 13.5% of spend</span>
+          </div>
+          <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
+            <polyline fill="none" stroke="var(--green)" stroke-width="1.5" points="0,30 10,28 20,24 30,22 40,18 50,16 60,12 70,10 80,6"/>
+            <polyline fill="rgba(46,125,91,0.1)" stroke="none" points="0,34 0,30 10,28 20,24 30,22 40,18 50,16 60,12 70,10 80,6 80,34"/>
+          </svg>
+        </div>
 
- <div class="kpi-grid">
- <div class="kpi">
- <div class="kpi-l"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Spend YTD</div>
- <div class="kpi-v">$84.2K</div>
- <div class="kpi-sub">
- <span class="kpi-tr down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>23% under plan</span>
- </div>
- <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
- <polyline fill="none" stroke="var(--accent)" stroke-width="1.5" points="0,28 10,22 20,18 30,20 40,14 50,16 60,10 70,12 80,8"/>
- <polyline fill="rgba(30,58,95,0.08)" stroke="none" points="0,34 0,28 10,22 20,18 30,20 40,14 50,16 60,10 70,12 80,8 80,34"/>
- </svg>
- </div>
+        <div class="kpi">
+          <div class="kpi-l"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Time saved (agent)</div>
+          <div class="kpi-v">14.2<span style="font-size:14px;color:var(--ink-3);font-weight:500;margin-left:4px">hrs</span></div>
+          <div class="kpi-sub">
+            <span style="color:var(--ink-3)">47 requests · ~18 min each</span>
+          </div>
+          <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
+            <rect x="3" y="22" width="4" height="12" fill="var(--brand)" opacity=".25"/>
+            <rect x="11" y="18" width="4" height="16" fill="var(--brand)" opacity=".3"/>
+            <rect x="19" y="20" width="4" height="14" fill="var(--brand)" opacity=".35"/>
+            <rect x="27" y="14" width="4" height="20" fill="var(--brand)" opacity=".45"/>
+            <rect x="35" y="12" width="4" height="22" fill="var(--brand)" opacity=".55"/>
+            <rect x="43" y="10" width="4" height="24" fill="var(--brand)" opacity=".65"/>
+            <rect x="51" y="8" width="4" height="26" fill="var(--brand)" opacity=".75"/>
+            <rect x="59" y="6" width="4" height="28" fill="var(--brand)" opacity=".85"/>
+            <rect x="67" y="4" width="4" height="30" fill="var(--brand)"/>
+          </svg>
+        </div>
 
- <div class="kpi">
- <div class="kpi-l"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Contract & catalog savings</div>
- <div class="kpi-v" style="color:var(--green)">$11.4K</div>
- <div class="kpi-sub">
- <span class="kpi-tr up"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>+18% vs LFY</span>
- <span style="color:var(--ink-3)">· 13.5% of spend</span>
- </div>
- <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
- <polyline fill="none" stroke="var(--green)" stroke-width="1.5" points="0,30 10,28 20,24 30,22 40,18 50,16 60,12 70,10 80,6"/>
- <polyline fill="rgba(61,107,74,0.1)" stroke="none" points="0,34 0,30 10,28 20,24 30,22 40,18 50,16 60,12 70,10 80,6 80,34"/>
- </svg>
- </div>
+        <div class="kpi">
+          <div class="kpi-l"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compliance health</div>
+          <div class="kpi-v" style="color:var(--green)">100<span style="font-size:14px;color:var(--ink-3);font-weight:500;margin-left:2px">%</span></div>
+          <div class="kpi-sub">
+            <span class="kpi-tr flat"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>0 exceptions FY26</span>
+          </div>
+          <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
+            <polyline fill="none" stroke="var(--green)" stroke-width="1.5" points="0,8 10,8 20,8 30,8 40,8 50,8 60,8 70,8 80,8"/>
+          </svg>
+        </div>
+      </div>
+    </div>
 
- <div class="kpi">
- <div class="kpi-l"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Time saved (agent)</div>
- <div class="kpi-v">14.2<span style="font-size:14px;color:var(--ink-3);font-weight:500;margin-left:4px">hrs</span></div>
- <div class="kpi-sub">
- <span style="color:var(--ink-3)">47 requests · ~18 min each</span>
- </div>
- <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
- <rect x="3" y="22" width="4" height="12" fill="var(--brand)" opacity=".25"/>
- <rect x="11" y="18" width="4" height="16" fill="var(--brand)" opacity=".3"/>
- <rect x="19" y="20" width="4" height="14" fill="var(--brand)" opacity=".35"/>
- <rect x="27" y="14" width="4" height="20" fill="var(--brand)" opacity=".45"/>
- <rect x="35" y="12" width="4" height="22" fill="var(--brand)" opacity=".55"/>
- <rect x="43" y="10" width="4" height="24" fill="var(--brand)" opacity=".65"/>
- <rect x="51" y="8" width="4" height="26" fill="var(--brand)" opacity=".75"/>
- <rect x="59" y="6" width="4" height="28" fill="var(--brand)" opacity=".85"/>
- <rect x="67" y="4" width="4" height="30" fill="var(--brand)"/>
- </svg>
- </div>
+    <!-- SAVINGS DEEP DIVE -->
+    <div class="sec-block collapsible">
+      <div class="sec-h">
+        <div class="sec-t">Where savings came from · FY26</div>
+        <div class="sec-sub"><a href="#">Department view</a></div>
+      </div>
 
- <div class="kpi">
- <div class="kpi-l"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compliance health</div>
- <div class="kpi-v" style="color:var(--green)">100<span style="font-size:14px;color:var(--ink-3);font-weight:500;margin-left:2px">%</span></div>
- <div class="kpi-sub">
- <span class="kpi-tr flat"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>0 exceptions FY26</span>
- </div>
- <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
- <polyline fill="none" stroke="var(--green)" stroke-width="1.5" points="0,8 10,8 20,8 30,8 40,8 50,8 60,8 70,8 80,8"/>
- </svg>
- </div>
- </div>
- </div>
+      <div class="card">
+        <div class="card-b">
+          <div class="save-hero">
+            <!-- Big number -->
+            <div class="save-big">
+              <div class="save-l">Total realized savings</div>
+              <div class="save-v">$11,420</div>
+              <div class="save-sub">vs. <b>$98K</b> of addressable spend · <b>11.6%</b> realized rate</div>
 
- <!-- SAVINGS DEEP DIVE -->
- <div class="sec-block collapsible">
- <div class="sec-h">
- <div class="sec-t">Where savings came from · FY26</div>
- <div class="sec-sub"><a href="#">Department view</a></div>
- </div>
+              <div class="save-bar">
+                <div class="save-seg cat" style="flex-basis:62%">$7.1K</div>
+                <div class="save-seg cont" style="flex-basis:21%">$2.4K</div>
+                <div class="save-seg pay" style="flex-basis:7%">$820</div>
+                <div class="save-seg neg" style="flex-basis:10%">$1.1K</div>
+              </div>
 
- <div class="card">
- <div class="card-b">
- <div class="save-hero">
- <!-- Big number -->
- <div class="save-big">
- <div class="save-l">Total realized savings</div>
- <div class="save-v">$11,420</div>
- <div class="save-sub">vs. <b>$98K</b> of addressable spend · <b>11.6%</b> realized rate</div>
+              <div class="save-legend">
+                <div class="lg"><span class="lg-d cat"></span>Catalog / punchout</div>
+                <div class="lg"><span class="lg-d cont"></span>MSA pricing</div>
+                <div class="lg"><span class="lg-d pay"></span>Early-pay disc.</div>
+                <div class="lg"><span class="lg-d neg"></span>Negotiated</div>
+              </div>
+            </div>
 
- <div class="save-bar">
- <div class="save-seg cat" style="flex-basis:62%">$7.1K</div>
- <div class="save-seg cont" style="flex-basis:21%">$2.4K</div>
- <div class="save-seg pay" style="flex-basis:7%">$820</div>
- <div class="save-seg neg" style="flex-basis:10%">$1.1K</div>
- </div>
+            <!-- Trend chart -->
+            <div>
+              <div class="save-l">Monthly trend · last 6 months</div>
+              <svg class="chart" viewBox="0 0 480 140" preserveAspectRatio="none">
+                <!-- Grid -->
+                <line x1="0" y1="35" x2="480" y2="35" stroke="var(--line)" stroke-dasharray="2,3"/>
+                <line x1="0" y1="70" x2="480" y2="70" stroke="var(--line)" stroke-dasharray="2,3"/>
+                <line x1="0" y1="105" x2="480" y2="105" stroke="var(--line)" stroke-dasharray="2,3"/>
 
- <div class="save-legend">
- <div class="lg"><span class="lg-d cat"></span>Catalog / punchout</div>
- <div class="lg"><span class="lg-d cont"></span>MSA pricing</div>
- <div class="lg"><span class="lg-d pay"></span>Early-pay disc.</div>
- <div class="lg"><span class="lg-d neg"></span>Negotiated</div>
- </div>
- </div>
+                <!-- Bars: 6 months of savings, grouped -->
+                <!-- Dec -->
+                <rect x="20" y="92" width="38" height="22" fill="var(--green)" opacity=".7" rx="2"/>
+                <rect x="60" y="100" width="14" height="14" fill="var(--purple)" opacity=".7" rx="2"/>
+                <!-- Jan -->
+                <rect x="100" y="84" width="38" height="30" fill="var(--green)" opacity=".75" rx="2"/>
+                <rect x="140" y="98" width="14" height="16" fill="var(--purple)" opacity=".75" rx="2"/>
+                <!-- Feb -->
+                <rect x="180" y="74" width="38" height="40" fill="var(--green)" opacity=".8" rx="2"/>
+                <rect x="220" y="96" width="14" height="18" fill="var(--purple)" opacity=".8" rx="2"/>
+                <!-- Mar -->
+                <rect x="260" y="68" width="38" height="46" fill="var(--green)" opacity=".85" rx="2"/>
+                <rect x="300" y="92" width="14" height="22" fill="var(--purple)" opacity=".85" rx="2"/>
+                <rect x="316" y="106" width="10" height="8" fill="var(--teal)" opacity=".7" rx="2"/>
+                <!-- Apr -->
+                <rect x="340" y="56" width="38" height="58" fill="var(--green)" opacity=".9" rx="2"/>
+                <rect x="380" y="88" width="14" height="26" fill="var(--purple)" opacity=".9" rx="2"/>
+                <rect x="396" y="104" width="10" height="10" fill="var(--teal)" opacity=".8" rx="2"/>
+                <!-- May -->
+                <rect x="420" y="48" width="38" height="66" fill="var(--green)" rx="2"/>
+                <rect x="460" y="86" width="14" height="28" fill="var(--purple)" rx="2"/>
 
- <!-- Trend chart -->
- <div>
- <div class="save-l">Monthly trend · last 6 months</div>
- <svg class="chart" viewBox="0 0 480 140" preserveAspectRatio="none">
- <!-- Grid -->
- <line x1="0" y1="35" x2="480" y2="35" stroke="var(--line)" stroke-dasharray="2,3"/>
- <line x1="0" y1="70" x2="480" y2="70" stroke="var(--line)" stroke-dasharray="2,3"/>
- <line x1="0" y1="105" x2="480" y2="105" stroke="var(--line)" stroke-dasharray="2,3"/>
+                <!-- Total line -->
+                <polyline fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-dasharray="0"
+                  points="40,100 120,90 200,82 280,76 360,62 440,52"/>
+                <circle cx="40" cy="100" r="3" fill="var(--ink)"/>
+                <circle cx="120" cy="90" r="3" fill="var(--ink)"/>
+                <circle cx="200" cy="82" r="3" fill="var(--ink)"/>
+                <circle cx="280" cy="76" r="3" fill="var(--ink)"/>
+                <circle cx="360" cy="62" r="3" fill="var(--ink)"/>
+                <circle cx="440" cy="52" r="3" fill="var(--brand)" stroke="#fff" stroke-width="2"/>
 
- <!-- Bars: 6 months of savings, grouped -->
- <!-- Dec -->
- <rect x="20" y="92" width="38" height="22" fill="var(--green)" opacity=".7" rx="2"/>
- <rect x="60" y="100" width="14" height="14" fill="var(--purple)" opacity=".7" rx="2"/>
- <!-- Jan -->
- <rect x="100" y="84" width="38" height="30" fill="var(--green)" opacity=".75" rx="2"/>
- <rect x="140" y="98" width="14" height="16" fill="var(--purple)" opacity=".75" rx="2"/>
- <!-- Feb -->
- <rect x="180" y="74" width="38" height="40" fill="var(--green)" opacity=".8" rx="2"/>
- <rect x="220" y="96" width="14" height="18" fill="var(--purple)" opacity=".8" rx="2"/>
- <!-- Mar -->
- <rect x="260" y="68" width="38" height="46" fill="var(--green)" opacity=".85" rx="2"/>
- <rect x="300" y="92" width="14" height="22" fill="var(--purple)" opacity=".85" rx="2"/>
- <rect x="316" y="106" width="10" height="8" fill="var(--teal)" opacity=".7" rx="2"/>
- <!-- Apr -->
- <rect x="340" y="56" width="38" height="58" fill="var(--green)" opacity=".9" rx="2"/>
- <rect x="380" y="88" width="14" height="26" fill="var(--purple)" opacity=".9" rx="2"/>
- <rect x="396" y="104" width="10" height="10" fill="var(--teal)" opacity=".8" rx="2"/>
- <!-- May -->
- <rect x="420" y="48" width="38" height="66" fill="var(--green)" rx="2"/>
- <rect x="460" y="86" width="14" height="28" fill="var(--purple)" rx="2"/>
+                <!-- Y-axis labels -->
+                <text x="0" y="32" font-size="9" fill="var(--ink-3)">$3K</text>
+                <text x="0" y="67" font-size="9" fill="var(--ink-3)">$2K</text>
+                <text x="0" y="102" font-size="9" fill="var(--ink-3)">$1K</text>
+              </svg>
+              <div class="chart-x">
+                <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
- <!-- Total line -->
- <polyline fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-dasharray="0"
- points="40,100 120,90 200,82 280,76 360,62 440,52"/>
- <circle cx="40" cy="100" r="3" fill="var(--ink)"/>
- <circle cx="120" cy="90" r="3" fill="var(--ink)"/>
- <circle cx="200" cy="82" r="3" fill="var(--ink)"/>
- <circle cx="280" cy="76" r="3" fill="var(--ink)"/>
- <circle cx="360" cy="62" r="3" fill="var(--ink)"/>
- <circle cx="440" cy="52" r="3" fill="var(--brand)" stroke="#fff" stroke-width="2"/>
+    <!-- SPEND BY OBJECT CODE + GRANT UTILIZATION -->
+    <div class="sec-block collapsible">
+      <div class="sec-h">
+        <div class="sec-t">Spend & funding</div>
+        <div class="sec-sub">Lab + linked grants</div>
+      </div>
 
- <!-- Y-axis labels -->
- <text x="0" y="32" font-size="9" fill="var(--ink-3)">$3K</text>
- <text x="0" y="67" font-size="9" fill="var(--ink-3)">$2K</text>
- <text x="0" y="102" font-size="9" fill="var(--ink-3)">$1K</text>
- </svg>
- <div class="chart-x">
- <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span>
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
+      <div class="grid-2">
+        <!-- Object Codes -->
+        <div class="card">
+          <div class="card-h">
+            <div class="card-t">Spend by object code</div>
+            <div class="card-meta">FY26 · $84.2K total</div>
+          </div>
+          <div class="card-b">
+            <div class="oc">
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7110</span>Lab supplies & reagents</div>
+                    <div class="oc-amt">$38,210 <span class="oc-pct">45%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:45%"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7240</span>Equipment service & maintenance</div>
+                    <div class="oc-amt">$14,820 <span class="oc-pct">18%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:18%;background:linear-gradient(90deg,var(--purple),#8463B0)"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7320</span>Consulting & research services</div>
+                    <div class="oc-amt">$12,400 <span class="oc-pct">15%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:15%;background:linear-gradient(90deg,var(--teal),#458388)"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7180</span>Software & data subscriptions</div>
+                    <div class="oc-amt">$8,940 <span class="oc-pct">11%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:11%;background:linear-gradient(90deg,var(--green),#3A9971)"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7150</span>Office & general supplies</div>
+                    <div class="oc-amt">$5,720 <span class="oc-pct">7%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:7%;background:linear-gradient(90deg,var(--amber),#D89522)"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7460</span>Conference & travel</div>
+                    <div class="oc-amt">$4,110 <span class="oc-pct">4%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:4%;background:linear-gradient(90deg,var(--brand),#A8351F)"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
- <!-- SPEND BY OBJECT CODE + GRANT UTILIZATION -->
- <div class="sec-block collapsible">
- <div class="sec-h">
- <div class="sec-t">Spend & funding</div>
- <div class="sec-sub">Lab + linked grants</div>
- </div>
+        <!-- Grants -->
+        <div class="card">
+          <div class="card-h">
+            <div class="card-t">Grant utilization</div>
+            <div class="card-meta">3 active</div>
+          </div>
+          <div class="card-b">
+            <div class="gr-list">
+              <div class="gr">
+                <div class="gr-top">
+                  <div>
+                    <div class="gr-name">Cancer immunotherapy mechanisms</div>
+                    <div class="gr-id">NIH · R01-CA248932 · Wellman PI</div>
+                  </div>
+                  <div class="gr-status tight">78% spent</div>
+                </div>
+                <div class="gr-bar-w"><div class="gr-bar tight" style="width:78%"></div></div>
+                <div class="gr-meta"><span><b>$487K</b> of $625K</span><span>6 mo left · burn slightly high</span></div>
+              </div>
 
- <div class="grid-2">
- <!-- Object Codes -->
- <div class="card">
- <div class="card-h">
- <div class="card-t">Spend by object code</div>
- <div class="card-meta">FY26 · $84.2K total</div>
- </div>
- <div class="card-b">
- <div class="oc">
- <div class="oc-row">
- <div>
- <div class="oc-top">
- <div class="oc-name"><span class="oc-code">7110</span>Lab supplies & reagents</div>
- <div class="oc-amt">$38,210 <span class="oc-pct">45%</span></div>
- </div>
- <div class="oc-bar-w"><div class="oc-bar" style="width:45%"></div></div>
- </div>
- </div>
- <div class="oc-row">
- <div>
- <div class="oc-top">
- <div class="oc-name"><span class="oc-code">7240</span>Equipment service & maintenance</div>
- <div class="oc-amt">$14,820 <span class="oc-pct">18%</span></div>
- </div>
- <div class="oc-bar-w"><div class="oc-bar" style="width:18%;background:linear-gradient(90deg,var(--purple),#8463B0)"></div></div>
- </div>
- </div>
- <div class="oc-row">
- <div>
- <div class="oc-top">
- <div class="oc-name"><span class="oc-code">7320</span>Consulting & research services</div>
- <div class="oc-amt">$12,400 <span class="oc-pct">15%</span></div>
- </div>
- <div class="oc-bar-w"><div class="oc-bar" style="width:15%;background:linear-gradient(90deg,var(--teal),#458388)"></div></div>
- </div>
- </div>
- <div class="oc-row">
- <div>
- <div class="oc-top">
- <div class="oc-name"><span class="oc-code">7180</span>Software & data subscriptions</div>
- <div class="oc-amt">$8,940 <span class="oc-pct">11%</span></div>
- </div>
- <div class="oc-bar-w"><div class="oc-bar" style="width:11%;background:linear-gradient(90deg,var(--green),#3A9971)"></div></div>
- </div>
- </div>
- <div class="oc-row">
- <div>
- <div class="oc-top">
- <div class="oc-name"><span class="oc-code">7150</span>Office & general supplies</div>
- <div class="oc-amt">$5,720 <span class="oc-pct">7%</span></div>
- </div>
- <div class="oc-bar-w"><div class="oc-bar" style="width:7%;background:linear-gradient(90deg,var(--amber),#D89522)"></div></div>
- </div>
- </div>
- <div class="oc-row">
- <div>
- <div class="oc-top">
- <div class="oc-name"><span class="oc-code">7460</span>Conference & travel</div>
- <div class="oc-amt">$4,110 <span class="oc-pct">4%</span></div>
- </div>
- <div class="oc-bar-w"><div class="oc-bar" style="width:4%;background:linear-gradient(90deg,var(--brand),#7A2C1E)"></div></div>
- </div>
- </div>
- </div>
- </div>
- </div>
+              <div class="gr">
+                <div class="gr-top">
+                  <div>
+                    <div class="gr-name">Single-cell sequencing instrumentation</div>
+                    <div class="gr-id">NSF · DBI-2231445 · co-PI</div>
+                  </div>
+                  <div class="gr-status ok">37% spent</div>
+                </div>
+                <div class="gr-bar-w"><div class="gr-bar ok" style="width:37%"></div></div>
+                <div class="gr-meta"><span><b>$112K</b> of $300K</span><span>14 mo left · on pace</span></div>
+              </div>
 
- <!-- Grants -->
- <div class="card">
- <div class="card-h">
- <div class="card-t">Grant utilization</div>
- <div class="card-meta">3 active</div>
- </div>
- <div class="card-b">
- <div class="gr-list">
- <div class="gr">
- <div class="gr-top">
- <div>
- <div class="gr-name">Cancer immunotherapy mechanisms</div>
- <div class="gr-id">NIH · R01-CA248932 · Wellman PI</div>
- </div>
- <div class="gr-status tight">78% spent</div>
- </div>
- <div class="gr-bar-w"><div class="gr-bar tight" style="width:78%"></div></div>
- <div class="gr-meta"><span><b>$487K</b> of $625K</span><span>6 mo left · burn slightly high</span></div>
- </div>
+              <div class="gr">
+                <div class="gr-top">
+                  <div>
+                    <div class="gr-name">Internal bridge fund</div>
+                    <div class="gr-id">MU · WL-BRIDGE-26</div>
+                  </div>
+                  <div class="gr-status warn">48% spent</div>
+                </div>
+                <div class="gr-bar-w"><div class="gr-bar warn" style="width:48%"></div></div>
+                <div class="gr-meta"><span><b>$24K</b> of $50K</span><span>4 mo left · watch closely</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
- <div class="gr">
- <div class="gr-top">
- <div>
- <div class="gr-name">Single-cell sequencing instrumentation</div>
- <div class="gr-id">NSF · DBI-2231445 · co-PI</div>
- </div>
- <div class="gr-status ok">37% spent</div>
- </div>
- <div class="gr-bar-w"><div class="gr-bar ok" style="width:37%"></div></div>
- <div class="gr-meta"><span><b>$112K</b> of $300K</span><span>14 mo left · on pace</span></div>
- </div>
+    <!-- ACTIVITY -->
+    <div class="sec-block collapsible">
+      <div class="sec-h">
+        <div class="sec-t">Recent activity</div>
+        <div class="sec-sub"><a href="#">View all 312</a></div>
+      </div>
 
- <div class="gr">
- <div class="gr-top">
- <div>
- <div class="gr-name">Internal bridge fund</div>
- <div class="gr-id">MU · WL-BRIDGE-26</div>
- </div>
- <div class="gr-status warn">48% spent</div>
- </div>
- <div class="gr-bar-w"><div class="gr-bar warn" style="width:48%"></div></div>
- <div class="gr-meta"><span><b>$24K</b> of $50K</span><span>4 mo left · watch closely</span></div>
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
+      <div class="card">
+        <div class="card-h">
+          <div class="tabs">
+            <button class="tab">Mine (47)</button>
+            <button class="tab active">Wellman Lab (118)</button>
+            <button class="tab">Dept 4421 (312)</button>
+          </div>
+          <div class="card-meta">Last 7 days</div>
+        </div>
+        <div>
+          <div class="act-row">
+            <div class="act-icon invoice"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+            <div class="act-desc">
+              <div class="act-t">Sigma-Aldrich · invoice INV-2026-4471</div>
+              <div class="act-d">3-way matched · ready for AP Friday cycle</div>
+            </div>
+            <div class="act-actor">J. Mendez</div>
+            <div class="act-amt">$1,840</div>
+            <div class="act-st green">Cleared</div>
+          </div>
+          <div class="act-row">
+            <div class="act-icon contract"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+            <div class="act-desc">
+              <div class="act-t">Strand Biosciences · MSA amendment + PO</div>
+              <div class="act-d">Routed to Legal (light touch) · est. ready Wed</div>
+            </div>
+            <div class="act-actor">J. Mendez</div>
+            <div class="act-amt">$28,500</div>
+            <div class="act-st purple">In Legal</div>
+          </div>
+          <div class="act-row">
+            <div class="act-icon noncat"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <div class="act-desc">
+              <div class="act-t">PrecisionCal — centrifuge recalibration</div>
+              <div class="act-d">Approved · PO-2026-0418 issued</div>
+            </div>
+            <div class="act-actor">J. Mendez</div>
+            <div class="act-amt">$4,200</div>
+            <div class="act-st green">Approved</div>
+          </div>
+          <div class="act-row">
+            <div class="act-icon catalog"><svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg></div>
+            <div class="act-desc">
+              <div class="act-t">Fisher Scientific · gloves, tips, plates</div>
+              <div class="act-d">Catalog order · contract pricing applied · saved $58</div>
+            </div>
+            <div class="act-actor">A. Kim · postdoc</div>
+            <div class="act-amt">$312</div>
+            <div class="act-st green">Shipped</div>
+          </div>
+          <div class="act-row">
+            <div class="act-icon noncat"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <div class="act-desc">
+              <div class="act-t">Custom oligos · IDT</div>
+              <div class="act-d">Awaiting PI approval · sent yesterday</div>
+            </div>
+            <div class="act-actor">M. Park · grad</div>
+            <div class="act-amt">$1,840</div>
+            <div class="act-st amber">Pending</div>
+          </div>
+          <div class="act-row">
+            <div class="act-icon catalog"><svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg></div>
+            <div class="act-desc">
+              <div class="act-t">VWR · serological pipettes (case)</div>
+              <div class="act-d">Auto-restock · matched 12-week pattern</div>
+            </div>
+            <div class="act-actor">Agent</div>
+            <div class="act-amt">$420</div>
+            <div class="act-st gray">Draft</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
- <!-- ACTIVITY -->
- <div class="sec-block collapsible">
- <div class="sec-h">
- <div class="sec-t">Recent activity</div>
- <div class="sec-sub"><a href="#">View all 312</a></div>
- </div>
+    <!-- WHAT'S COMING YOUR WAY -->
+    <div class="sec-block collapsible">
+      <div class="sec-h">
+        <div class="sec-t">What's coming your way · next 7 days</div>
+        <div class="sec-sub">From deliveries, approvals, patterns, and market signals · <a href="#">How does this work? →</a></div>
+      </div>
 
- <div class="card">
- <div class="card-h">
- <div class="tabs">
- <button class="tab">Mine (47)</button>
- <button class="tab active">Wellman Lab (118)</button>
- <button class="tab">Dept 4421 (312)</button>
- </div>
- <div class="card-meta">Last 7 days</div>
- </div>
- <div>
- <div class="act-row">
- <div class="act-icon invoice"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
- <div class="act-desc">
- <div class="act-t">Sigma-Aldrich · invoice INV-2026-4471</div>
- <div class="act-d">3-way matched · ready for AP Friday cycle</div>
- </div>
- <div class="act-actor">J. Mendez</div>
- <div class="act-amt">$1,840</div>
- <div class="act-st green">Cleared</div>
- </div>
- <div class="act-row">
- <div class="act-icon contract"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
- <div class="act-desc">
- <div class="act-t">Strand Biosciences · MSA amendment + PO</div>
- <div class="act-d">Routed to Legal (light touch) · est. ready Wed</div>
- </div>
- <div class="act-actor">J. Mendez</div>
- <div class="act-amt">$28,500</div>
- <div class="act-st purple">In Legal</div>
- </div>
- <div class="act-row">
- <div class="act-icon noncat"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
- <div class="act-desc">
- <div class="act-t">PrecisionCal centrifuge recalibration</div>
- <div class="act-d">Approved · PO-2026-0418 issued</div>
- </div>
- <div class="act-actor">J. Mendez</div>
- <div class="act-amt">$4,200</div>
- <div class="act-st green">Approved</div>
- </div>
- <div class="act-row">
- <div class="act-icon catalog"><svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg></div>
- <div class="act-desc">
- <div class="act-t">Fisher Scientific · gloves, tips, plates</div>
- <div class="act-d">Catalog order · contract pricing applied · saved $58</div>
- </div>
- <div class="act-actor">A. Kim · postdoc</div>
- <div class="act-amt">$312</div>
- <div class="act-st green">Shipped</div>
- </div>
- <div class="act-row">
- <div class="act-icon noncat"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
- <div class="act-desc">
- <div class="act-t">Custom oligos · IDT</div>
- <div class="act-d">Awaiting PI approval · sent yesterday</div>
- </div>
- <div class="act-actor">M. Park · grad</div>
- <div class="act-amt">$1,840</div>
- <div class="act-st amber">Pending</div>
- </div>
- <div class="act-row">
- <div class="act-icon catalog"><svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg></div>
- <div class="act-desc">
- <div class="act-t">VWR · serological pipettes (case)</div>
- <div class="act-d">Auto-restock · matched 12-week pattern</div>
- </div>
- <div class="act-actor">Agent</div>
- <div class="act-amt">$420</div>
- <div class="act-st gray">Draft</div>
- </div>
- </div>
- </div>
- </div>
+      <div class="pred-card">
+        <div class="pred-h">
+          <div class="pred-t">Predicted activity <span class="new">Telepathy</span></div>
+          <div style="font-size:11px;color:var(--ink-3)">6 items · agent watching</div>
+        </div>
 
- <!-- WHAT'S COMING YOUR WAY -->
- <div class="sec-block collapsible">
- <div class="sec-h">
- <div class="sec-t">What's coming your way · next 7 days</div>
- <div class="sec-sub">From deliveries, approvals, patterns, and market signals · <a href="#">How does this work? →</a></div>
- </div>
+        <div class="pred-row">
+          <div class="pr-conf">
+            <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot on"></div>
+            <span class="pr-conf-l">98%</span>
+          </div>
+          <div><span class="pr-src deliv">Delivery</span></div>
+          <div class="pr-desc">
+            <div class="pr-t">Sigma antibody batch · UPS tracking active</div>
+            <div class="pr-d">PO-2026-0498 · 3 boxes · <b>I'll prompt you to confirm receipt</b> when it arrives</div>
+          </div>
+          <div>
+            <div class="pr-when-d">Wed May 20</div>
+            <div class="pr-when-s">5 days · UPS tracking</div>
+          </div>
+          <div class="pr-action">Track</div>
+          <div class="pr-arrow">›</div>
+        </div>
 
- <div class="pred-card">
- <div class="pred-h">
- <div class="pred-t">Predicted activity <span class="new">Telepathy</span></div>
- <div style="font-size:11px;color:var(--ink-3)">6 items · agent watching</div>
- </div>
+        <div class="pred-row">
+          <div class="pr-conf">
+            <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot on"></div>
+            <span class="pr-conf-l">95%</span>
+          </div>
+          <div><span class="pr-src appr">Approval back</span></div>
+          <div class="pr-desc">
+            <div class="pr-t">PrecisionCal recalibration · Dr. Wellman</div>
+            <div class="pr-d">Sent yesterday · <b>responds in &lt;4h typically</b> · PO will release automatically</div>
+          </div>
+          <div>
+            <div class="pr-when-d">Today</div>
+            <div class="pr-when-s">~3 hrs · pattern</div>
+          </div>
+          <div class="pr-action">—</div>
+          <div class="pr-arrow">›</div>
+        </div>
 
- <div class="pred-row">
- <div class="pr-conf">
- <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot on"></div>
- <span class="pr-conf-l">98%</span>
- </div>
- <div><span class="pr-src deliv">Delivery</span></div>
- <div class="pr-desc">
- <div class="pr-t">Sigma antibody batch · UPS tracking active</div>
- <div class="pr-d">PO-2026-0498 · 3 boxes · <b>I'll prompt you to confirm receipt</b> when it arrives</div>
- </div>
- <div>
- <div class="pr-when-d">Wed May 20</div>
- <div class="pr-when-s">5 days · UPS tracking</div>
- </div>
- <div class="pr-action">Track</div>
- <div class="pr-arrow">›</div>
- </div>
+        <div class="pred-row">
+          <div class="pr-conf">
+            <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot"></div>
+            <span class="pr-conf-l">82%</span>
+          </div>
+          <div><span class="pr-src restock">Auto-restock</span></div>
+          <div class="pr-desc">
+            <div class="pr-t">Pipette tips · usage suggests reorder Fri</div>
+            <div class="pr-d">Every 11 weeks pattern · last order Mar 8 · I'll draft a cart for you to approve</div>
+          </div>
+          <div>
+            <div class="pr-when-d">Fri May 22</div>
+            <div class="pr-when-s">7 days · usage pattern</div>
+          </div>
+          <div class="pr-action">Preview</div>
+          <div class="pr-arrow">›</div>
+        </div>
 
- <div class="pred-row">
- <div class="pr-conf">
- <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot on"></div>
- <span class="pr-conf-l">95%</span>
- </div>
- <div><span class="pr-src appr">Approval back</span></div>
- <div class="pr-desc">
- <div class="pr-t">PrecisionCal recalibration · Dr. Wellman</div>
- <div class="pr-d">Sent yesterday · <b>responds in &lt;4h typically</b> · PO will release automatically</div>
- </div>
- <div>
- <div class="pr-when-d">Today</div>
- <div class="pr-when-s">~3 hrs · pattern</div>
- </div>
- <div class="pr-action"> </div>
- <div class="pr-arrow">›</div>
- </div>
+        <div class="pred-row">
+          <div class="pr-conf">
+            <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot on"></div>
+            <span class="pr-conf-l">High</span>
+          </div>
+          <div><span class="pr-src market">Market timing</span></div>
+          <div class="pr-desc">
+            <div class="pr-t">USD strong vs EUR · Eppendorf reagents 2.1% cheaper</div>
+            <div class="pr-d">Your draft for $4,200 Eppendorf order · <b>accelerate this week to save ~$88</b> · window closes mid-June</div>
+          </div>
+          <div>
+            <div class="pr-when-d">By Wed</div>
+            <div class="pr-when-s">FX window</div>
+          </div>
+          <div class="pr-action">Act now</div>
+          <div class="pr-arrow">›</div>
+        </div>
 
- <div class="pred-row">
- <div class="pr-conf">
- <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot"></div>
- <span class="pr-conf-l">82%</span>
- </div>
- <div><span class="pr-src restock">Auto-restock</span></div>
- <div class="pr-desc">
- <div class="pr-t">Pipette tips · usage suggests reorder Fri</div>
- <div class="pr-d">Every 11 weeks pattern · last order Mar 8 · I'll draft a cart for you to approve</div>
- </div>
- <div>
- <div class="pr-when-d">Fri May 22</div>
- <div class="pr-when-s">7 days · usage pattern</div>
- </div>
- <div class="pr-action">Preview</div>
- <div class="pr-arrow">›</div>
- </div>
+        <div class="pred-row">
+          <div class="pr-conf">
+            <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot"></div>
+            <span class="pr-conf-l">88%</span>
+          </div>
+          <div><span class="pr-src expense">Reimbursement</span></div>
+          <div class="pr-desc">
+            <div class="pr-t">Society of Neuroscience travel · 2 trips this month</div>
+            <div class="pr-d">Boston (4d) + Chicago (2d) · <b>receipt deadline May 30</b> · ~$2,840 est. reimbursement</div>
+          </div>
+          <div>
+            <div class="pr-when-d">By May 30</div>
+            <div class="pr-when-s">15 days · policy</div>
+          </div>
+          <div class="pr-action">Start now</div>
+          <div class="pr-arrow">›</div>
+        </div>
 
- <div class="pred-row">
- <div class="pr-conf">
- <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot on"></div>
- <span class="pr-conf-l">High</span>
- </div>
- <div><span class="pr-src market">Market timing</span></div>
- <div class="pr-desc">
- <div class="pr-t">USD strong vs EUR · Eppendorf reagents 2.1% cheaper</div>
- <div class="pr-d">Your draft for $4,200 Eppendorf order · <b>accelerate this week to save ~$88</b> · window closes mid-June</div>
- </div>
- <div>
- <div class="pr-when-d">By Wed</div>
- <div class="pr-when-s">FX window</div>
- </div>
- <div class="pr-action">Act now</div>
- <div class="pr-arrow">›</div>
- </div>
+        <div class="pred-row">
+          <div class="pr-conf">
+            <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot"></div>
+            <span class="pr-conf-l">85%</span>
+          </div>
+          <div><span class="pr-src pattern">Invoice incoming</span></div>
+          <div class="pr-desc">
+            <div class="pr-t">Strand Biosciences · invoice expected next week</div>
+            <div class="pr-d">After contract execution · I'll match it to PO and prompt receipt automatically · no work for you</div>
+          </div>
+          <div>
+            <div class="pr-when-d">~May 26</div>
+            <div class="pr-when-s">11 days · est.</div>
+          </div>
+          <div class="pr-action">—</div>
+          <div class="pr-arrow">›</div>
+        </div>
+      </div>
+    </div>
 
- <div class="pred-row">
- <div class="pr-conf">
- <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot"></div>
- <span class="pr-conf-l">88%</span>
- </div>
- <div><span class="pr-src expense">Reimbursement</span></div>
- <div class="pr-desc">
- <div class="pr-t">Society of Neuroscience travel · 2 trips this month</div>
- <div class="pr-d">Boston (4d) + Chicago (2d) · <b>receipt deadline May 30</b> · ~$2,840 est. reimbursement</div>
- </div>
- <div>
- <div class="pr-when-d">By May 30</div>
- <div class="pr-when-s">15 days · policy</div>
- </div>
- <div class="pr-action">Start now</div>
- <div class="pr-arrow">›</div>
- </div>
+  </main>
 
- <div class="pred-row">
- <div class="pr-conf">
- <div class="pr-dot on"></div><div class="pr-dot on"></div><div class="pr-dot"></div>
- <span class="pr-conf-l">85%</span>
- </div>
- <div><span class="pr-src pattern">Invoice incoming</span></div>
- <div class="pr-desc">
- <div class="pr-t">Strand Biosciences · invoice expected next week</div>
- <div class="pr-d">After contract execution · I'll match it to PO and prompt receipt automatically · no work for you</div>
- </div>
- <div>
- <div class="pr-when-d">~May 26</div>
- <div class="pr-when-s">11 days · est.</div>
- </div>
- <div class="pr-action"> </div>
- <div class="pr-arrow">›</div>
- </div>
- </div>
- </div>
+  <!-- ===== RIGHT — PULSE & ATTENTION ===== -->
+  <aside class="sum">
 
- <!-- QUICK SCENARIOS -->
- </main>
+    <!-- ATTENTION -->
+    <div class="sum-s">
+      <div class="sum-h"><span>Needs your attention</span><span style="font-size:11px;color:var(--brand);font-weight:600;text-transform:none;letter-spacing:0">4</span></div>
+      <div class="attn">
+        <div class="at">
+          <div class="at-i amber"><svg viewBox="0 0 24 24"><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="16.5"/></svg></div>
+          <div class="at-b">
+            <div class="at-t">3 invoices waiting on receipt</div>
+            <div class="at-d">Sigma, IDT, NEB · oldest at day 22 of net-30</div>
+            <div class="at-action">Confirm receipts →</div>
+          </div>
+        </div>
+        <div class="at">
+          <div class="at-i brand"><svg viewBox="0 0 24 24"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <div class="at-b">
+            <div class="at-t">R01-CA248932 burn rate up</div>
+            <div class="at-d">$487K of $625K spent · 6 mo left · projecting $40K overrun</div>
+            <div class="at-action">Review with PI →</div>
+          </div>
+        </div>
+        <div class="at">
+          <div class="at-i teal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="at-b">
+            <div class="at-t">Sigma early-pay discount available</div>
+            <div class="at-d">2/10 net 30 · save $36.80 if released today</div>
+            <div class="at-action">Approve early pay →</div>
+          </div>
+        </div>
+        <div class="at">
+          <div class="at-i accent"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div class="at-b">
+            <div class="at-t">M. Park's oligo request</div>
+            <div class="at-d">Awaiting your approval · $1,840 · IDT</div>
+            <div class="at-action">Review →</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
- <!-- ===== RIGHT PULSE & ATTENTION ===== -->
- <aside class="sum">
+    <!-- DEPARTMENT PULSE -->
+    <div class="sum-s">
+      <div class="sum-h"><span>Department pulse</span><span style="font-size:11px;color:var(--ink-3);text-transform:none;letter-spacing:0">Dept 4421 · FY26</span></div>
+      <div style="border:1px solid var(--line);border-radius:var(--rs);padding:6px 14px;background:var(--surface)">
+        <div class="pulse-row">
+          <div class="pulse-k">Spend YTD<div class="sub">vs LFY</div></div>
+          <div class="pulse-v">$1.21M<div class="delta down">↓ 4.2%</div></div>
+        </div>
+        <div class="pulse-row">
+          <div class="pulse-k">Contract savings<div class="sub">All sources</div></div>
+          <div class="pulse-v" style="color:var(--green)">$138K<div class="delta up">↑ 22%</div></div>
+        </div>
+        <div class="pulse-row">
+          <div class="pulse-k">Catalog adoption<div class="sub">Of addressable</div></div>
+          <div class="pulse-v">71%<div class="delta up">↑ 8 pts</div></div>
+        </div>
+        <div class="pulse-row">
+          <div class="pulse-k">Invoices on-time<div class="sub">Within terms</div></div>
+          <div class="pulse-v">98%<div class="delta up">↑ 14 pts</div></div>
+        </div>
+        <div class="pulse-row">
+          <div class="pulse-k">Avg cycle time<div class="sub">Req → PO</div></div>
+          <div class="pulse-v">1.8 days<div class="delta down">↓ 62%</div></div>
+        </div>
+      </div>
+    </div>
 
- <!-- ATTENTION -->
- <div class="sum-s">
- <div class="sum-h"><span>Needs your attention</span><span style="font-size:11px;color:var(--brand);font-weight:600;text-transform:none;letter-spacing:0">4</span></div>
- <div class="attn">
- <div class="at">
- <div class="at-i amber"><svg viewBox="0 0 24 24"><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="16.5"/></svg></div>
- <div class="at-b">
- <div class="at-t">3 invoices waiting on receipt</div>
- <div class="at-d">Sigma, IDT, NEB · oldest at day 22 of net-30</div>
- <div class="at-action">Confirm receipts →</div>
- </div>
- </div>
- <div class="at">
- <div class="at-i brand"><svg viewBox="0 0 24 24"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="10"/></svg></div>
- <div class="at-b">
- <div class="at-t">R01-CA248932 burn rate up</div>
- <div class="at-d">$487K of $625K spent · 6 mo left · projecting $40K overrun</div>
- <div class="at-action">Review with PI →</div>
- </div>
- </div>
- <div class="at">
- <div class="at-i teal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
- <div class="at-b">
- <div class="at-t">Sigma early-pay discount available</div>
- <div class="at-d">2/10 net 30 · save $36.80 if released today</div>
- <div class="at-action">Approve early pay →</div>
- </div>
- </div>
- <div class="at">
- <div class="at-i accent"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
- <div class="at-b">
- <div class="at-t">M. Park's oligo request</div>
- <div class="at-d">Awaiting your approval · $1,840 · IDT</div>
- <div class="at-action">Review →</div>
- </div>
- </div>
- </div>
- </div>
+    <!-- TIP -->
+    <div class="sum-s">
+      <div class="sum-h"><span>Agent suggestion</span></div>
+      <div class="tip">
+        <div class="tip-t">
+          <svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          Worth $1,800/yr in your area
+        </div>
+        Across the lab, you're buying <b>plastics consumables off-catalog</b> from 4 different suppliers. Switching to your Fisher Scientific contract would save ~<b>$1,800/yr</b> at current volume — no behavior change needed.
+        <div style="margin-top:8px;display:flex;gap:6px"><button class="btn" style="padding:5px 10px;font-size:11px">Show me</button><button class="btn" style="padding:5px 10px;font-size:11px">Dismiss</button></div>
+      </div>
+    </div>
 
- <!-- DEPARTMENT PULSE -->
- <div class="sum-s">
- <div class="sum-h"><span>Department pulse</span><span style="font-size:11px;color:var(--ink-3);text-transform:none;letter-spacing:0">Dept 4421 · FY26</span></div>
- <div style="border:1px solid var(--line);border-radius:2px;padding:6px 14px;background:var(--surface)">
- <div class="pulse-row">
- <div class="pulse-k">Spend YTD<div class="sub">vs LFY</div></div>
- <div class="pulse-v">$1.21M<div class="delta down">↓ 4.2%</div></div>
- </div>
- <div class="pulse-row">
- <div class="pulse-k">Contract savings<div class="sub">All sources</div></div>
- <div class="pulse-v" style="color:var(--green)">$138K<div class="delta up">↑ 22%</div></div>
- </div>
- <div class="pulse-row">
- <div class="pulse-k">Catalog adoption<div class="sub">Of addressable</div></div>
- <div class="pulse-v">71%<div class="delta up">↑ 8 pts</div></div>
- </div>
- <div class="pulse-row">
- <div class="pulse-k">Invoices on-time<div class="sub">Within terms</div></div>
- <div class="pulse-v">98%<div class="delta up">↑ 14 pts</div></div>
- </div>
- <div class="pulse-row">
- <div class="pulse-k">Avg cycle time<div class="sub">Req → PO</div></div>
- <div class="pulse-v">1.8 days<div class="delta down">↓ 62%</div></div>
- </div>
- </div>
- </div>
+    <div class="footer-n">
+      <b>Concept mockup</b> · Command-center landing showing how guided buying surfaces savings, compliance, and grant management proactively. Click any scenario to walk through the agent's behavior.
+      <br/><br/>
+      <a href="leader-dashboard.html" style="color:var(--accent);font-weight:600;text-decoration:none">→ Switch to leader view</a>
+      &nbsp;·&nbsp;
+      <a href="ap-operations.html" style="color:var(--accent);font-weight:600;text-decoration:none">→ AP operations view</a>
+    </div>
 
- <!-- TIP -->
- <div class="sum-s">
- <div class="sum-h"><span>Agent suggestion</span></div>
- <div class="tip">
- <div class="tip-t">
- <svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
- Worth $1,800/yr in your area
- </div>
- Across the lab, you're buying <b>plastics consumables off-catalog</b> from 4 different suppliers. Switching to your Fisher Scientific contract would save ~<b>$1,800/yr</b> at current volume no behavior change needed.
- <div style="margin-top:8px;display:flex;gap:6px"><button class="btn" style="padding:5px 10px;font-size:11px">Show me</button><button class="btn" style="padding:5px 10px;font-size:11px">Dismiss</button></div>
- </div>
- </div>
-
- <div class="footer-n">
- <b>Concept mockup</b> · Command-center landing showing how guided buying surfaces savings, compliance, and grant management proactively. Click any scenario to walk through the agent's behavior.
- <br/><br/>
- <a href="leader-dashboard.html" style="color:var(--accent);font-weight:600;text-decoration:none">→ Switch to leader view</a>
- &nbsp;·&nbsp;
- <a href="ap-operations.html" style="color:var(--accent);font-weight:600;text-decoration:none">→ AP operations view</a>
- </div>
-
- </aside>
+  </aside>
 
 </div>
 
 <script>
- document.addEventListener('click', e => {
- const h = e.target.closest('.sec-block.collapsible > .sec-h');
- if (h && !e.target.closest('button, a, .tab, .tabs, input, select')) {
- h.parentElement.classList.toggle('collapsed');
- }
- });
+  document.addEventListener('click', e => {
+    const h = e.target.closest('.sec-block.collapsible > .sec-h');
+    if (h && !e.target.closest('button, a, .tab, .tabs, input, select')) {
+      h.parentElement.classList.toggle('collapsed');
+    }
+  });
 </script>
-
-
 
 </body>
 </html>
