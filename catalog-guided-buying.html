@@ -3,636 +3,938 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Procurello Catalog Guided Buying</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Procurello — Catalog buying (live demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
- :root {
- /* Brand palette DS v2 */
- --ink: #1A1016;
- --aubergine: #3C1239;
- --plum: #5D1E58;
- --brand: #7C3AED;
- --brand-light: #A87CE8;
- --violet-dim: #2D1B4E;
-
- /* Earth neutrals */
- --bg: #F5F2EF;
- --surface: #FFFFFF;
- --surface-2: #EDE8E3;
- --line: #D9D2CB;
- --line-2: #B8AFA6;
- --border: #D9D2CB;
-
- /* Text */
- --text-primary: #1F1A17;
- --text-secondary: #7A6E65;
- --text-muted: #B8AFA6;
-
- /* Semantic status muted, not neon */
- --green: #3D6B4A;
- --amber: #7A5C1E;
- --red: #7A2C1E;
-
- /* Soft tints */
- --brand-soft: #EDE9FE;
- --green-soft: #E4F1EB;
- --amber-soft: #F5EDD8;
- --red-soft: #FBEBE8;
-
- /* Typography */
- --font-display: 'DM Serif Display', Georgia, serif;
- --font-body: 'Karla', 'Helvetica Neue', sans-serif;
- --font-mono: 'DM Mono', 'Courier New', monospace;
-
- /* Radius: intentionally minimal */
- --r: 0px;
- --rs: 2px;
- --rl: 0px;
-
- /* Shadows: crisp offset, no blur */
- --shadow-sm: 2px 2px 0px #D9D2CB;
- --shadow-md: 4px 4px 0px #D9D2CB;
- --shadow-brand: 4px 4px 0px rgba(92,30,88,0.25);
+:root {
+  --ink:#1A1016; --aubergine:#3C1239; --plum:#5D1E58;
+  --brand:#7C3AED; --brand-light:#A87CE8; --violet-dim:#2D1B4E;
+  --bg:#F5F2EF; --surface:#FFFFFF; --surface-2:#EDE8E3;
+  --line:#D9D2CB; --line-2:#B8AFA6;
+  --text-primary:#1F1A17; --text-secondary:#7A6E65; --text-muted:#B8AFA6;
+  --green:#3D6B4A; --green-soft:#E4F1EB;
+  --amber:#7A5C1E; --amber-soft:#F5EDD8;
+  --red:#7A2C1E; --red-soft:#FBEBE8;
+  --teal:#2A6F73; --teal-soft:#E0EDEE;
+  --brand-soft:#EDE9FE; --purple-soft:#EFE8F5;
+  --font-display:'DM Serif Display',Georgia,serif;
+  --font-body:'Karla','Helvetica Neue',sans-serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+  --shadow-sm:2px 2px 0px #D9D2CB;
+  --shadow-md:4px 4px 0px #D9D2CB;
+  --shadow-brand:4px 4px 0px rgba(92,30,88,0.25);
 }
- *{box-sizing:border-box;margin:0;padding:0}
- body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
- .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text-primary);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:0.9375rem;line-height:1.6}
 
- /* SIDEBAR */
- .sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%);border-right:none;padding:20px 14px;display:flex;flex-direction:column;gap:2px}
- .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:2px;color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
- .nav:hover{background:rgba(255,255,255,0.07);color:var(--ink)}
- .nav.active{background:var(--brand-soft);color:var(--brand)}
- .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
- .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:0;font-weight:600}
- .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.35);padding:18px 10px 6px;font-weight:600}
- .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
- .av{width:30px;height:30px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
- .av-i{flex:1;min-width:0}
- .av-n{font-size:12px;font-weight:600}
- .av-r{font-size:11px;color:var(--ink-3)}
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;background:rgba(245,242,239,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+.topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;max-width:1180px;margin:0 auto}
+.tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.tb-dot{width:28px;height:28px;border-radius:2px;background:linear-gradient(135deg,var(--aubergine),var(--plum));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;font-family:var(--font-body)}
+.tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em}
+.tb-sub{font-size:11px;color:var(--text-secondary);margin-top:1px}
+.tb-links{display:flex;gap:24px;font-size:13px}
+.tb-links a{color:var(--text-secondary);text-decoration:none;transition:color .15s}
+.tb-links a:hover{color:var(--text-primary)}
+.tb-user{display:flex;align-items:center;gap:10px}
+.tb-uname{font-size:12px;color:var(--text-secondary)}
+.tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-light));color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
 
- /* MAIN */
- .main{padding:32px 40px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
- .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
- .crumb .s{color:var(--line-2)}
- h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
- .lede{color:var(--ink-2);font-size:14px;margin-bottom:24px;max-width:620px}
+/* ── DEMO LAYOUT ── */
+.demo-wrap{max-width:880px;margin:0 auto;padding:32px 24px 160px;position:relative}
+.demo-intro{padding:24px 28px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);margin-bottom:28px}
+.demo-eyebrow{font-family:var(--font-mono);font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--plum);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.demo-eyebrow .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);animation:livepulse 2s ease-in-out infinite}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:.4}}
+.demo-title{font-family:var(--font-display);font-size:1.5rem;font-weight:400;line-height:1.2;color:var(--text-primary);margin-bottom:6px}
+.demo-title em{color:var(--aubergine);font-style:italic}
+.demo-lede{font-size:.875rem;color:var(--text-secondary);line-height:1.6;max-width:620px}
+.demo-hint{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--font-mono);font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em;display:flex;gap:14px;flex-wrap:wrap}
+.demo-hint kbd{font-family:var(--font-mono);font-size:.65rem;background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:3px;color:var(--text-primary)}
 
- /* COMPOSER */
- .composer{background:var(--surface);border:1px solid var(--line);border-radius:0;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
- .c-in{padding:16px 18px 12px}
- .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
- .spk{width:12px;height:12px;color:var(--brand)}
- .c-txt{font-size:15px;color:var(--ink);min-height:20px}
- .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
- .c-acts{display:flex;gap:4px;flex-wrap:wrap}
- .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
- .chip:hover{border-color:var(--line-2);color:var(--ink)}
- .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
- .btn{padding:8px 14px;border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
- .btn:hover{background:var(--surface-2)}
- .btn-p{background:var(--aubergine);color:rgba(255,255,255,.92);box-shadow:var(--shadow-brand)}
- .btn-p:hover{background:var(--plum)}
- .btn-g{background:var(--green);color:#fff;border-color:var(--green)}
- .btn-g:hover{background:#256749}
+/* ── CONVERSATION ── */
+.conv{display:flex;flex-direction:column;gap:18px}
+.msg{display:flex;gap:12px;animation:msgIn .35s ease-out}
+.msg.from-user{flex-direction:row-reverse}
+.msg-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:11px;font-weight:600;color:#fff;font-family:var(--font-body)}
+.msg.from-user .msg-av{background:linear-gradient(135deg,var(--brand),var(--brand-light))}
+.msg.from-agent .msg-av{background:linear-gradient(135deg,var(--aubergine),var(--plum))}
+.msg-body{max-width:78%}
+.msg-meta{font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary);margin-bottom:4px;display:flex;gap:8px;align-items:center}
+.msg.from-user .msg-meta{justify-content:flex-end}
+.msg-bubble{padding:12px 16px;font-size:.9375rem;line-height:1.55;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow-sm);white-space:pre-wrap;word-wrap:break-word}
+.msg.from-user .msg-bubble{background:var(--brand-soft);border-color:#D8CDF5;color:var(--text-primary)}
+.msg.from-agent .msg-bubble{border-left:3px solid var(--aubergine);background:var(--surface);position:relative}
+.msg.from-agent .msg-bubble strong{color:var(--aubergine);font-weight:600}
 
- /* THREAD */
- .thread{margin-top:24px}
- .turn{margin-bottom:22px}
- .t-user{display:flex;justify-content:flex-end;margin-bottom:14px}
- .t-user-b{background:var(--accent);color:#fff;padding:10px 14px;border-radius:0 14px 4px 14px;font-size:14px;max-width:80%;line-height:1.5}
- .t-agent{display:flex;gap:12px}
- .a-dot{width:28px;height:28px;border-radius:0;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
- .a-body{flex:1;min-width:0}
- .a-name{font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
- .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);display:inline-block}
- .a-msg{font-size:14px;color:var(--ink);line-height:1.6}
- .a-msg p{margin-bottom:10px}
- .a-msg strong{font-weight:600}
+.typing-dots{display:inline-flex;gap:4px;align-items:center;padding:6px 4px}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--text-secondary);animation:dotPulse 1.4s ease-in-out infinite}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotPulse{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
 
- /* INLINE CARDS */
- .card{background:var(--surface);border:1px solid var(--line);border-radius:0;margin:10px 0;overflow:hidden}
- .card-h{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
- .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
- .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
- .card-b{padding:12px 14px}
+.typing-cursor{display:inline-block;width:2px;height:1.1em;background:var(--text-primary);vertical-align:text-bottom;margin-left:1px;animation:cursorBlink 1s steps(2) infinite}
+@keyframes cursorBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
- /* PRODUCT CARDS */
- .prod-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
- .prod{border:1px solid var(--line);border-radius:2px;background:var(--surface);display:flex;flex-direction:column;transition:all .15s;cursor:pointer;position:relative;overflow:hidden}
- .prod:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
- .prod.best{border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
- .prod-flag{position:absolute;top:0;left:0;right:0;background:var(--green);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;text-align:center;letter-spacing:.04em;text-transform:uppercase}
- .prod-img{height:80px;background:var(--surface-2);display:grid;place-items:center;border-bottom:1px solid var(--line);position:relative}
- .prod.best .prod-img{margin-top:18px}
- .prod-img svg{width:42px;height:42px;color:var(--ink-3);opacity:.7}
- .prod-img img{max-width:80%;max-height:64px;object-fit:contain;display:block}
- .prod-body{padding:10px 12px;flex:1;display:flex;flex-direction:column}
- .prod-sup{font-size:10px;color:var(--ink-3);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px}
- .sup-dot{width:14px;height:14px;border-radius:2px;background:var(--surface-2);display:grid;place-items:center;font-size:8px;font-weight:700;color:var(--ink-2);border:1px solid var(--line)}
- .prod-n{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:3px}
- .prod-m{font-size:11px;color:var(--ink-3);margin-bottom:8px;line-height:1.4;flex:1}
- .prod-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:auto}
- .prod-price-w{display:flex;flex-direction:column}
- .prod-price{font-size:14px;font-weight:700;line-height:1}
- .prod-list{font-size:10px;color:var(--ink-3);text-decoration:line-through;margin-top:2px}
- .prod-save{font-size:10px;color:var(--green);font-weight:600;margin-top:2px}
- .add-btn{background:var(--ink);color:#fff;border:none;border-radius:2px;padding:6px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px}
- .add-btn:hover{background:#000}
- .add-btn svg{width:10px;height:10px;stroke:currentColor;stroke-width:2.5;fill:none}
- .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:2px;font-size:10px;font-weight:600;margin-bottom:6px}
- .b-g{background:var(--green-soft);color:var(--green)}
- .b-a{background:var(--amber-soft);color:var(--amber)}
- .b-n{background:var(--surface-2);color:var(--ink-2)}
- .b-b{background:var(--accent-soft);color:var(--accent)}
+/* ── COMPOSER ── */
+.composer{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);padding:18px 20px;margin-bottom:8px}
+.composer-label{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.composer-label svg{width:12px;height:12px;stroke:var(--plum);stroke-width:1.5;fill:none}
+.composer-text{font-size:1.0625rem;line-height:1.55;color:var(--text-primary);min-height:60px;padding:6px 0;font-family:var(--font-body)}
+.composer-text.placeholder{color:var(--text-muted)}
+.composer-foot{display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:12px;border-top:1px solid var(--line)}
+.composer-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--font-mono);font-size:.7rem;font-weight:500;padding:5px 10px;border:1px solid var(--line);color:var(--text-secondary);background:var(--surface-2);cursor:default}
+.composer-send{padding:8px 18px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;background:var(--aubergine);color:#fff;border:none;cursor:pointer;box-shadow:var(--shadow-brand);transition:all .12s;display:inline-flex;align-items:center;gap:8px}
+.composer-send:hover{background:var(--plum)}
+.composer-send:disabled{background:var(--text-muted);box-shadow:none;cursor:not-allowed}
+.composer-send.ready{animation:btnReady 1.8s ease-in-out infinite}
+@keyframes btnReady{0%,100%{box-shadow:var(--shadow-brand)}50%{box-shadow:0 0 0 4px rgba(124,58,237,.12), var(--shadow-brand)}}
 
- /* PRODUCT INTELLIGENCE - market awareness */
- .prod-intel{display:flex;gap:10px;font-size:10px;color:var(--ink-3);margin:6px 0 8px;padding:6px 0;border-top:1px dashed var(--line);flex-wrap:wrap}
- .prod-intel span{display:inline-flex;align-items:center;gap:4px}
- .prod-intel svg{width:9px;height:9px;stroke:currentColor;stroke-width:2;fill:none;flex-shrink:0}
- .prod-intel b{color:var(--ink-2);font-weight:600}
- .prod-intel .pos{color:var(--green);font-weight:600}
- .prod-intel .neg{color:var(--brand);font-weight:600}
+/* ── PRODUCT CARDS (catalog-specific) ── */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.prod-card{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);cursor:pointer;transition:all .2s;position:relative;display:flex;flex-direction:column;animation:cardIn .4s ease-out both;overflow:hidden}
+.prod-card:hover{border-color:var(--plum);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.prod-card.recommended{border-color:var(--plum);box-shadow:var(--shadow-brand)}
+.prod-card.faded{opacity:.35;cursor:default;transform:none!important;box-shadow:var(--shadow-sm)!important}
+.prod-card.faded:hover{border-color:var(--line)}
+.prod-card.selected{border-color:var(--aubergine);box-shadow:var(--shadow-brand)}
+.prod-badge{position:absolute;top:0;right:0;font-family:var(--font-mono);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;background:var(--aubergine);color:#fff;z-index:2}
+.prod-selected-mark{position:absolute;top:8px;right:8px;width:24px;height:24px;background:var(--aubergine);color:#fff;display:grid;place-items:center;animation:checkPop .3s ease-out;z-index:2}
+.prod-selected-mark svg{width:14px;height:14px;stroke:#fff;stroke-width:2.5;fill:none}
+@keyframes checkPop{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.prod-image{background:var(--surface-2);height:120px;display:grid;place-items:center;border-bottom:1px solid var(--line);overflow:hidden}
+.prod-image img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.prod-image-placeholder{width:48px;height:48px;background:var(--line);display:grid;place-items:center;color:var(--text-secondary);font-family:var(--font-mono);font-size:.6rem;letter-spacing:.06em}
+.prod-body{padding:14px;flex:1;display:flex;flex-direction:column}
+.prod-supplier{font-family:var(--font-mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary);margin-bottom:4px}
+.prod-name{font-family:var(--font-display);font-size:.95rem;line-height:1.3;color:var(--text-primary);margin-bottom:10px;margin-right:24px}
+.prod-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.prod-price{font-family:var(--font-display);font-size:1.25rem;color:var(--aubergine);line-height:1}
+.prod-price-unit{font-family:var(--font-mono);font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em}
+.prod-list-price{font-size:.75rem;color:var(--text-muted);text-decoration:line-through;margin-left:auto}
+.prod-savings{font-family:var(--font-mono);font-size:.65rem;color:var(--green);font-weight:600;margin-bottom:10px;letter-spacing:.04em}
+.prod-meta{flex:1;font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+.prod-meta strong{color:var(--text-primary);font-weight:600}
+.prod-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.tag-sm{font-family:var(--font-mono);font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border:1px solid currentColor;font-weight:500}
+.tag-sm.tg-ok{color:var(--green);background:var(--green-soft)}
+.tag-sm.tg-warn{color:var(--amber);background:var(--amber-soft)}
+.tag-sm.tg-neutral{color:var(--text-secondary);background:var(--surface-2);border-color:var(--line)}
+.tag-sm.tg-info{color:var(--plum);background:var(--purple-soft)}
+.prod-hint{text-align:center;margin-top:10px;font-family:var(--font-mono);font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em}
 
- /* PUNCHOUT CARD */
- .punch{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(90deg,var(--surface-2) 0%,var(--surface) 100%);border:1px dashed var(--line-2);border-radius:2px;margin-top:10px;cursor:pointer;transition:all .15s}
- .punch:hover{border-color:var(--ink-3);background:var(--surface-2)}
- .punch-i{width:36px;height:36px;border-radius:2px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:10px;color:var(--ink-2);flex-shrink:0}
- .punch-b{flex:1;min-width:0}
- .punch-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
- .punch-d{font-size:11px;color:var(--ink-3);margin-top:2px}
- .punch-a{font-size:11px;color:var(--ink-2);font-weight:600;display:flex;align-items:center;gap:4px;flex-shrink:0}
- .punch-a svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
+/* ── CART ── */
+.cart-card{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);margin-top:6px;overflow:hidden}
+.cart-head{padding:14px 18px;background:var(--surface-2);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.cart-title{font-family:var(--font-mono);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-primary)}
+.cart-sub{font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em}
+.cart-rows{padding:0}
+.cart-line{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line);animation:fieldIn .25s ease-out}
+.cart-line:last-of-type{border-bottom:none}
+.cart-line-img{width:40px;height:40px;background:var(--surface-2);border:1px solid var(--line);display:grid;place-items:center;flex-shrink:0;overflow:hidden}
+.cart-line-img img{max-width:100%;max-height:100%;object-fit:contain}
+.cart-line-info{flex:1;min-width:0}
+.cart-line-name{font-size:.875rem;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.cart-line-meta{font-family:var(--font-mono);font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em}
+.cart-line-qty{font-family:var(--font-mono);font-size:.8125rem;color:var(--text-primary);min-width:60px;text-align:right;font-weight:600}
+.cart-line-total{font-family:var(--font-display);font-size:1rem;color:var(--text-primary);min-width:80px;text-align:right}
+.cart-totals{padding:14px 18px;background:var(--surface-2);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;font-size:.8125rem}
+.cart-total-row.savings{color:var(--green);font-weight:600}
+.cart-total-row.grand{padding-top:8px;border-top:1px solid var(--line);font-size:.95rem;font-weight:600}
+.cart-total-row.grand .total-amt{font-family:var(--font-display);font-size:1.25rem;color:var(--aubergine)}
+.cart-total-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-secondary)}
+.cart-total-row.savings .cart-total-label{color:var(--green)}
+.cart-suggest{padding:12px 18px;background:rgba(124,58,237,.05);border-top:1px solid var(--line);border-left:3px solid var(--brand);font-size:.8125rem;color:var(--text-secondary);line-height:1.5;display:flex;align-items:flex-start;gap:10px}
+.cart-suggest svg{width:14px;height:14px;stroke:var(--brand);stroke-width:1.5;fill:none;flex-shrink:0;margin-top:2px}
+.cart-suggest strong{color:var(--text-primary);font-weight:600}
+@keyframes fieldIn{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 
- /* FOLLOWUP */
- .fu{background:var(--surface);border:1px dashed var(--line-2);border-radius:0;padding:13px;margin:10px 0}
- .fu-q{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink-2)}
- .fu-opts{display:flex;flex-wrap:wrap;gap:6px}
- .opt{padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;cursor:pointer;background:var(--surface);transition:all .15s}
- .opt:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* ── COMPLIANCE ── */
+.compliance-panel{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);padding:16px 18px;margin-top:6px}
+.compliance-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.compliance-title{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600;color:var(--text-primary)}
+.compliance-status{font-family:var(--font-mono);font-size:.7rem;color:var(--green);font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.compliance-status .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:livepulse 1.5s ease-in-out infinite}
+.compliance-status.running .dot{background:var(--amber)}
+.compliance-status.running{color:var(--amber)}
+.compliance-progress{height:3px;background:var(--surface-2);position:relative;overflow:hidden;margin-bottom:10px}
+.compliance-progress-bar{height:100%;background:linear-gradient(90deg,var(--brand),var(--aubergine));width:0%;transition:width 1s ease-out}
+.compliance-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 18px;font-size:.78rem;color:var(--text-secondary)}
+.compliance-check{display:flex;align-items:center;gap:8px;opacity:0;animation:checkIn .25s ease-out forwards}
+.compliance-check::before{content:'';width:14px;height:14px;background:var(--green);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.5 8.5L6.5 11.5L12.5 5.5' stroke='white' stroke-width='2' fill='none'/></svg>");background-position:center;background-repeat:no-repeat;flex-shrink:0}
+@keyframes checkIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
 
- /* HISTORY HINT */
- .hint{background:var(--accent-soft);border:1px solid #C7D2E0;border-radius:0;padding:12px 14px;margin:10px 0;display:flex;align-items:flex-start;gap:10px}
- .hint-i{width:24px;height:24px;border-radius:2px;background:var(--accent);color:#fff;display:grid;place-items:center;flex-shrink:0;font-size:11px;font-weight:700}
- .hint-b{flex:1;font-size:13px;color:var(--ink)}
- .hint-b b{font-weight:600}
- .hint-a{display:flex;gap:6px;margin-top:8px}
+/* ── AUTO-APPROVAL PATH (catalog-specific - simplified) ── */
+.approval-path{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);padding:16px 18px;margin-top:6px}
+.approval-path-head{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-primary);font-weight:600;margin-bottom:14px}
+.auto-approve{display:flex;align-items:center;gap:12px;padding:12px;background:var(--green-soft);border:1px solid var(--green);border-left:3px solid var(--green)}
+.auto-approve-icon{width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.auto-approve-icon svg{width:16px;height:16px;stroke:#fff;stroke-width:2.5;fill:none}
+.auto-approve-info{flex:1}
+.auto-approve-name{font-size:.875rem;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.auto-approve-role{font-size:.75rem;color:var(--text-secondary)}
+.approval-note{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:.78rem;color:var(--text-secondary);display:flex;gap:6px;align-items:center}
+.approval-note strong{color:var(--text-primary);font-weight:600}
 
- /* INLINE COMPOSER */
- .icomp{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:0;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
- .icomp input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:10px 0}
- .icomp input::placeholder{color:var(--ink-3)}
+/* ── SUBMIT ── */
+.submit-row{margin-top:8px;display:flex;gap:10px;justify-content:flex-end}
+.btn-submit{padding:11px 24px;font-family:var(--font-body);font-size:.875rem;font-weight:600;background:var(--aubergine);color:#fff;border:none;cursor:pointer;box-shadow:var(--shadow-brand);transition:all .12s;display:inline-flex;align-items:center;gap:10px}
+.btn-submit:hover{background:var(--plum)}
+.btn-submit:disabled{background:var(--text-muted);cursor:not-allowed;box-shadow:none}
+.btn-submit svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
 
- /* RIGHT CART */
- .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
- .sum-s{margin-bottom:22px}
- .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
- .sum-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em}
- .sum-h .count{font-size:11px;color:var(--ink-2);background:var(--surface-2);padding:2px 8px;border-radius:0;font-weight:600;text-transform:none;letter-spacing:0}
+/* ── SUBMISSION + TELEPATHY ── */
+.confirm-card{background:linear-gradient(135deg, #2D1B4E 0%, #3C1239 100%);color:rgba(255,255,255,.92);padding:24px 28px;margin-top:8px;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
+.confirm-card::before{content:'';position:absolute;top:-100px;right:-100px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(168,124,232,.22),transparent 70%);pointer-events:none}
+.confirm-eyebrow{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(168,124,232,.9);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.confirm-eyebrow .dot{width:6px;height:6px;background:var(--brand-light);border-radius:50%;box-shadow:0 0 0 3px rgba(168,124,232,.25);animation:livepulse 1.5s ease-in-out infinite}
+.confirm-title{font-family:var(--font-display);font-size:1.5rem;font-weight:400;line-height:1.2;color:#fff;margin-bottom:6px}
+.confirm-ref{font-family:var(--font-mono);font-size:.85rem;letter-spacing:.04em;color:rgba(168,124,232,.9);margin-bottom:18px}
+.telepathy-grid{margin-top:14px}
+.telepathy-item{display:grid;grid-template-columns:160px 1fr;gap:18px;padding:10px 0;border-top:1px solid rgba(255,255,255,.1);font-size:.8125rem;line-height:1.55;color:rgba(255,255,255,.75);animation:teleIn .4s ease-out both}
+.telepathy-item:first-child{border-top:none;padding-top:6px}
+.telepathy-when{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brand-light);font-weight:600}
+.telepathy-what strong{color:#fff;font-weight:600}
+@keyframes teleIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
- /* CART ITEMS */
- .cart{background:var(--surface);border:1px solid var(--line);border-radius:0;overflow:hidden}
- .ci{padding:11px 12px;display:flex;gap:10px;border-bottom:1px solid var(--line)}
- .ci:last-child{border-bottom:none}
- .ci-img{width:38px;height:38px;border-radius:2px;background:var(--surface-2);display:grid;place-items:center;flex-shrink:0;border:1px solid var(--line)}
- .ci-img svg{width:18px;height:18px;color:var(--ink-3);opacity:.7}
- .ci-b{flex:1;min-width:0}
- .ci-n{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:2px}
- .ci-m{font-size:11px;color:var(--ink-3)}
- .ci-q{display:flex;align-items:center;gap:6px;margin-top:6px}
- .qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:2px;overflow:hidden}
- .qty button{background:var(--surface);border:none;width:18px;height:18px;font-size:12px;cursor:pointer;color:var(--ink-2)}
- .qty button:hover{background:var(--surface-2)}
- .qty span{font-size:11px;font-weight:600;padding:0 6px;min-width:20px;text-align:center}
- .ci-p{font-size:13px;font-weight:700;flex-shrink:0;text-align:right}
- .ci-p-s{font-size:10px;color:var(--green);font-weight:600;margin-top:2px}
+.demo-end{margin-top:32px;padding:20px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.demo-end-title{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-secondary);margin-bottom:14px}
+.demo-end-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-ghost{padding:8px 16px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;background:transparent;color:var(--text-primary);border:1px solid var(--line-2);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .12s}
+.btn-ghost:hover{border-color:var(--aubergine);color:var(--aubergine)}
 
- /* CART TOTALS */
- .totals{padding:12px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
- .tt{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}
- .tt-k{color:var(--ink-3)}
- .tt-v{font-weight:500}
- .tt.grand{padding-top:8px;margin-top:6px;border-top:1px solid var(--line-2);font-size:14px}
- .tt.grand .tt-k{color:var(--ink);font-weight:600}
- .tt.grand .tt-v{font-weight:700}
- .tt.save .tt-v{color:var(--green);font-weight:600}
+/* ── CONTROLS ── */
+.demo-controls{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,rgba(245,242,239,0) 0%,rgba(245,242,239,.95) 30%);padding:32px 24px 18px;z-index:100;display:flex;justify-content:center;pointer-events:none}
+.demo-controls-inner{display:flex;align-items:center;gap:12px;background:var(--surface);padding:8px 8px 8px 16px;border:1px solid var(--line);box-shadow:var(--shadow-md);pointer-events:auto}
+.demo-step-indicator{display:flex;gap:4px;align-items:center}
+.demo-step-dot{width:6px;height:6px;border-radius:50%;background:var(--line-2);transition:all .25s}
+.demo-step-dot.active{background:var(--aubergine);transform:scale(1.5)}
+.demo-step-dot.completed{background:var(--plum)}
+.demo-step-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary);margin:0 8px;white-space:nowrap}
+.demo-step-label b{color:var(--text-primary);font-weight:600}
+.btn-control{padding:7px 12px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;border:none;cursor:pointer;background:var(--surface-2);color:var(--text-primary);display:inline-flex;align-items:center;gap:6px;transition:all .12s}
+.btn-control:hover:not(:disabled){background:var(--line)}
+.btn-control:disabled{opacity:.4;cursor:not-allowed}
+.btn-control.primary{background:var(--aubergine);color:#fff;box-shadow:var(--shadow-brand)}
+.btn-control.primary:hover:not(:disabled){background:var(--plum)}
+.btn-control svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none}
 
- /* CHECKS */
- .chk{display:flex;align-items:flex-start;gap:8px;padding:7px 0;font-size:12px}
- .chk-i{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
- .chk-i.ok{background:var(--green);color:#fff}
- .chk-i.info{background:var(--accent);color:#fff}
- .chk-i svg{width:8px;height:8px;stroke:currentColor;stroke-width:3;fill:none}
- .chk-t{color:var(--ink-2)}
- .chk-t b{color:var(--ink);font-weight:600}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.beat{display:none}
+.beat.visible{display:block;animation:msgIn .4s ease-out}
 
- .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:20px}
- .actions .btn{width:100%;text-align:center;padding:10px}
-
- /* ── Topbar (cross-page nav) ─────────────────────────────── */
- .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
- .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
- .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
- .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
- .tb-dot{width:28px;height:28px;border-radius:2px;background:var(--aubergine);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:var(--shadow-sm)}
- .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
- .tb-sub{font-size:11px;color:var(--ink-3)}
- .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
- .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
- .tb-links a:hover{color:var(--ink)}
- .tb-links a.tb-active{color:var(--plum);font-weight:600;border-bottom:2px solid var(--plum)}
- .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
- .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
- .tb-av{width:28px;height:28px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
-
- 
- /* Sidebar nav light text on dark aubergine */
- .sb .nav{color:rgba(255,255,255,.75)}
- .sb .nav svg{stroke:rgba(255,255,255,.55)}
- .sb .nav:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92)}
- .sb .nav:hover svg{stroke:rgba(255,255,255,.8)}
- .sb .nav.active{color:#fff;background:rgba(168,124,232,.2);border-left-color:var(--brand-light)}
- .sb .nav.active svg{stroke:var(--brand-light)}
- .sb .nav-h{color:rgba(255,255,255,.35)}
- .sb .pill{background:rgba(168,124,232,.25);color:var(--brand-light)}
- .sb .pill.amber{background:rgba(122,92,30,.35);color:#FBBF24}
-
- 
- /* Sidebar gradient + guaranteed light text (placed last, high specificity) */
- aside.sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%)}
- aside.sb .nav{color:rgba(255,255,255,.75)!important}
- aside.sb .nav svg{stroke:rgba(255,255,255,.5)!important}
- aside.sb .nav:hover{background:rgba(255,255,255,.07)!important;color:rgba(255,255,255,.92)!important}
- aside.sb .nav:hover svg{stroke:rgba(255,255,255,.8)!important}
- aside.sb .nav.active{color:#fff!important;background:rgba(168,124,232,.2)!important;border-left:2px solid var(--brand-light)!important}
- aside.sb .nav.active svg{stroke:var(--brand-light)!important}
- aside.sb .nav-h{color:rgba(255,255,255,.3)!important}
- aside.sb .pill{background:rgba(168,124,232,.25)!important;color:var(--brand-light)!important}
- aside.sb .pill.amber{background:rgba(122,92,30,.4)!important;color:#FBBF24!important}
-
- </style>
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media (max-width:720px){.product-grid{grid-template-columns:1fr}.telepathy-item{grid-template-columns:1fr}.demo-controls-inner{flex-wrap:wrap;justify-content:center}}
+</style>
 </head>
 <body>
 
-
 <!-- ── Topbar ── -->
 <nav class="topbar">
- <div class="topbar-inner">
- <a href="index.html" class="tb-brand">
- <div class="tb-dot">P</div>
- <div>
- <div class="tb-name">Procurello</div>
- <div class="tb-sub">Guided buying</div>
- </div>
- </a>
- <div class="tb-links">
- <a href="index.html#concept">Concept</a>
- <a href="index.html#different">Why It Matters</a>
- <a href="index.html#demos">Demos</a>
- </div>
- <div class="tb-user">
- <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
- <div class="tb-av">JM</div>
- </div>
- </div>
+  <div class="topbar-inner">
+    <a href="index.html" class="tb-brand">
+      <div class="tb-dot">P</div>
+      <div>
+        <div class="tb-name">Procurello</div>
+        <div class="tb-sub">Buyer workspace</div>
+      </div>
+    </a>
+    <div class="tb-links">
+      <a href="index.html#concept">Concept</a>
+      <a href="index.html#different">Why It Matters</a>
+      <a href="index.html#demos">Demos</a>
+    </div>
+    <div class="tb-user">
+      <span class="tb-uname">Jamie Mendez · Lab Manager</span>
+      <div class="tb-av">JM</div>
+    </div>
+  </div>
 </nav>
 
-<div class="app">
+<!-- ── Demo container ── -->
+<div class="demo-wrap">
 
- <!-- ===== SIDEBAR ===== -->
- <aside class="sb">
+  <!-- Intro -->
+  <div class="demo-intro">
+    <div class="demo-eyebrow"><span class="live-dot"></span>Interactive Demo · Catalog buying</div>
+    <div class="demo-title">Everyday buying with <em>contract-aware pricing.</em></div>
+    <p class="demo-lede">A casual request for catalog items becomes a contracted purchase with restock awareness, market-aware pricing, and complementary-item suggestions — handled in under a minute without forms.</p>
+    <div class="demo-hint">
+      <span><kbd>Space</kbd> or <kbd>→</kbd> to advance</span>
+      <span><kbd>←</kbd> to step back</span>
+      <span><kbd>Esc</kbd> to restart</span>
+    </div>
+  </div>
 
- <div class="nav active">
- <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
- Buy something
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
- My requests
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
- Approvals <span class="pill">3</span>
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
- Orders
- </div>
-
- <div class="nav-h">Workspace</div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
- Suppliers
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
- Contracts
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
- Spend insights
- </div>
- </aside>
-
- <!-- ===== MAIN ===== -->
- <main class="main">
- <div class="crumb">
- <span>Shop</span><span class="s">/</span><span>New request</span>
- </div>
-
- <h1>What do you need to buy?</h1>
- <p class="lede">Describe it in plain language I'll find the best price across your catalogs and contracts, then build the cart.</p>
-
- <!-- COMPOSER -->
- <div class="composer">
- <div class="c-in">
- <div class="c-lbl">
- <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
- Ask your buying agent
- </div>
- <div class="c-txt">
- I need a couple boxes of nitrile exam gloves, medium, powder-free for the lab.
- </div>
- </div>
- <div class="c-row">
- <div class="c-acts">
- <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Attach quote</span>
- <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Need-by date</span>
- <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
- </div>
- <button class="btn btn-p">Continue →</button>
- </div>
- </div>
-
- <!-- THREAD -->
- <div class="thread">
-
- <!-- Turn 1: Agent recognizes catalog item -->
- <div class="turn">
- <div class="t-agent">
- <div class="a-dot">AI</div>
- <div class="a-body">
- <div class="a-name">Buying agent <span class="live"></span> found 4 matches</div>
- <div class="a-msg">
- <p>This is a stocked item no quote or non-catalog form needed. I checked your three glove suppliers and surfaced the best matches based on <strong>active contract pricing</strong> and lab compatibility.</p>
-
- <div class="card">
- <div class="card-h">
- <div class="card-t">Top picks <span class="ai">Contract-priced</span></div>
- <span style="font-size:11px;color:var(--ink-3)">Sorted by total cost</span>
- </div>
- <div class="card-b">
- <div class="prod-grid">
- <!-- BEST -->
- <div class="prod best">
- <div class="prod-flag">★ Best value · Contract</div>
- <div class="prod-img">
- <img src="images/microflex.png" alt="Microflex MidKnight Nitrile Exam Gloves" loading="lazy">
- </div>
- <div class="prod-body">
- <div class="prod-sup"><span class="sup-dot">FS</span>Fisher Scientific</div>
- <span class="badge b-g">Contract C-2024-118</span>
- <div class="prod-n">Microflex MidKnight Nitrile Exam Gloves, M</div>
- <div class="prod-m">Powder-free · 100/box · Chemo-rated</div>
- <div class="prod-intel">
- <span><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><b>Price locked</b> · MSA Dec</span>
- <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>2 3d</b> · <span class="pos">98%</span> on-time</span>
- </div>
- <div class="prod-foot">
- <div class="prod-price-w">
- <div class="prod-price">$11.40</div>
- <div class="prod-list">$14.25 list</div>
- <div class="prod-save">Save 20%</div>
- </div>
- <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
- </div>
- </div>
- </div>
-
- <!-- VWR -->
- <div class="prod">
- <div class="prod-img">
- <img src="images/vwr.jpg" alt="VWR Signature Nitrile Exam Gloves" loading="lazy">
- </div>
- <div class="prod-body">
- <div class="prod-sup"><span class="sup-dot">VW</span>VWR International</div>
- <span class="badge b-n">List price</span>
- <div class="prod-n">VWR Signature Nitrile Exam, M</div>
- <div class="prod-m">Powder-free · 100/box · 4 mil</div>
- <div class="prod-intel">
- <span><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>Price <span class="neg">+2.1%</span> · 90d</span>
- <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>4 6d</b> · <span style="color:var(--amber);font-weight:600">94%</span> on-time</span>
- </div>
- <div class="prod-foot">
- <div class="prod-price-w">
- <div class="prod-price">$13.80</div>
- <div class="prod-list" style="visibility:hidden">.</div>
- </div>
- <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
- </div>
- </div>
- </div>
-
- <!-- Grainger -->
- <div class="prod">
- <div class="prod-img">
- <img src="images/ansell.png" alt="Ansell TouchNTuff Nitrile Gloves" loading="lazy">
- </div>
- <div class="prod-body">
- <div class="prod-sup"><span class="sup-dot">GR</span>Grainger</div>
- <span class="badge b-g">Contract C-2023-091</span>
- <div class="prod-n">Ansell TouchNTuff Nitrile, M</div>
- <div class="prod-m">Powder-free · 100/box · 5 mil heavy-duty</div>
- <div class="prod-intel">
- <span><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>Price held</span>
- <span><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Ships <b>1 2d</b> · <span class="pos">96%</span> on-time</span>
- </div>
- <div class="prod-foot">
- <div class="prod-price-w">
- <div class="prod-price">$15.60</div>
- <div class="prod-list">$18.40 list</div>
- <div class="prod-save">Save 15%</div>
- </div>
- <button class="add-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
- </div>
- </div>
- </div>
- </div>
-
- <!-- Punchout option -->
- <div class="punch">
- <div class="punch-i">FS</div>
- <div class="punch-b">
- <div class="punch-t">More options on Fisher Scientific <span class="badge b-b" style="margin:0">Punchout</span></div>
- <div class="punch-d">Browse 240+ glove SKUs with your contract pricing applied · returns directly to this cart</div>
- </div>
- <div class="punch-a">Open
- <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
- </div>
- </div>
- </div>
- </div>
-
- <!-- Smart restock hint -->
- <div class="hint">
- <div class="hint-i">
- <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-6.219-8.56M21 4v6h-6"/></svg>
- </div>
- <div class="hint-b">
- Your lab ordered <b>Microflex MidKnight gloves</b> 6 times in the last year about every 7 weeks. Last order was 8 weeks ago, so stock is likely low.
- <div class="hint-a">
- <button class="btn" style="padding:5px 10px;font-size:11px">Match last order (4 boxes)</button>
- <button class="btn" style="padding:5px 10px;font-size:11px">Set up auto-reorder</button>
- </div>
- </div>
- </div>
-
- <div class="fu">
- <div class="fu-q">How many boxes do you need?</div>
- <div class="fu-opts">
- <span class="opt">2 boxes</span>
- <span class="opt">4 boxes (typical)</span>
- <span class="opt">A case (10)</span>
- <span class="opt">Custom amount</span>
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- Turn 2 -->
- <div class="turn">
- <div class="t-user">
- <div class="t-user-b">Add 4 boxes of the Microflex. Also do we already have safety goggles in stock anywhere?</div>
- </div>
-
- <div class="t-agent">
- <div class="a-dot">AI</div>
- <div class="a-body">
- <div class="a-name">Buying agent</div>
- <div class="a-msg">
- <p>Added 4 boxes of <strong>Microflex MidKnight Nitrile, M</strong> at $11.40/box total $45.60. You're saving $11.40 versus list.</p>
-
- <p>On goggles yes, <strong>Central Stores</strong> has 23 pairs of your standard ANSI Z87.1 indirect-vent goggles available now at $8.50 each (no shipping, picks up next-day). Worth checking before I order more.</p>
-
- <div class="card">
- <div class="card-h">
- <div class="card-t">Internal stock first <span class="ai">Inventory check</span></div>
- </div>
- <div class="card-b" style="padding:6px 14px">
- <div class="chk">
- <div class="chk-i info"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/></svg></div>
- <div class="chk-t"><b>Central Stores · Building 4</b> 23 in stock · $8.50/pair · pickup by tomorrow 10am</div>
- </div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t">Cheaper than Fisher ($12.95) and zero shipping</div>
- </div>
- </div>
- </div>
-
- <div class="fu">
- <div class="fu-q">Want me to add goggles from Central Stores?</div>
- <div class="fu-opts">
- <span class="opt">Yes, add 6 pairs</span>
- <span class="opt">Add a different quantity</span>
- <span class="opt">No, just the gloves</span>
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
-
- </div>
-
- <!-- INLINE CHAT INPUT -->
- <div class="icomp">
- <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
- <input placeholder="Reply, ask a question, or change something…" />
- <button class="btn btn-p" style="padding:7px 14px">Send</button>
- </div>
-
- </main>
-
- <!-- ===== RIGHT CART ===== -->
- <aside class="sum">
-
- <div class="sum-s">
- <div class="sum-h">
- <span>Your cart</span>
- <span class="count">1 item · 4 qty</span>
- </div>
-
- <div class="cart">
- <div class="ci">
- <div class="ci-img">
- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 11V5a2 2 0 014 0v6M12 11V3a2 2 0 014 0v8M16 11V5a2 2 0 014 0v10a7 7 0 01-7 7H9a4 4 0 01-4-4v-3a2 2 0 014-2"/></svg>
- </div>
- <div class="ci-b">
- <div class="ci-n">Microflex MidKnight Nitrile, M</div>
- <div class="ci-m">Fisher Scientific · 100/box · powder-free</div>
- <div class="ci-q">
- <div class="qty"><button>−</button><span>4</span><button>+</button></div>
- <span style="font-size:11px;color:var(--ink-3)">@ $11.40</span>
- </div>
- </div>
- <div>
- <div class="ci-p">$45.60</div>
- <div class="ci-p-s">−$11.40</div>
- </div>
- </div>
-
- <!-- Pending suggestion -->
- <div class="ci" style="background:var(--accent-soft);opacity:.85">
- <div class="ci-img" style="background:#fff">
- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
- </div>
- <div class="ci-b">
- <div class="ci-n" style="display:flex;align-items:center;gap:6px">ANSI Z87.1 Safety Goggles <span class="badge b-b" style="margin:0">Suggested</span></div>
- <div class="ci-m">Central Stores · pickup tomorrow</div>
- <div class="ci-q">
- <button class="btn" style="padding:3px 8px;font-size:11px">Add 6 pairs · $51</button>
- </div>
- </div>
- </div>
- </div>
-
- <div class="totals">
- <div class="tt"><span class="tt-k">Subtotal</span><span class="tt-v">$45.60</span></div>
- <div class="tt save"><span class="tt-k">Contract savings</span><span class="tt-v">−$11.40</span></div>
- <div class="tt"><span class="tt-k">Shipping</span><span class="tt-v">$4.95</span></div>
- <div class="tt"><span class="tt-k">Est. tax (exempt)</span><span class="tt-v">$0.00</span></div>
- <div class="tt grand"><span class="tt-k">Total</span><span class="tt-v">$50.55</span></div>
- </div>
- </div>
-
- <div class="sum-s">
- <div class="sum-h"><span>Routing</span></div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t"><b>Below approval threshold</b> ($1,000) submits directly as a PO</div>
- </div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t"><b>Charging</b> Project WL-CAL-26 · $1,432 remaining</div>
- </div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t"><b>Ship to</b> Wellman Lab, Bldg 4 Rm 312</div>
- </div>
- </div>
-
- <div class="actions">
- <button class="btn btn-g">Place order →</button>
- <button class="btn">Keep shopping</button>
- </div>
-
- </aside>
+  <!-- Conversation thread (populated dynamically) -->
+  <div class="conv" id="conv"></div>
 
 </div>
+
+<!-- ── Floating controls ── -->
+<div class="demo-controls">
+  <div class="demo-controls-inner">
+    <button class="btn-control" id="btn-back" onclick="goBack()" aria-label="Previous step">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="demo-step-indicator" id="step-dots"></div>
+    <span class="demo-step-label">Step <b id="step-num">1</b> of 8</span>
+    <button class="btn-control primary" id="btn-next" onclick="goNext()" aria-label="Next step">
+      <span id="btn-next-label">Continue</span>
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   PROCURELLO — CATALOG BUYING DEMO
+   8 beats · nitrile gloves restock scenario
+═══════════════════════════════════════════════════════════════════ */
+
+const TOTAL_STEPS = 8;
+const TIME = () => new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+const STATE = { step:1, isAnimating:false, productSelected:false, submitted:false };
+const CONV = document.getElementById('conv');
+
+const SCRIPT = {
+  user_request: "I need a couple boxes of nitrile exam gloves, medium, powder-free for the lab.",
+  agent_classify: "This is a catalog item — I'll show three products that match your spec, with contract pricing and current availability. Your lab orders Microflex MidKnight regularly, so I'm flagging that as your typical choice.",
+  agent_selected: "Microflex it is. Your lab orders these about every 7 weeks — last order was 8 weeks ago, so four boxes will restock you through Q3. Adding to cart now.",
+  agent_compliance: "Twelve compliance checks passed in 0.9 seconds. This is a catalog buy under your $500 standing authority, so it auto-approves — no PI sign-off needed.",
+  agent_submitted: "Submitted as REQ-2026-0851. Microflex's order management releases the PO within the hour. Expected delivery Friday May 16. I'll prompt for receipt then and watch for the invoice within a week."
+};
+
+/* ── Utility ── */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function scrollDown(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
+
+async function typeInto(el, text, baseSpeed=22, instant=false){
+  if(instant){el.textContent = text;return}
+  el.textContent = '';
+  for(const char of text){
+    el.textContent += char;
+    let delay = baseSpeed + Math.random()*30;
+    if(',.;:'.includes(char)) delay += 180;
+    if(char === ' ') delay += 8;
+    await sleep(delay);
+  }
+}
+
+/* ── Step dots ── */
+function buildStepDots(){
+  const c = document.getElementById('step-dots');
+  c.innerHTML = '';
+  for(let i=1;i<=TOTAL_STEPS;i++){
+    const d = document.createElement('div');
+    d.className = 'demo-step-dot';
+    if(i < STATE.step) d.classList.add('completed');
+    if(i === STATE.step) d.classList.add('active');
+    c.appendChild(d);
+  }
+  document.getElementById('step-num').textContent = STATE.step;
+  document.getElementById('btn-back').disabled = STATE.step === 1;
+  const nextBtn = document.getElementById('btn-next');
+  const nextLabel = document.getElementById('btn-next-label');
+  if(STATE.step === TOTAL_STEPS){nextBtn.disabled=true;nextLabel.textContent='Complete'}
+  else if(STATE.step === 4 && !STATE.productSelected){nextBtn.disabled=false;nextLabel.textContent='Skip selection'}
+  else if(STATE.step === 7 && !STATE.submitted){nextBtn.disabled=false;nextLabel.textContent='Submit & continue'}
+  else{nextBtn.disabled=false;nextLabel.textContent='Continue'}
+}
+
+/* ── Message builders ── */
+function buildUserMsg(initials, name, text=''){
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-user';
+  wrap.innerHTML = `
+    <div class="msg-av">${initials}</div>
+    <div class="msg-body">
+      <div class="msg-meta">${name} · ${TIME()}</div>
+      <div class="msg-bubble"><span class="msg-text">${text}</span></div>
+    </div>`;
+  return wrap;
+}
+function buildAgentMsg(){
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-agent';
+  wrap.innerHTML = `
+    <div class="msg-av">AI</div>
+    <div class="msg-body">
+      <div class="msg-meta">Procurello agent · ${TIME()}</div>
+      <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+    </div>`;
+  return wrap;
+}
+function buildAgentMsgStatic(html){
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-agent';
+  wrap.innerHTML = `
+    <div class="msg-av">AI</div>
+    <div class="msg-body">
+      <div class="msg-meta">Procurello agent · ${TIME()}</div>
+      <div class="msg-bubble"><span class="msg-text">${html}</span></div>
+    </div>`;
+  return wrap;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BEAT RENDERERS
+═══════════════════════════════════════════════════════════════════ */
+
+function renderBeat1(){
+  const composer = document.createElement('div');
+  composer.id = 'beat-1';
+  composer.className = 'beat visible';
+  composer.innerHTML = `
+    <div class="composer">
+      <div class="composer-label">
+        <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z" fill="currentColor"/></svg>
+        What do you need to buy?
+      </div>
+      <div class="composer-text placeholder" id="composer-text">Describe your need, attach a quote, or forward an email…<span class="typing-cursor"></span></div>
+      <div class="composer-foot">
+        <div class="composer-chips">
+          <span class="chip">+ Attach quote</span>
+          <span class="chip">↻ Reuse past order</span>
+          <span class="chip">⌕ Browse catalog</span>
+        </div>
+        <button class="composer-send" id="send-btn" disabled>
+          Continue
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>`;
+  CONV.appendChild(composer);
+}
+
+async function renderBeat2(instant=false){
+  const textEl = document.getElementById('composer-text');
+  if(!textEl) return;
+  textEl.classList.remove('placeholder');
+  textEl.innerHTML = '';
+  const sendBtn = document.getElementById('send-btn');
+  if(instant){
+    textEl.textContent = SCRIPT.user_request;
+    sendBtn.disabled = false;
+    sendBtn.classList.add('ready');
+  } else {
+    STATE.isAnimating = true;
+    await typeInto(textEl, SCRIPT.user_request, 22);
+    textEl.innerHTML += '<span class="typing-cursor"></span>';
+    sendBtn.disabled = false;
+    sendBtn.classList.add('ready');
+    STATE.isAnimating = false;
+  }
+}
+
+async function renderBeat3(instant=false){
+  const composerBeat = document.getElementById('beat-1');
+  if(composerBeat) composerBeat.remove();
+  const userMsg = buildUserMsg('JM', 'Jamie Mendez', SCRIPT.user_request);
+  userMsg.id = 'beat-3-user';
+  CONV.appendChild(userMsg);
+  scrollDown();
+  if(instant){
+    const agentMsg = buildAgentMsgStatic(SCRIPT.agent_classify);
+    agentMsg.id = 'beat-3-agent';
+    CONV.appendChild(agentMsg);
+  } else {
+    STATE.isAnimating = true;
+    await sleep(400);
+    const agentMsg = buildAgentMsg();
+    agentMsg.id = 'beat-3-agent';
+    CONV.appendChild(agentMsg);
+    scrollDown();
+    await sleep(900);
+    const bubble = agentMsg.querySelector('.msg-bubble');
+    bubble.innerHTML = '<span class="msg-text"></span>';
+    await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_classify, 13);
+    scrollDown();
+    STATE.isAnimating = false;
+  }
+}
+
+function renderBeat4(instant=false){
+  if(document.getElementById('beat-4')) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-4';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="product-grid">
+
+      <div class="prod-card recommended" data-product="microflex" onclick="selectProduct('microflex')">
+        <div class="prod-badge">Recommended</div>
+        <div class="prod-image">
+          <img src="images/microflex.png" alt="Microflex MidKnight" onerror="this.parentElement.innerHTML='<div class=\\'prod-image-placeholder\\'>MICROFLEX</div>'">
+        </div>
+        <div class="prod-body">
+          <div class="prod-supplier">Microflex · Lab Safety</div>
+          <div class="prod-name">MidKnight Nitrile Exam Gloves, M</div>
+          <div class="prod-price-row">
+            <span class="prod-price">$11.40</span>
+            <span class="prod-price-unit">/ 100-ct box</span>
+            <span class="prod-list-price">$14.25</span>
+          </div>
+          <div class="prod-savings">Contract pricing · save 20%</div>
+          <div class="prod-meta">
+            <strong>Your lab's regular choice</strong> — ordered 6× in last 12 months. 2-day lead from regional warehouse. <strong>98%</strong> on-time delivery rate.
+          </div>
+          <div class="prod-tags">
+            <span class="tag-sm tg-ok">Contract active</span>
+            <span class="tag-sm tg-info">Lab history</span>
+            <span class="tag-sm tg-ok">In stock</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card" data-product="vwr" onclick="selectProduct('vwr')">
+        <div class="prod-image">
+          <img src="images/vwr.jpg" alt="VWR Signature" onerror="this.parentElement.innerHTML='<div class=\\'prod-image-placeholder\\'>VWR</div>'">
+        </div>
+        <div class="prod-body">
+          <div class="prod-supplier">VWR International</div>
+          <div class="prod-name">Signature Nitrile Exam, M</div>
+          <div class="prod-price-row">
+            <span class="prod-price">$12.20</span>
+            <span class="prod-price-unit">/ 100-ct box</span>
+            <span class="prod-list-price">$15.30</span>
+          </div>
+          <div class="prod-savings">Contract pricing · save 20%</div>
+          <div class="prod-meta">
+            Punchout via VWR portal · 2-day lead time · <strong>95%</strong> on-time. Comparable spec to Microflex.
+          </div>
+          <div class="prod-tags">
+            <span class="tag-sm tg-ok">Contract active</span>
+            <span class="tag-sm tg-neutral">Punchout</span>
+            <span class="tag-sm tg-ok">In stock</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card" data-product="ansell" onclick="selectProduct('ansell')">
+        <div class="prod-image">
+          <img src="images/ansell.png" alt="Ansell TouchNTuff" onerror="this.parentElement.innerHTML='<div class=\\'prod-image-placeholder\\'>ANSELL</div>'">
+        </div>
+        <div class="prod-body">
+          <div class="prod-supplier">Ansell</div>
+          <div class="prod-name">TouchNTuff Nitrile, M</div>
+          <div class="prod-price-row">
+            <span class="prod-price">$14.80</span>
+            <span class="prod-price-unit">/ 100-ct box</span>
+          </div>
+          <div class="prod-savings" style="color:var(--text-muted);font-weight:500">List pricing · no contract</div>
+          <div class="prod-meta">
+            Heavier-duty chemical resistance · 3-day lead time. Useful when you're handling solvents — overkill for routine bench work.
+          </div>
+          <div class="prod-tags">
+            <span class="tag-sm tg-warn">List price</span>
+            <span class="tag-sm tg-neutral">3d lead</span>
+            <span class="tag-sm tg-neutral">Heavier duty</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="prod-hint" id="prod-hint">Click a product to add to cart · Microflex is recommended based on your lab's order history</div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+}
+
+async function renderBeat5(instant=false){
+  STATE.productSelected = true;
+  document.querySelectorAll('.prod-card').forEach(c => {
+    if(c.dataset.product !== 'microflex'){
+      c.classList.add('faded');
+    } else {
+      c.classList.add('selected');
+      c.classList.remove('recommended');
+      if(!c.querySelector('.prod-selected-mark')){
+        const mark = document.createElement('div');
+        mark.className = 'prod-selected-mark';
+        mark.innerHTML = '<svg viewBox="0 0 16 16"><polyline points="3 8 7 12 13 5"/></svg>';
+        c.appendChild(mark);
+        const badge = c.querySelector('.prod-badge');
+        if(badge) badge.remove();
+      }
+    }
+  });
+  const hint = document.getElementById('prod-hint');
+  if(hint) hint.textContent = 'Microflex MidKnight selected — agent is building the cart';
+
+  if(instant){
+    if(!document.getElementById('beat-5-agent')){
+      const agentMsg = buildAgentMsgStatic(SCRIPT.agent_selected);
+      agentMsg.id = 'beat-5-agent';
+      CONV.appendChild(agentMsg);
+    }
+  } else {
+    if(!document.getElementById('beat-5-agent')){
+      STATE.isAnimating = true;
+      await sleep(500);
+      const agentMsg = buildAgentMsg();
+      agentMsg.id = 'beat-5-agent';
+      CONV.appendChild(agentMsg);
+      scrollDown();
+      await sleep(800);
+      const bubble = agentMsg.querySelector('.msg-bubble');
+      bubble.innerHTML = '<span class="msg-text"></span>';
+      await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_selected, 13);
+      scrollDown();
+      STATE.isAnimating = false;
+    }
+  }
+}
+
+async function renderBeat6(instant=false){
+  if(document.getElementById('beat-6')) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-6';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="cart-card">
+      <div class="cart-head">
+        <div class="cart-title">Your cart · REQ-2026-0851</div>
+        <div class="cart-sub" id="cart-status">Building…</div>
+      </div>
+      <div class="cart-rows" id="cart-rows"></div>
+      <div class="cart-totals" id="cart-totals" style="display:none">
+        <div class="cart-total-row">
+          <span class="cart-total-label">Subtotal</span>
+          <span>$45.60</span>
+        </div>
+        <div class="cart-total-row savings">
+          <span class="cart-total-label">Contract savings vs list</span>
+          <span>− $11.40</span>
+        </div>
+        <div class="cart-total-row">
+          <span class="cart-total-label">Estimated shipping</span>
+          <span>Free · contract terms</span>
+        </div>
+        <div class="cart-total-row grand">
+          <span class="cart-total-label" style="color:var(--text-primary)">Total</span>
+          <span class="total-amt">$45.60</span>
+        </div>
+      </div>
+      <div class="cart-suggest" id="cart-suggest" style="display:none">
+        <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 5v3M8 11v.5"/></svg>
+        <div>
+          <strong>Worth knowing:</strong> Labs ordering Microflex gloves usually pair them with safety goggles within 2 weeks. Central Stores shows 14 pairs of impact goggles in stock — no purchase needed if you can use those. <strong>Restock prediction:</strong> Next glove order ~September 5.
+        </div>
+      </div>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  const rowsContainer = document.getElementById('cart-rows');
+  const lineHtml = `
+    <div class="cart-line">
+      <div class="cart-line-img">
+        <img src="images/microflex.png" alt="Microflex" onerror="this.style.display='none'">
+      </div>
+      <div class="cart-line-info">
+        <div class="cart-line-name">Microflex MidKnight Nitrile Exam Gloves, M</div>
+        <div class="cart-line-meta">100-ct box · contract MSU-LSF-22 · cost object WL-LAB-26</div>
+      </div>
+      <div class="cart-line-qty">4 × $11.40</div>
+      <div class="cart-line-total">$45.60</div>
+    </div>`;
+
+  if(instant){
+    rowsContainer.innerHTML = lineHtml;
+    document.getElementById('cart-totals').style.display = 'flex';
+    document.getElementById('cart-suggest').style.display = 'flex';
+    document.getElementById('cart-status').textContent = '1 item · ready to submit';
+  } else {
+    STATE.isAnimating = true;
+    await sleep(300);
+    rowsContainer.innerHTML = lineHtml;
+    scrollDown();
+    await sleep(400);
+    document.getElementById('cart-totals').style.display = 'flex';
+    scrollDown();
+    await sleep(300);
+    document.getElementById('cart-suggest').style.display = 'flex';
+    document.getElementById('cart-status').textContent = '1 item · ready to submit';
+    scrollDown();
+    STATE.isAnimating = false;
+  }
+}
+
+async function renderBeat7(instant=false){
+  if(document.getElementById('beat-7')) return;
+  const checks = [
+    'OFAC / sanctions screen',
+    'Vendor master active + TIN verified',
+    'Banking validated (no recent change)',
+    'Contract pricing applied',
+    'Use-tax determination',
+    'Budget availability vs cost object',
+    'Catalog item · spec match',
+    'Duplicate order detection',
+    'Standing authority threshold check',
+    'Auto-approval mapped',
+    'Document retention tagged',
+    'Audit trail recorded'
+  ];
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-7';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="compliance-panel">
+      <div class="compliance-head">
+        <div class="compliance-title">Compliance checks</div>
+        <div class="compliance-status running" id="compliance-status"><span class="dot"></span><span id="compliance-text">Running…</span></div>
+      </div>
+      <div class="compliance-progress"><div class="compliance-progress-bar" id="compliance-bar"></div></div>
+      <div class="compliance-checks" id="compliance-list"></div>
+    </div>
+
+    <div class="approval-path" id="approval-path" style="display:none">
+      <div class="approval-path-head">Auto-approval · catalog under threshold</div>
+      <div class="auto-approve">
+        <div class="auto-approve-icon">
+          <svg viewBox="0 0 16 16"><polyline points="3 8 7 12 13 5"/></svg>
+        </div>
+        <div class="auto-approve-info">
+          <div class="auto-approve-name">Approved under your standing authority</div>
+          <div class="auto-approve-role">$45.60 is under your $500 catalog buy limit · no PI sign-off needed</div>
+        </div>
+      </div>
+      <div class="approval-note">
+        <strong>Microflex receives the PO directly within the hour.</strong> Your lab captures the contract savings of $11.40 vs list pricing.
+      </div>
+    </div>
+
+    <div class="submit-row" id="submit-row" style="display:none">
+      <button class="btn-submit" id="btn-submit" onclick="submitOrder()">
+        Release purchase order
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  const listEl = document.getElementById('compliance-list');
+  const statusEl = document.getElementById('compliance-status');
+  const statusTextEl = document.getElementById('compliance-text');
+  const barEl = document.getElementById('compliance-bar');
+  const approvalEl = document.getElementById('approval-path');
+  const submitEl = document.getElementById('submit-row');
+
+  if(instant){
+    checks.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'compliance-check';
+      item.textContent = c;
+      item.style.opacity = '1';
+      listEl.appendChild(item);
+    });
+    barEl.style.width = '100%';
+    statusEl.classList.remove('running');
+    statusTextEl.textContent = '12 of 12 passed · 0.9s';
+    approvalEl.style.display = 'block';
+    submitEl.style.display = 'flex';
+  } else {
+    STATE.isAnimating = true;
+    barEl.style.width = '100%';
+    for(let i=0;i<checks.length;i++){
+      const item = document.createElement('div');
+      item.className = 'compliance-check';
+      item.textContent = checks[i];
+      listEl.appendChild(item);
+      await sleep(70);
+    }
+    await sleep(200);
+    statusEl.classList.remove('running');
+    statusTextEl.textContent = '12 of 12 passed · 0.9s';
+    await sleep(300);
+    approvalEl.style.display = 'block';
+    scrollDown();
+    await sleep(400);
+    submitEl.style.display = 'flex';
+    scrollDown();
+    STATE.isAnimating = false;
+  }
+}
+
+async function renderBeat8(instant=false){
+  if(document.getElementById('beat-8')) return;
+  STATE.submitted = true;
+  const submitBtn = document.getElementById('btn-submit');
+  if(submitBtn){submitBtn.disabled = true;submitBtn.innerHTML = '✓ Released'}
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-8';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="confirm-card">
+      <div class="confirm-eyebrow"><span class="dot"></span>PO released · Predictive close-out</div>
+      <div class="confirm-title">Your order is in motion.</div>
+      <div class="confirm-ref">REQ-2026-0851 · Microflex · $45.60 · 4 × MidKnight Nitrile M</div>
+
+      <div class="telepathy-grid">
+        <div class="telepathy-item" style="animation-delay:0s">
+          <div class="telepathy-when">Within the hour</div>
+          <div class="telepathy-what">Microflex's order system <strong>accepts the PO automatically</strong>. EDI confirmation back to Procurello within 30 minutes.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.15s">
+          <div class="telepathy-when">Tomorrow</div>
+          <div class="telepathy-what">Microflex <strong>ships from regional distribution</strong>. UPS tracking attaches to this requisition.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.3s">
+          <div class="telepathy-when">Friday, May 16</div>
+          <div class="telepathy-what">Expected delivery to the Wellman Lab. I'll <strong>prompt you to confirm receipt</strong> when it arrives.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.45s">
+          <div class="telepathy-when">Within 7 days of receipt</div>
+          <div class="telepathy-what">Microflex's <strong>invoice arrives and auto-matches</strong> to this PO. No action from you.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.6s">
+          <div class="telepathy-when">Around September 5</div>
+          <div class="telepathy-what"><strong>Restock prediction</strong> · 8 weeks from now, based on your lab's pattern. I'll surface it then.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.75s">
+          <div class="telepathy-when">90-day market</div>
+          <div class="telepathy-what">Nitrile gloves trending <strong>+3%</strong> against list pricing. Your contract locks current pricing through December — you're insulated.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-end">
+      <div class="demo-end-title">End of demo</div>
+      <div class="demo-end-actions">
+        <a href="index.html" class="btn-ghost">← Back to landing</a>
+        <button class="btn-ghost" onclick="restart()">↻ Restart demo</button>
+        <a href="guided-buying-concept.html" class="btn-ghost">Non-catalog scenario</a>
+        <a href="invoice-guided-buying.html" class="btn-ghost">Invoice scenario</a>
+      </div>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  if(!instant){
+    STATE.isAnimating = true;
+    const agentMsg = buildAgentMsg();
+    agentMsg.id = 'beat-8-agent';
+    CONV.insertBefore(agentMsg, wrap);
+    scrollDown();
+    await sleep(700);
+    const bubble = agentMsg.querySelector('.msg-bubble');
+    bubble.innerHTML = '<span class="msg-text"></span>';
+    await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_submitted, 13);
+    scrollDown();
+    STATE.isAnimating = false;
+  } else {
+    const agentMsg = buildAgentMsgStatic(SCRIPT.agent_submitted);
+    agentMsg.id = 'beat-8-agent';
+    CONV.insertBefore(agentMsg, wrap);
+  }
+}
+
+/* ── CONTROL FLOW ── */
+async function renderUpToStep(targetStep){
+  CONV.innerHTML = '';
+  STATE.productSelected = targetStep >= 5;
+  STATE.submitted = targetStep >= 8;
+  if(targetStep >= 1) renderBeat1();
+  if(targetStep >= 2) await renderBeat2(true);
+  if(targetStep >= 3) await renderBeat3(true);
+  if(targetStep >= 4) renderBeat4(true);
+  if(targetStep >= 5) await renderBeat5(true);
+  if(targetStep >= 6) await renderBeat6(true);
+  if(targetStep >= 7) await renderBeat7(true);
+  if(targetStep >= 8) await renderBeat8(true);
+  buildStepDots();
+  updateHash();
+  scrollDown();
+}
+
+async function advance(){
+  if(STATE.isAnimating) return;
+  if(STATE.step >= TOTAL_STEPS) return;
+  if(STATE.step === 4 && !STATE.productSelected){
+    STATE.step = 5;buildStepDots();updateHash();
+    await renderBeat5(false);return;
+  }
+  if(STATE.step === 7 && !STATE.submitted){
+    STATE.step = 8;buildStepDots();updateHash();
+    await renderBeat8(false);return;
+  }
+  STATE.step++;buildStepDots();updateHash();
+  switch(STATE.step){
+    case 2: await renderBeat2(false); break;
+    case 3: await renderBeat3(false); break;
+    case 4: renderBeat4(false); break;
+    case 5: await renderBeat5(false); break;
+    case 6: await renderBeat6(false); break;
+    case 7: await renderBeat7(false); break;
+    case 8: await renderBeat8(false); break;
+  }
+}
+
+async function goBack(){
+  if(STATE.isAnimating || STATE.step <= 1) return;
+  STATE.step--;
+  await renderUpToStep(STATE.step);
+}
+function goNext(){advance()}
+
+async function selectProduct(id){
+  if(STATE.isAnimating) return;
+  if(id !== 'microflex'){
+    const card = document.querySelector(`[data-product="${id}"]`);
+    if(card && !card.classList.contains('faded')){
+      card.style.animation = 'none';void card.offsetWidth;card.style.animation = 'msgIn .3s ease-out';
+    }
+    return;
+  }
+  if(STATE.step !== 4) return;
+  STATE.step = 5;buildStepDots();updateHash();
+  await renderBeat5(false);
+}
+
+async function submitOrder(){
+  if(STATE.isAnimating || STATE.step !== 7) return;
+  STATE.step = 8;buildStepDots();updateHash();
+  await renderBeat8(false);
+}
+
+async function restart(){
+  STATE.step = 1;STATE.productSelected = false;STATE.submitted = false;
+  await renderUpToStep(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateHash(){history.replaceState(null,'',`#step-${STATE.step}`)}
+
+async function init(){
+  const hash = window.location.hash.match(/step-(\d+)/);
+  let initialStep = 1;
+  if(hash && hash[1]) initialStep = Math.min(Math.max(parseInt(hash[1],10),1),TOTAL_STEPS);
+  STATE.step = initialStep;
+  await renderUpToStep(initialStep);
+}
+
+document.addEventListener('keydown', e => {
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if(e.code === 'Space' || e.code === 'ArrowRight'){e.preventDefault();advance()}
+  else if(e.code === 'ArrowLeft'){e.preventDefault();goBack()}
+  else if(e.code === 'Escape'){restart()}
+});
+
+init();
+</script>
 
 </body>
 </html>

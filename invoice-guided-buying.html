@@ -3,824 +3,941 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Procurello Invoice & Receiving</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Procurello — Invoice & receiving (live demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
- :root {
- /* Brand palette DS v2 */
- --ink: #1A1016;
- --aubergine: #3C1239;
- --plum: #5D1E58;
- --brand: #7C3AED;
- --brand-light: #A87CE8;
- --violet-dim: #2D1B4E;
-
- /* Earth neutrals */
- --bg: #F5F2EF;
- --surface: #FFFFFF;
- --surface-2: #EDE8E3;
- --line: #D9D2CB;
- --line-2: #B8AFA6;
- --border: #D9D2CB;
-
- /* Text */
- --text-primary: #1F1A17;
- --text-secondary: #7A6E65;
- --text-muted: #B8AFA6;
-
- /* Semantic status muted, not neon */
- --green: #3D6B4A;
- --amber: #7A5C1E;
- --red: #7A2C1E;
-
- /* Soft tints */
- --brand-soft: #EDE9FE;
- --green-soft: #E4F1EB;
- --amber-soft: #F5EDD8;
- --red-soft: #FBEBE8;
-
- /* Typography */
- --font-display: 'DM Serif Display', Georgia, serif;
- --font-body: 'Karla', 'Helvetica Neue', sans-serif;
- --font-mono: 'DM Mono', 'Courier New', monospace;
-
- /* Radius: intentionally minimal */
- --r: 0px;
- --rs: 2px;
- --rl: 0px;
-
- /* Shadows: crisp offset, no blur */
- --shadow-sm: 2px 2px 0px #D9D2CB;
- --shadow-md: 4px 4px 0px #D9D2CB;
- --shadow-brand: 4px 4px 0px rgba(92,30,88,0.25);
+:root {
+  --ink:#1A1016; --aubergine:#3C1239; --plum:#5D1E58;
+  --brand:#7C3AED; --brand-light:#A87CE8; --violet-dim:#2D1B4E;
+  --bg:#F5F2EF; --surface:#FFFFFF; --surface-2:#EDE8E3;
+  --line:#D9D2CB; --line-2:#B8AFA6;
+  --text-primary:#1F1A17; --text-secondary:#7A6E65; --text-muted:#B8AFA6;
+  --green:#3D6B4A; --green-soft:#E4F1EB;
+  --amber:#7A5C1E; --amber-soft:#F5EDD8;
+  --red:#7A2C1E; --red-soft:#FBEBE8;
+  --teal:#2A6F73; --teal-soft:#E0EDEE;
+  --brand-soft:#EDE9FE; --purple-soft:#EFE8F5;
+  --font-display:'DM Serif Display',Georgia,serif;
+  --font-body:'Karla','Helvetica Neue',sans-serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+  --shadow-sm:2px 2px 0px #D9D2CB;
+  --shadow-md:4px 4px 0px #D9D2CB;
+  --shadow-brand:4px 4px 0px rgba(92,30,88,0.25);
 }
- *{box-sizing:border-box;margin:0;padding:0}
- body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
- .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text-primary);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:0.9375rem;line-height:1.6}
 
- /* SIDEBAR */
- .sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%);border-right:none;padding:20px 14px;display:flex;flex-direction:column;gap:2px}
- .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:2px;color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
- .nav:hover{background:rgba(255,255,255,0.07);color:var(--ink)}
- .nav.active{background:var(--brand-soft);color:var(--brand)}
- .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
- .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:0;font-weight:600}
- .nav .pill.teal{background:var(--teal)}
- .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.35);padding:18px 10px 6px;font-weight:600}
- .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
- .av{width:30px;height:30px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
- .av-i{flex:1;min-width:0}
- .av-n{font-size:12px;font-weight:600}
- .av-r{font-size:11px;color:var(--ink-3)}
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;background:rgba(245,242,239,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
+.topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;max-width:1180px;margin:0 auto}
+.tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.tb-dot{width:28px;height:28px;border-radius:2px;background:linear-gradient(135deg,var(--aubergine),var(--plum));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;font-family:var(--font-body)}
+.tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em}
+.tb-sub{font-size:11px;color:var(--text-secondary);margin-top:1px}
+.tb-links{display:flex;gap:24px;font-size:13px}
+.tb-links a{color:var(--text-secondary);text-decoration:none;transition:color .15s}
+.tb-links a:hover{color:var(--text-primary)}
+.tb-user{display:flex;align-items:center;gap:10px}
+.tb-uname{font-size:12px;color:var(--text-secondary)}
+.tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-light));color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
 
- /* MAIN */
- .main{padding:32px 40px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
- .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
- .crumb .s{color:var(--line-2)}
- h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
- .lede{color:var(--ink-2);font-size:14px;margin-bottom:24px;max-width:620px}
+/* ── DEMO LAYOUT ── */
+.demo-wrap{max-width:880px;margin:0 auto;padding:32px 24px 160px;position:relative}
+.demo-intro{padding:24px 28px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);margin-bottom:28px}
+.demo-eyebrow{font-family:var(--font-mono);font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--plum);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.demo-eyebrow .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);animation:livepulse 2s ease-in-out infinite}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:.4}}
+.demo-title{font-family:var(--font-display);font-size:1.5rem;font-weight:400;line-height:1.2;color:var(--text-primary);margin-bottom:6px}
+.demo-title em{color:var(--aubergine);font-style:italic}
+.demo-lede{font-size:.875rem;color:var(--text-secondary);line-height:1.6;max-width:620px}
+.demo-hint{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--font-mono);font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em;display:flex;gap:14px;flex-wrap:wrap}
+.demo-hint kbd{font-family:var(--font-mono);font-size:.65rem;background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:3px;color:var(--text-primary)}
 
- /* COMPOSER */
- .composer{background:var(--surface);border:1px solid var(--line);border-radius:0;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
- .c-in{padding:16px 18px 12px}
- .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
- .spk{width:12px;height:12px;color:var(--brand)}
- .c-txt{font-size:15px;color:var(--ink);min-height:20px;margin-bottom:10px}
- .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
- .c-acts{display:flex;gap:4px;flex-wrap:wrap}
- .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
- .chip:hover{border-color:var(--line-2);color:var(--ink)}
- .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
- .btn{padding:8px 14px;border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
- .btn:hover{background:var(--surface-2)}
- .btn-p{background:var(--aubergine);color:rgba(255,255,255,.92);box-shadow:var(--shadow-brand)}
- .btn-p:hover{background:var(--plum)}
- .btn-g{background:var(--green);color:#fff;border-color:var(--green)}
- .btn-g:hover{background:#256749}
+/* ── CONVERSATION ── */
+.conv{display:flex;flex-direction:column;gap:18px}
+.msg{display:flex;gap:12px;animation:msgIn .35s ease-out}
+.msg.from-user{flex-direction:row-reverse}
+.msg-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:11px;font-weight:600;color:#fff;font-family:var(--font-body)}
+.msg.from-user .msg-av{background:linear-gradient(135deg,var(--brand),var(--brand-light))}
+.msg.from-agent .msg-av{background:linear-gradient(135deg,var(--aubergine),var(--plum))}
+.msg-body{max-width:78%}
+.msg-meta{font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary);margin-bottom:4px;display:flex;gap:8px;align-items:center}
+.msg.from-user .msg-meta{justify-content:flex-end}
+.msg-bubble{padding:12px 16px;font-size:.9375rem;line-height:1.55;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow-sm);white-space:pre-wrap;word-wrap:break-word}
+.msg.from-user .msg-bubble{background:var(--brand-soft);border-color:#D8CDF5;color:var(--text-primary)}
+.msg.from-agent .msg-bubble{border-left:3px solid var(--aubergine);background:var(--surface);position:relative}
+.msg.from-agent .msg-bubble strong{color:var(--aubergine);font-weight:600}
 
- /* ATTACHED DOC */
- .att{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--line);border-radius:2px;margin-top:4px}
- .att-i{width:32px;height:36px;border-radius:2px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:9px;font-weight:700;color:var(--brand);flex-shrink:0;position:relative}
- .att-i::after{content:'';position:absolute;top:0;right:0;border-style:solid;border-width:0 6px 6px 0;border-color:transparent var(--line) transparent transparent}
- .att-b{flex:1;min-width:0}
- .att-n{font-size:12px;font-weight:600;line-height:1.3}
- .att-m{font-size:11px;color:var(--ink-3);margin-top:1px}
- .att-x{font-size:11px;color:var(--ink-3);cursor:pointer;padding:4px}
+.typing-dots{display:inline-flex;gap:4px;align-items:center;padding:6px 4px}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--text-secondary);animation:dotPulse 1.4s ease-in-out infinite}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotPulse{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
+.typing-cursor{display:inline-block;width:2px;height:1.1em;background:var(--text-primary);vertical-align:text-bottom;margin-left:1px;animation:cursorBlink 1s steps(2) infinite}
+@keyframes cursorBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
- /* THREAD */
- .thread{margin-top:24px}
- .turn{margin-bottom:22px}
- .t-user{display:flex;justify-content:flex-end;margin-bottom:14px}
- .t-user-b{background:var(--accent);color:#fff;padding:10px 14px;border-radius:0 14px 4px 14px;font-size:14px;max-width:80%;line-height:1.5}
- .t-agent{display:flex;gap:12px}
- .a-dot{width:28px;height:28px;border-radius:0;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
- .a-body{flex:1;min-width:0}
- .a-name{font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
- .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);display:inline-block}
- .a-msg{font-size:14px;color:var(--ink);line-height:1.6}
- .a-msg p{margin-bottom:10px}
- .a-msg strong{font-weight:600}
+/* ── COMPOSER (with attach state) ── */
+.composer{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);padding:18px 20px;margin-bottom:8px}
+.composer-label{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.composer-label svg{width:12px;height:12px;stroke:var(--plum);stroke-width:1.5;fill:none}
+.composer-text{font-size:1.0625rem;line-height:1.55;color:var(--text-primary);min-height:60px;padding:6px 0;font-family:var(--font-body)}
+.composer-text.placeholder{color:var(--text-muted)}
+.composer-attachment{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--line);margin-top:8px;animation:attachIn .35s ease-out}
+.composer-attachment.pdf{border-left:3px solid var(--red)}
+.composer-attach-icon{width:32px;height:32px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;flex-shrink:0}
+.composer-attach-icon svg{width:16px;height:16px;stroke:var(--red);stroke-width:1.5;fill:none}
+.composer-attach-info{flex:1;min-width:0}
+.composer-attach-name{font-size:.875rem;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.composer-attach-meta{font-family:var(--font-mono);font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em}
+@keyframes attachIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.composer-foot{display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:12px;border-top:1px solid var(--line)}
+.composer-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--font-mono);font-size:.7rem;font-weight:500;padding:5px 10px;border:1px solid var(--line);color:var(--text-secondary);background:var(--surface-2);cursor:default}
+.composer-send{padding:8px 18px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;background:var(--aubergine);color:#fff;border:none;cursor:pointer;box-shadow:var(--shadow-brand);transition:all .12s;display:inline-flex;align-items:center;gap:8px}
+.composer-send:hover{background:var(--plum)}
+.composer-send:disabled{background:var(--text-muted);box-shadow:none;cursor:not-allowed}
+.composer-send.ready{animation:btnReady 1.8s ease-in-out infinite}
+@keyframes btnReady{0%,100%{box-shadow:var(--shadow-brand)}50%{box-shadow:0 0 0 4px rgba(124,58,237,.12), var(--shadow-brand)}}
 
- /* INLINE CARDS */
- .card{background:var(--surface);border:1px solid var(--line);border-radius:0;margin:10px 0;overflow:hidden}
- .card-h{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
- .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
- .card-t .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
- .card-b{padding:14px}
+/* ── EXTRACTED INVOICE PANEL ── */
+.extract-card{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);margin-top:6px;overflow:hidden;animation:msgIn .4s ease-out}
+.extract-head{padding:14px 18px;background:var(--surface-2);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.extract-title{font-family:var(--font-mono);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-primary)}
+.extract-sub{font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em}
+.extract-rows{padding:4px 0}
+.extract-row{display:grid;grid-template-columns:180px 1fr;gap:18px;padding:9px 18px;font-size:.8125rem;border-bottom:1px solid var(--line);animation:fieldIn .25s ease-out}
+.extract-row:last-child{border-bottom:none}
+.extract-label{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-secondary);font-weight:500;padding-top:1px}
+.extract-value{color:var(--text-primary);font-weight:500}
+.extract-value strong{color:var(--text-primary);font-weight:700}
+.extract-value.matched{color:var(--green);font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.extract-value.matched::before{content:'';width:5px;height:5px;background:var(--green);border-radius:50%;flex-shrink:0}
+@keyframes fieldIn{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 
- /* MATCH VISUALIZATION */
- .match{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:10px;padding:8px 0}
- .match-c{padding:14px;border:1px solid var(--line);border-radius:2px;text-align:center;background:var(--surface)}
- .match-c.ok{border-color:var(--green);background:var(--green-soft)}
- .match-c.missing{border-color:var(--amber);background:var(--amber-soft)}
- .match-i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;color:#fff;font-weight:700;font-size:13px}
- .match-i.ok{background:var(--green)}
- .match-i.missing{background:var(--amber)}
- .match-l{font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
- .match-v{font-size:13px;font-weight:600;line-height:1.2}
- .match-s{font-size:11px;color:var(--ink-3);margin-top:3px}
- .match-arrow{color:var(--line-2);font-size:18px;font-weight:300}
- .match-c.ok .match-s{color:var(--green);font-weight:600}
- .match-c.missing .match-s{color:var(--amber);font-weight:600}
+/* ── 3-WAY MATCH PANEL ── */
+.match-panel{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);padding:16px 18px;margin-top:6px}
+.match-head{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-primary);font-weight:600;margin-bottom:14px}
+.match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.match-cell{text-align:center;padding:14px 10px;border:1px solid var(--line);background:var(--surface-2);position:relative}
+.match-cell.ok{border-color:var(--green);background:var(--green-soft)}
+.match-cell.pending{border-color:var(--amber);background:var(--amber-soft)}
+.match-cell.confirmed{border-color:var(--green);background:var(--green-soft);animation:matchPop .4s ease-out}
+@keyframes matchPop{0%{transform:scale(.95)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+.match-cell-icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;margin:0 auto 8px;font-family:var(--font-mono);font-weight:700;font-size:.7rem;letter-spacing:.06em}
+.match-cell.ok .match-cell-icon{background:var(--green);color:#fff}
+.match-cell.pending .match-cell-icon{background:var(--amber);color:#fff}
+.match-cell.confirmed .match-cell-icon{background:var(--green);color:#fff}
+.match-cell-icon svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none}
+.match-cell-label{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--text-primary);margin-bottom:3px}
+.match-cell-status{font-size:.75rem;color:var(--text-secondary)}
+.match-cell.ok .match-cell-status,
+.match-cell.confirmed .match-cell-status{color:var(--green);font-weight:600}
+.match-cell.pending .match-cell-status{color:var(--amber);font-weight:600}
 
- /* EXTRACT FIELDS */
- .ext{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-radius:2px;overflow:hidden;border:1px solid var(--line)}
- .ext-c{background:var(--surface);padding:10px 12px}
- .ext-l{font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
- .ext-v{font-size:13px;font-weight:600;line-height:1.3}
- .ext-v .sub{font-size:11px;color:var(--ink-3);font-weight:400;display:block;margin-top:2px}
+/* ── LINE ITEMS ── */
+.line-items{margin-top:14px;border:1px solid var(--line)}
+.line-item{display:grid;grid-template-columns:1fr 80px 100px 100px;gap:12px;padding:10px 14px;font-size:.8125rem;border-bottom:1px solid var(--line);align-items:center}
+.line-item:last-child{border-bottom:none}
+.line-item.header{background:var(--surface-2);font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary);font-weight:600;padding:8px 14px}
+.line-item-name{color:var(--text-primary)}
+.line-item-name strong{font-weight:600}
+.line-item-qty{font-family:var(--font-mono);font-size:.78rem;text-align:right;color:var(--text-secondary)}
+.line-item-amt{font-family:var(--font-mono);font-size:.78rem;text-align:right;color:var(--text-primary);font-weight:600}
+.line-item-status{display:flex;justify-content:flex-end}
 
- /* RECEIVING LINE ITEMS */
- .recv{margin:0}
- .recv-row{display:grid;grid-template-columns:24px 1fr 60px 70px 70px;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px}
- .recv-row:last-child{border-bottom:none}
- .recv-row.head{background:var(--surface-2);font-size:10px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
- .recv-cb{width:18px;height:18px;border:2px solid var(--green);border-radius:2px;background:var(--green);display:grid;place-items:center;color:#fff;cursor:pointer}
- .recv-cb svg{width:10px;height:10px;stroke:currentColor;stroke-width:3;fill:none}
- .recv-cb.unchecked{background:#fff;border-color:var(--line-2)}
- .recv-cb.unchecked svg{display:none}
- .recv-n{font-weight:600;color:var(--ink)}
- .recv-d{font-size:11px;color:var(--ink-3);margin-top:1px}
- .recv-q{text-align:center;font-weight:600}
- .recv-p{text-align:right;color:var(--ink-2)}
- .recv-actions{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
- .recv-summary{font-size:12px;color:var(--ink-2)}
- .recv-summary b{font-weight:600}
- .recv-btns{display:flex;gap:6px}
+/* ── RECEIPT CONFIRMATION ── */
+.receipt-card{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);padding:18px 20px;margin-top:6px;border-left:3px solid var(--amber)}
+.receipt-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.receipt-icon{width:36px;height:36px;background:var(--amber-soft);border:1px solid var(--amber);display:grid;place-items:center;flex-shrink:0;color:var(--amber)}
+.receipt-icon svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.5;fill:none}
+.receipt-info{flex:1}
+.receipt-title{font-family:var(--font-display);font-size:1.05rem;color:var(--text-primary);margin-bottom:4px;line-height:1.3}
+.receipt-meta{font-size:.8125rem;color:var(--text-secondary);line-height:1.5}
+.receipt-meta strong{color:var(--text-primary);font-weight:600}
+.receipt-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-receipt{padding:9px 16px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;border:1px solid var(--line-2);background:var(--surface);color:var(--text-primary);cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:8px}
+.btn-receipt:hover{border-color:var(--aubergine);color:var(--aubergine)}
+.btn-receipt.primary{background:var(--green);color:#fff;border-color:var(--green);box-shadow:2px 2px 0 rgba(61,107,74,.35)}
+.btn-receipt.primary:hover{background:#2d5238;color:#fff}
+.btn-receipt svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
 
- /* COMPLIANCE STRIP */
- .comp{display:flex;align-items:center;gap:12px;padding:11px 14px;background:linear-gradient(90deg,var(--green-soft) 0%,var(--surface) 100%);border:1px solid #BBD9CA;border-radius:2px;margin:10px 0}
- .comp-i{width:32px;height:32px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0}
- .comp-i svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none}
- .comp-b{flex:1;min-width:0}
- .comp-t{font-size:13px;font-weight:600;color:var(--green)}
- .comp-d{font-size:11px;color:var(--ink-3);margin-top:1px}
- .comp-a{font-size:11px;color:var(--ink-2);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;flex-shrink:0}
- .comp-a svg{width:11px;height:11px;stroke:currentColor;stroke-width:2;fill:none}
+/* ── COMPLIANCE & BEHAVIOR ── */
+.compliance-panel{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);padding:16px 18px;margin-top:6px}
+.compliance-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.compliance-title{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600;color:var(--text-primary)}
+.compliance-status{font-family:var(--font-mono);font-size:.7rem;color:var(--green);font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.compliance-status .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:livepulse 1.5s ease-in-out infinite}
+.compliance-status.running .dot{background:var(--amber)}
+.compliance-status.running{color:var(--amber)}
+.compliance-progress{height:3px;background:var(--surface-2);position:relative;overflow:hidden;margin-bottom:10px}
+.compliance-progress-bar{height:100%;background:linear-gradient(90deg,var(--brand),var(--aubergine));width:0%;transition:width 1.2s ease-out}
+.compliance-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 18px;font-size:.78rem;color:var(--text-secondary)}
+.compliance-check{display:flex;align-items:center;gap:8px;opacity:0;animation:checkIn .25s ease-out forwards}
+.compliance-check::before{content:'';width:14px;height:14px;background:var(--green);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.5 8.5L6.5 11.5L12.5 5.5' stroke='white' stroke-width='2' fill='none'/></svg>");background-position:center;background-repeat:no-repeat;flex-shrink:0}
+@keyframes checkIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
 
- /* FOLLOWUP */
- .fu{background:var(--surface);border:1px dashed var(--line-2);border-radius:0;padding:13px;margin:10px 0}
- .fu-q{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink-2)}
- .fu-opts{display:flex;flex-wrap:wrap;gap:6px}
- .opt{padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;cursor:pointer;background:var(--surface);transition:all .15s}
- .opt:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ap-context{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);padding:14px 18px;margin-top:6px;border-left:3px solid var(--teal)}
+.ap-context-head{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-primary);font-weight:600;margin-bottom:10px}
+.ap-context-rows{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 18px;font-size:.8125rem}
+.ap-context-row{display:flex;justify-content:space-between;color:var(--text-secondary)}
+.ap-context-row strong{color:var(--text-primary);font-weight:600}
+.ap-context-row.behavioral{grid-column:span 2;padding-top:8px;margin-top:4px;border-top:1px solid var(--line);color:var(--green);font-weight:600;display:flex;align-items:center;gap:6px}
+.ap-context-row.behavioral::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%}
 
- /* INLINE COMPOSER */
- .icomp{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:0;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
- .icomp input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:10px 0}
- .icomp input::placeholder{color:var(--ink-3)}
+/* ── SUBMIT ── */
+.submit-row{margin-top:8px;display:flex;gap:10px;justify-content:flex-end}
+.btn-submit{padding:11px 24px;font-family:var(--font-body);font-size:.875rem;font-weight:600;background:var(--aubergine);color:#fff;border:none;cursor:pointer;box-shadow:var(--shadow-brand);transition:all .12s;display:inline-flex;align-items:center;gap:10px}
+.btn-submit:hover{background:var(--plum)}
+.btn-submit:disabled{background:var(--text-muted);cursor:not-allowed;box-shadow:none}
+.btn-submit svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
 
- /* RIGHT PANEL */
- .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;display:flex;flex-direction:column}
- .sum-s{margin-bottom:22px}
- .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
- .sum-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em}
+/* ── SUBMISSION + TELEPATHY ── */
+.confirm-card{background:linear-gradient(135deg, #2D1B4E 0%, #3C1239 100%);color:rgba(255,255,255,.92);padding:24px 28px;margin-top:8px;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
+.confirm-card::before{content:'';position:absolute;top:-100px;right:-100px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(168,124,232,.22),transparent 70%);pointer-events:none}
+.confirm-eyebrow{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(168,124,232,.9);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.confirm-eyebrow .dot{width:6px;height:6px;background:var(--brand-light);border-radius:50%;box-shadow:0 0 0 3px rgba(168,124,232,.25);animation:livepulse 1.5s ease-in-out infinite}
+.confirm-title{font-family:var(--font-display);font-size:1.5rem;font-weight:400;line-height:1.2;color:#fff;margin-bottom:6px}
+.confirm-ref{font-family:var(--font-mono);font-size:.85rem;letter-spacing:.04em;color:rgba(168,124,232,.9);margin-bottom:18px}
+.telepathy-grid{margin-top:14px}
+.telepathy-item{display:grid;grid-template-columns:160px 1fr;gap:18px;padding:10px 0;border-top:1px solid rgba(255,255,255,.1);font-size:.8125rem;line-height:1.55;color:rgba(255,255,255,.75);animation:teleIn .4s ease-out both}
+.telepathy-item:first-child{border-top:none;padding-top:6px}
+.telepathy-when{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brand-light);font-weight:600}
+.telepathy-what strong{color:#fff;font-weight:600}
+@keyframes teleIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
- /* INVOICE STATUS CARD */
- .inv-card{border:1px solid var(--line);border-radius:0;overflow:hidden}
- .inv-head{padding:14px;background:linear-gradient(180deg,var(--teal-soft) 0%,var(--surface) 70%);border-bottom:1px solid var(--line)}
- .inv-pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:600;background:#fff;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--teal)}
- .inv-pill.ready{background:var(--green);color:#fff;border-color:var(--green)}
- .inv-pill .d{width:5px;height:5px;border-radius:50%;background:currentColor}
- .inv-t{font-size:15px;font-weight:600;line-height:1.3;margin-bottom:2px}
- .inv-s{font-size:12px;color:var(--ink-3)}
+.demo-end{margin-top:32px;padding:20px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.demo-end-title{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-secondary);margin-bottom:14px}
+.demo-end-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-ghost{padding:8px 16px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;background:transparent;color:var(--text-primary);border:1px solid var(--line-2);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .12s}
+.btn-ghost:hover{border-color:var(--aubergine);color:var(--aubergine)}
 
- .kv{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px dashed var(--line);gap:10px}
- .kv:last-child{border-bottom:none}
- .kv-k{color:var(--ink-3);white-space:nowrap}
- .kv-v{font-weight:500;color:var(--ink);text-align:right}
- .kv-v.big{font-size:14px;font-weight:600}
- .inv-body{padding:12px 14px}
+/* ── CONTROLS ── */
+.demo-controls{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,rgba(245,242,239,0) 0%,rgba(245,242,239,.95) 30%);padding:32px 24px 18px;z-index:100;display:flex;justify-content:center;pointer-events:none}
+.demo-controls-inner{display:flex;align-items:center;gap:12px;background:var(--surface);padding:8px 8px 8px 16px;border:1px solid var(--line);box-shadow:var(--shadow-md);pointer-events:auto}
+.demo-step-indicator{display:flex;gap:4px;align-items:center}
+.demo-step-dot{width:6px;height:6px;border-radius:50%;background:var(--line-2);transition:all .25s}
+.demo-step-dot.active{background:var(--aubergine);transform:scale(1.5)}
+.demo-step-dot.completed{background:var(--plum)}
+.demo-step-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary);margin:0 8px;white-space:nowrap}
+.demo-step-label b{color:var(--text-primary);font-weight:600}
+.btn-control{padding:7px 12px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;border:none;cursor:pointer;background:var(--surface-2);color:var(--text-primary);display:inline-flex;align-items:center;gap:6px;transition:all .12s}
+.btn-control:hover:not(:disabled){background:var(--line)}
+.btn-control:disabled{opacity:.4;cursor:not-allowed}
+.btn-control.primary{background:var(--aubergine);color:#fff;box-shadow:var(--shadow-brand)}
+.btn-control.primary:hover:not(:disabled){background:var(--plum)}
+.btn-control svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none}
 
- /* 3-WAY MATCH MINI */
- .match-mini{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface-2);border-top:1px solid var(--line)}
- .mm-step{flex:1;text-align:center;position:relative}
- .mm-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;margin:0 auto 5px;font-size:12px;font-weight:700;color:#fff}
- .mm-dot.ok{background:var(--green)}
- .mm-dot.pend{background:var(--surface);color:var(--ink-3);border:1px dashed var(--line-2)}
- .mm-l{font-size:10px;color:var(--ink-2);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
- .mm-sub{font-size:10px;color:var(--ink-3);margin-top:1px}
- .mm-line{position:absolute;top:11px;right:-50%;width:100%;height:2px;background:var(--green);z-index:0}
- .mm-line.pend{background:var(--line-2)}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.beat{display:none}
+.beat.visible{display:block;animation:msgIn .4s ease-out}
 
- /* COMPLIANCE PANEL */
- .comp-panel{border:1px solid var(--line);border-radius:0;overflow:hidden}
- .comp-summary{padding:12px 14px;background:var(--surface);display:flex;align-items:center;gap:10px;cursor:pointer}
- .comp-summary:hover{background:var(--surface-2)}
- .comp-circle{width:32px;height:32px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0;position:relative}
- .comp-circle svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.5;fill:none}
- .comp-circle::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--green-soft);z-index:-1}
- .comp-info{flex:1}
- .comp-title{font-size:12px;font-weight:600}
- .comp-meta{font-size:11px;color:var(--ink-3);margin-top:1px}
- .comp-toggle{font-size:11px;color:var(--ink-3)}
- .comp-list{padding:8px 14px 12px;border-top:1px solid var(--line);background:var(--surface-2)}
- .comp-item{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px}
- .comp-tick{width:14px;height:14px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex-shrink:0}
- .comp-tick svg{width:7px;height:7px;stroke:currentColor;stroke-width:3.5;fill:none}
- .comp-name{color:var(--ink-2);flex:1}
- .comp-name b{color:var(--ink);font-weight:600}
- .comp-val{color:var(--ink-3);font-size:10px}
-
- /* AUDIT TRAIL */
- .audit{border:1px solid var(--line);border-radius:0;overflow:hidden;background:var(--surface)}
- .audit-h{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
- .audit-t{font-size:11px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
- .audit-x{font-size:11px;color:var(--ink-3);cursor:pointer}
- .audit-list{max-height:200px;overflow-y:auto;padding:6px 0}
- .audit-row{display:flex;gap:10px;padding:5px 14px;font-size:11px;font-family:'JetBrains Mono',monospace;line-height:1.5}
- .audit-time{color:var(--ink-3);flex-shrink:0;font-size:10px}
- .audit-evt{color:var(--ink-2)}
- .audit-evt b{color:var(--ink);font-weight:600}
- .audit-evt .actor{color:var(--accent);font-weight:500}
- .audit-evt .ag{color:var(--brand);font-weight:500}
-
- .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:20px}
- .actions .btn{width:100%;text-align:center;padding:10px}
-
- /* HIGHLIGHT VARIANCE */
- .var{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:2px;font-size:10px;font-weight:600;background:var(--amber-soft);color:var(--amber);margin-left:6px}
-
- /* ── Topbar (cross-page nav) ─────────────────────────────── */
- .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
- .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
- .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
- .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
- .tb-dot{width:28px;height:28px;border-radius:2px;background:var(--aubergine);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:var(--shadow-sm)}
- .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
- .tb-sub{font-size:11px;color:var(--ink-3)}
- .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
- .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
- .tb-links a:hover{color:var(--ink)}
- .tb-links a.tb-active{color:var(--plum);font-weight:600;border-bottom:2px solid var(--plum)}
- .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
- .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
- .tb-av{width:28px;height:28px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
-
- 
- /* Sidebar nav light text on dark aubergine */
- .sb .nav{color:rgba(255,255,255,.75)}
- .sb .nav svg{stroke:rgba(255,255,255,.55)}
- .sb .nav:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92)}
- .sb .nav:hover svg{stroke:rgba(255,255,255,.8)}
- .sb .nav.active{color:#fff;background:rgba(168,124,232,.2);border-left-color:var(--brand-light)}
- .sb .nav.active svg{stroke:var(--brand-light)}
- .sb .nav-h{color:rgba(255,255,255,.35)}
- .sb .pill{background:rgba(168,124,232,.25);color:var(--brand-light)}
- .sb .pill.amber{background:rgba(122,92,30,.35);color:#FBBF24}
-
- 
- /* Sidebar gradient + guaranteed light text (placed last, high specificity) */
- aside.sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%)}
- aside.sb .nav{color:rgba(255,255,255,.75)!important}
- aside.sb .nav svg{stroke:rgba(255,255,255,.5)!important}
- aside.sb .nav:hover{background:rgba(255,255,255,.07)!important;color:rgba(255,255,255,.92)!important}
- aside.sb .nav:hover svg{stroke:rgba(255,255,255,.8)!important}
- aside.sb .nav.active{color:#fff!important;background:rgba(168,124,232,.2)!important;border-left:2px solid var(--brand-light)!important}
- aside.sb .nav.active svg{stroke:var(--brand-light)!important}
- aside.sb .nav-h{color:rgba(255,255,255,.3)!important}
- aside.sb .pill{background:rgba(168,124,232,.25)!important;color:var(--brand-light)!important}
- aside.sb .pill.amber{background:rgba(122,92,30,.4)!important;color:#FBBF24!important}
-
- </style>
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media (max-width:720px){.match-grid{grid-template-columns:1fr}.telepathy-item{grid-template-columns:1fr}.ap-context-rows{grid-template-columns:1fr}.ap-context-row.behavioral{grid-column:1}.line-item{grid-template-columns:1fr 60px 80px 80px}.demo-controls-inner{flex-wrap:wrap;justify-content:center}}
+</style>
 </head>
 <body>
 
-
 <!-- ── Topbar ── -->
 <nav class="topbar">
- <div class="topbar-inner">
- <a href="index.html" class="tb-brand">
- <div class="tb-dot">P</div>
- <div>
- <div class="tb-name">Procurello</div>
- <div class="tb-sub">Invoice matching</div>
- </div>
- </a>
- <div class="tb-links">
- <a href="index.html#concept">Concept</a>
- <a href="index.html#different">Why It Matters</a>
- <a href="index.html#demos">Demos</a>
- </div>
- <div class="tb-user">
- <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
- <div class="tb-av">JM</div>
- </div>
- </div>
+  <div class="topbar-inner">
+    <a href="index.html" class="tb-brand">
+      <div class="tb-dot">P</div>
+      <div>
+        <div class="tb-name">Procurello</div>
+        <div class="tb-sub">Buyer workspace</div>
+      </div>
+    </a>
+    <div class="tb-links">
+      <a href="index.html#concept">Concept</a>
+      <a href="index.html#different">Why It Matters</a>
+      <a href="index.html#demos">Demos</a>
+    </div>
+    <div class="tb-user">
+      <span class="tb-uname">Jamie Mendez · Lab Manager</span>
+      <div class="tb-av">JM</div>
+    </div>
+  </div>
 </nav>
 
-<div class="app">
+<!-- ── Demo container ── -->
+<div class="demo-wrap">
 
- <!-- ===== SIDEBAR ===== -->
- <aside class="sb">
+  <!-- Intro -->
+  <div class="demo-intro">
+    <div class="demo-eyebrow"><span class="live-dot"></span>Interactive Demo · Invoice and receiving</div>
+    <div class="demo-title">Closing the loop on a PO <em>that arrived in your inbox.</em></div>
+    <p class="demo-lede">A supplier's invoice lands with the lab manager rather than centralized AP. Drop the PDF, the agent extracts the fields, matches to the PO, prompts for receipt, and runs the compliance so payment can release on time.</p>
+    <div class="demo-hint">
+      <span><kbd>Space</kbd> or <kbd>→</kbd> to advance</span>
+      <span><kbd>←</kbd> to step back</span>
+      <span><kbd>Esc</kbd> to restart</span>
+    </div>
+  </div>
 
- <div class="nav active">
- <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
- Buy something
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
- My requests
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
- Approvals <span class="pill">3</span>
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
- Orders & invoices <span class="pill teal">1</span>
- </div>
-
- <div class="nav-h">Workspace</div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
- Suppliers
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
- Contracts
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
- Spend insights
- </div>
- </aside>
-
- <!-- ===== MAIN ===== -->
- <main class="main">
- <div class="crumb">
- <span>Orders & invoices</span><span class="s">/</span><span>New invoice</span>
- </div>
-
- <h1>Got an invoice let's close the loop</h1>
- <p class="lede">Forward an invoice or drop the PDF here. I'll match it to your purchase order, confirm what arrived, and run the compliance checks so AP can release payment.</p>
-
- <!-- COMPOSER WITH INVOICE ATTACHED -->
- <div class="composer">
- <div class="c-in">
- <div class="c-lbl">
- <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
- Ask your buying agent
- </div>
- <div class="c-txt">
- Got this invoice in my inbox from Sigma looks like for the reagent order from last month?
- </div>
- <div class="att">
- <div class="att-i">PDF</div>
- <div class="att-b">
- <div class="att-n">Sigma_Invoice_INV-2026-4471.pdf</div>
- <div class="att-m">2 pages · 412 KB · forwarded from jamie.mendez@mu.edu</div>
- </div>
- <span class="att-x">✕</span>
- </div>
- </div>
- <div class="c-row">
- <div class="c-acts">
- <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Add another file</span>
- <span class="chip"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Forward from email</span>
- </div>
- <button class="btn btn-p">Continue →</button>
- </div>
- </div>
-
- <!-- THREAD -->
- <div class="thread">
-
- <!-- Turn 1: Agent parses & matches -->
- <div class="turn">
- <div class="t-agent">
- <div class="a-dot">AI</div>
- <div class="a-body">
- <div class="a-name">Buying agent <span class="live"></span> matched invoice to PO</div>
- <div class="a-msg">
- <p>Good catch yes, this invoice matches <strong>PO-2026-0312</strong> from April 18 for the antibody and reagent order. I parsed both documents and lined everything up:</p>
-
- <div class="card">
- <div class="card-h">
- <div class="card-t">Invoice details <span class="ai">Extracted</span></div>
- <span style="font-size:11px;color:var(--ink-3)">From Sigma_Invoice_INV-2026-4471.pdf</span>
- </div>
- <div class="card-b">
- <div class="ext">
- <div class="ext-c">
- <div class="ext-l">Supplier</div>
- <div class="ext-v">Sigma-Aldrich<span class="sub">Vendor #V-00284</span></div>
- </div>
- <div class="ext-c">
- <div class="ext-l">Invoice #</div>
- <div class="ext-v">INV-2026-4471<span class="sub">Dated May 12, 2026</span></div>
- </div>
- <div class="ext-c">
- <div class="ext-l">Amount</div>
- <div class="ext-v">$1,840.00<span class="sub">Matches PO total</span></div>
- </div>
- <div class="ext-c">
- <div class="ext-l">PO reference</div>
- <div class="ext-v">PO-2026-0312<span class="sub">Auto-detected on invoice</span></div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- THREE-WAY MATCH STATUS -->
- <div class="card">
- <div class="card-h">
- <div class="card-t">Three-way match status <span class="ai">Real-time</span></div>
- <span style="font-size:11px;color:var(--amber);font-weight:600">1 of 3 complete</span>
- </div>
- <div class="card-b">
- <div class="match">
- <div class="match-c ok">
- <div class="match-i ok">✓</div>
- <div class="match-l">PO</div>
- <div class="match-v">PO-2026-0312</div>
- <div class="match-s">Authorized · Apr 18</div>
- </div>
- <div class="match-arrow">↔</div>
- <div class="match-c missing">
- <div class="match-i missing">?</div>
- <div class="match-l">Receipt</div>
- <div class="match-v">Not on file</div>
- <div class="match-s">Needs your help</div>
- </div>
- <div class="match-arrow">↔</div>
- <div class="match-c ok">
- <div class="match-i ok">✓</div>
- <div class="match-l">Invoice</div>
- <div class="match-v">INV-2026-4471</div>
- <div class="match-s">Received · just now</div>
- </div>
- </div>
- </div>
- </div>
-
- <p><strong>One thing I need from you:</strong> there's no goods receipt on file for this PO yet which means AP can't release payment, and Sigma's already at day 24 of their net-30 terms. Did the reagents arrive at the lab?</p>
-
- <!-- RECEIVING -->
- <div class="card">
- <div class="card-h">
- <div class="card-t">PO-2026-0312 line items <span class="ai">Confirm receipt</span></div>
- <span style="font-size:11px;color:var(--ink-3)">Tick what you received · partial OK</span>
- </div>
- <div class="recv">
- <div class="recv-row head">
- <span></span>
- <span>Item</span>
- <span style="text-align:center">Qty</span>
- <span style="text-align:right">Each</span>
- <span style="text-align:right">Total</span>
- </div>
- <div class="recv-row">
- <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div>
- <div class="recv-n">Anti-CD3 Antibody, 100µg</div>
- <div class="recv-d">Cat# A-9384 · Lot 26B-441</div>
- </div>
- <div class="recv-q">1</div>
- <div class="recv-p">$420.00</div>
- <div class="recv-p">$420.00</div>
- </div>
- <div class="recv-row">
- <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div>
- <div class="recv-n">Anti-CD8 Antibody, 100µg</div>
- <div class="recv-d">Cat# A-9388 · Lot 26B-441</div>
- </div>
- <div class="recv-q">1</div>
- <div class="recv-p">$385.00</div>
- <div class="recv-p">$385.00</div>
- </div>
- <div class="recv-row">
- <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div>
- <div class="recv-n">Recombinant IL-2, 100µg</div>
- <div class="recv-d">Cat# R-2241 · Lot 26B-498</div>
- </div>
- <div class="recv-q">2</div>
- <div class="recv-p">$290.00</div>
- <div class="recv-p">$580.00</div>
- </div>
- <div class="recv-row">
- <div class="recv-cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div>
- <div class="recv-n">Cell Stimulation Cocktail, 2ml</div>
- <div class="recv-d">Cat# C-8847 · Lot 26C-102</div>
- </div>
- <div class="recv-q">1</div>
- <div class="recv-p">$455.00</div>
- <div class="recv-p">$455.00</div>
- </div>
- <div class="recv-actions">
- <div class="recv-summary">All 4 items selected · <b>$1,840.00</b> total · matches invoice</div>
- <div class="recv-btns">
- <button class="btn" style="padding:6px 12px;font-size:12px">Mark partial…</button>
- <button class="btn btn-g" style="padding:6px 12px;font-size:12px">Confirm receipt of all 4</button>
- </div>
- </div>
- </div>
- </div>
-
- <p style="color:var(--ink-3);font-size:13px">If something's missing, damaged, or back-ordered, choose "Mark partial" and tell me what came in.</p>
- </div>
- </div>
- </div>
- </div>
-
- <!-- Turn 2: User confirms -->
- <div class="turn">
- <div class="t-user">
- <div class="t-user-b">Yes, everything arrived last week boxes are on the bench. Confirm all four.</div>
- </div>
-
- <div class="t-agent">
- <div class="a-dot">AI</div>
- <div class="a-body">
- <div class="a-name">Buying agent <span class="live"></span> finalizing</div>
- <div class="a-msg">
- <p>Receipt confirmed and logged against PO-2026-0312. The three-way match is complete PO, receipt, and invoice all reconcile to <strong>$1,840.00</strong>.</p>
-
- <!-- COMPLIANCE CONFIRMATION -->
- <div class="comp">
- <div class="comp-i">
- <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
- </div>
- <div class="comp-b">
- <div class="comp-t">12 AP compliance checks passed</div>
- <div class="comp-d">Sanctions, duplicate, tax, banking, vendor master all green · ran in 1.4 seconds</div>
- </div>
- <div class="comp-a">View audit trail
- <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
- </div>
- </div>
-
- <p>I checked all the things AP normally has to verify by hand. Nothing flagged. The invoice is ready for AP to release payment on the next disbursement cycle (this Friday).</p>
-
- <p><strong>One small note:</strong> Sigma offers a 2% early-pay discount if paid within 10 days of invoice date. We're at day 3 if AP releases today instead of waiting for the standard cycle, we save $36.80. Worth flagging?</p>
-
- <div class="fu">
- <div class="fu-q">Anything else, or should I route this to AP?</div>
- <div class="fu-opts">
- <span class="opt">Send to AP for Friday cycle</span>
- <span class="opt">Request early-pay (save $36.80)</span>
- <span class="opt">Hold I need to check something</span>
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
-
- </div>
-
- <!-- INLINE CHAT INPUT -->
- <div class="icomp">
- <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
- <input placeholder="Reply, ask a question, or change something…" />
- <button class="btn btn-p" style="padding:7px 14px">Send</button>
- </div>
-
- </main>
-
- <!-- ===== RIGHT PAYMENT READINESS ===== -->
- <aside class="sum">
-
- <div class="sum-s">
- <div class="sum-h">
- <span>Payment readiness</span>
- <span class="ai">Live</span>
- </div>
-
- <div class="inv-card">
- <div class="inv-head">
- <span class="inv-pill ready"><span class="d"></span>Ready for AP</span>
- <div class="inv-t">Sigma-Aldrich<br/>INV-2026-4471</div>
- <div class="inv-s">Matched to PO-2026-0312</div>
- </div>
-
- <div class="inv-body">
- <div class="kv"><span class="kv-k">Invoice amount</span><span class="kv-v big">$1,840.00</span></div>
- <div class="kv"><span class="kv-k">PO amount</span><span class="kv-v">$1,840.00 ✓</span></div>
- <div class="kv"><span class="kv-k">Received</span><span class="kv-v">$1,840.00 ✓</span></div>
- <div class="kv"><span class="kv-k">Payment terms</span><span class="kv-v">Net 30 · due Jun 11</span></div>
- <div class="kv"><span class="kv-k">Method</span><span class="kv-v">ACH · on file</span></div>
- </div>
-
- <div class="match-mini">
- <div class="mm-step">
- <div class="mm-line"></div>
- <div class="mm-dot ok">✓</div>
- <div class="mm-l">PO</div>
- <div class="mm-sub">Apr 18</div>
- </div>
- <div class="mm-step">
- <div class="mm-line"></div>
- <div class="mm-dot ok">✓</div>
- <div class="mm-l">Receipt</div>
- <div class="mm-sub">Just now</div>
- </div>
- <div class="mm-step">
- <div class="mm-dot ok">✓</div>
- <div class="mm-l">Invoice</div>
- <div class="mm-sub">May 12</div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- COMPLIANCE PANEL -->
- <div class="sum-s">
- <div class="sum-h"><span>Compliance checks</span><span style="font-size:11px;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0">All clear</span></div>
-
- <div class="comp-panel">
- <div class="comp-summary">
- <div class="comp-circle">
- <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
- </div>
- <div class="comp-info">
- <div class="comp-title">12 checks passed</div>
- <div class="comp-meta">Ran in 1.4s · no exceptions</div>
- </div>
- <div class="comp-toggle">▼</div>
- </div>
- <div class="comp-list">
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>OFAC / sanctions</b> screen</div>
- <div class="comp-val">Clear</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Duplicate invoice</b> check</div>
- <div class="comp-val">No match · 90 days</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Vendor master</b> current</div>
- <div class="comp-val">Active · TIN verified</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Banking</b> validated</div>
- <div class="comp-val">ACH · no change</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Tax classification</b></div>
- <div class="comp-val">Corp · no 1099</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Use-tax</b> determination</div>
- <div class="comp-val">Exempt · research</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Budget</b> availability</div>
- <div class="comp-val">WL-AB-26 funded</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Grant compliance</b> (Uniform Guidance)</div>
- <div class="comp-val">Allowable</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Price variance</b> vs PO</div>
- <div class="comp-val">0.0%</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Quantity variance</b> vs PO</div>
- <div class="comp-val">Match</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Segregation of duties</b></div>
- <div class="comp-val">Requester ≠ approver</div>
- </div>
- <div class="comp-item">
- <div class="comp-tick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="comp-name"><b>Document retention</b> tagged</div>
- <div class="comp-val">7yr · grant</div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- AUDIT TRAIL -->
- <div class="sum-s">
- <div class="sum-h"><span>Audit trail</span><span style="font-size:11px;color:var(--ink-3);text-transform:none;letter-spacing:0">Auto-recorded</span></div>
- <div class="audit">
- <div class="audit-h">
- <div class="audit-t">Event log · INV-2026-4471</div>
- <div class="audit-x">Export</div>
- </div>
- <div class="audit-list">
- <div class="audit-row">
- <div class="audit-time">10:42:18</div>
- <div class="audit-evt"><b>Invoice received</b> · forwarded by <span class="actor">J. Mendez</span></div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:42:19</div>
- <div class="audit-evt">OCR extraction · 14 fields · <span class="ag">agent</span></div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:42:20</div>
- <div class="audit-evt">Matched to <b>PO-2026-0312</b> · 99.2% conf</div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:42:21</div>
- <div class="audit-evt">Duplicate check · no match</div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:42:21</div>
- <div class="audit-evt">OFAC screen · clear</div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:42:22</div>
- <div class="audit-evt">Tax & banking verified</div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:42:22</div>
- <div class="audit-evt">Awaiting receipt confirmation</div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:45:32</div>
- <div class="audit-evt"><b>Receipt confirmed</b> · 4/4 lines · <span class="actor">J. Mendez</span></div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:45:33</div>
- <div class="audit-evt">3-way match complete · $1,840.00</div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:45:33</div>
- <div class="audit-evt">Grant compliance verified</div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:45:34</div>
- <div class="audit-evt">Doc retention tagged · 7yr</div>
- </div>
- <div class="audit-row">
- <div class="audit-time">10:45:34</div>
- <div class="audit-evt">Ready for <span class="actor">AP queue</span></div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- AP CONTEXT -->
- <div class="sum-s">
- <div class="sum-h"><span>AP context</span><span style="font-size:11px;color:var(--ink-3);text-transform:none;letter-spacing:0">What happens next</span></div>
- <div style="background:linear-gradient(180deg,#E7E9F5 0%,var(--surface) 100%);border:1px solid #C7CBE5;border-radius:2px;padding:13px;font-size:12px;line-height:1.5;color:var(--ink-2)">
- <div style="font-weight:600;color:#4A5BB8;font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Your invoice in the pipeline</div>
- <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
- <span style="color:var(--ink-3)">Position in today's queue</span>
- <span style="font-weight:600;color:var(--ink)">3 of 47</span>
- </div>
- <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
- <span style="color:var(--ink-3)">Est. payment release</span>
- <span style="font-weight:600;color:var(--ink)">Today (early-pay)</span>
- </div>
- <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)">
- <span style="color:var(--ink-3)">Sigma's typical invoice cadence</span>
- <span style="font-weight:600;color:var(--ink)">~Day 5 post-delivery</span>
- </div>
- <div style="display:flex;justify-content:space-between;padding:5px 0">
- <span style="color:var(--ink-3)">Your receipt response time</span>
- <span style="font-weight:600;color:var(--green)">2.1 hrs · top 10%</span>
- </div>
- <div style="margin-top:8px;font-size:11px;color:var(--ink-3);line-height:1.5"><b style="color:var(--ink-2)">Thanks for confirming receipt quickly</b> AP doesn't have to chase, supplier gets paid on time, and your lab captures the early-pay discount. The agent will flag the next Sigma invoice the same way.</div>
- </div>
- </div>
-
- <div class="actions">
- <button class="btn btn-g">Send to AP</button>
- <button class="btn">Hold for review</button>
- </div>
-
- </aside>
+  <div class="conv" id="conv"></div>
 
 </div>
+
+<!-- ── Floating controls ── -->
+<div class="demo-controls">
+  <div class="demo-controls-inner">
+    <button class="btn-control" id="btn-back" onclick="goBack()" aria-label="Previous step">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="demo-step-indicator" id="step-dots"></div>
+    <span class="demo-step-label">Step <b id="step-num">1</b> of 8</span>
+    <button class="btn-control primary" id="btn-next" onclick="goNext()" aria-label="Next step">
+      <span id="btn-next-label">Continue</span>
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   PROCURELLO — INVOICE & RECEIVING DEMO
+═══════════════════════════════════════════════════════════════════ */
+
+const TOTAL_STEPS = 8;
+const TIME = () => new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+const STATE = { step:1, isAnimating:false, receiptConfirmed:false, submitted:false };
+const CONV = document.getElementById('conv');
+
+const SCRIPT = {
+  user_request: "Got this invoice in my inbox from Sigma — looks like for the reagent order from last month?",
+  agent_classify: "I've read the invoice. It's from Sigma-Aldrich for $4,287.20 and matches PO-2026-0312 from April 18. The PO covers exactly these line items. Let me show you the match.",
+  agent_receipt_pending: "Before AP can release payment I need one thing from you — there's no goods receipt on file yet, and Sigma's at day 24 of net-30. Did the reagents arrive at the lab?",
+  agent_receipt_confirmed: "Receipt confirmed. Running the three-way match and compliance checks now.",
+  agent_compliance: "All clear — the match is complete and twelve compliance checks passed. Sigma will be paid on time and your lab still captures the early-pay discount window.",
+  agent_submitted: "Released for payment as PAY-2026-1184. Sigma's payment posts tonight in the next ACH run. I'll watch for their next invoice and auto-match it when it arrives — based on their cadence, that's around June 9."
+};
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function scrollDown(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
+
+async function typeInto(el, text, baseSpeed=22, instant=false){
+  if(instant){el.textContent = text;return}
+  el.textContent = '';
+  for(const char of text){
+    el.textContent += char;
+    let delay = baseSpeed + Math.random()*30;
+    if(',.;:'.includes(char)) delay += 180;
+    if(char === ' ') delay += 8;
+    await sleep(delay);
+  }
+}
+
+function buildStepDots(){
+  const c = document.getElementById('step-dots');
+  c.innerHTML = '';
+  for(let i=1;i<=TOTAL_STEPS;i++){
+    const d = document.createElement('div');
+    d.className = 'demo-step-dot';
+    if(i < STATE.step) d.classList.add('completed');
+    if(i === STATE.step) d.classList.add('active');
+    c.appendChild(d);
+  }
+  document.getElementById('step-num').textContent = STATE.step;
+  document.getElementById('btn-back').disabled = STATE.step === 1;
+  const nextBtn = document.getElementById('btn-next');
+  const nextLabel = document.getElementById('btn-next-label');
+  if(STATE.step === TOTAL_STEPS){nextBtn.disabled=true;nextLabel.textContent='Complete'}
+  else if(STATE.step === 5 && !STATE.receiptConfirmed){nextBtn.disabled=false;nextLabel.textContent='Skip confirmation'}
+  else if(STATE.step === 7 && !STATE.submitted){nextBtn.disabled=false;nextLabel.textContent='Submit & continue'}
+  else{nextBtn.disabled=false;nextLabel.textContent='Continue'}
+}
+
+function buildUserMsg(initials, name, html=''){
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-user';
+  wrap.innerHTML = `
+    <div class="msg-av">${initials}</div>
+    <div class="msg-body">
+      <div class="msg-meta">${name} · ${TIME()}</div>
+      <div class="msg-bubble">${html}</div>
+    </div>`;
+  return wrap;
+}
+function buildAgentMsg(){
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-agent';
+  wrap.innerHTML = `
+    <div class="msg-av">AI</div>
+    <div class="msg-body">
+      <div class="msg-meta">Procurello agent · ${TIME()}</div>
+      <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+    </div>`;
+  return wrap;
+}
+function buildAgentMsgStatic(html){
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-agent';
+  wrap.innerHTML = `
+    <div class="msg-av">AI</div>
+    <div class="msg-body">
+      <div class="msg-meta">Procurello agent · ${TIME()}</div>
+      <div class="msg-bubble"><span class="msg-text">${html}</span></div>
+    </div>`;
+  return wrap;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BEATS
+═══════════════════════════════════════════════════════════════════ */
+
+function renderBeat1(){
+  const composer = document.createElement('div');
+  composer.id = 'beat-1';
+  composer.className = 'beat visible';
+  composer.innerHTML = `
+    <div class="composer">
+      <div class="composer-label">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Forward an invoice, drop a PDF, or describe what you need
+      </div>
+      <div class="composer-text placeholder" id="composer-text">Forward an email from a supplier, or drop the invoice PDF here…<span class="typing-cursor"></span></div>
+      <div class="composer-foot">
+        <div class="composer-chips">
+          <span class="chip">+ Drop file</span>
+          <span class="chip">↩ Forward email</span>
+          <span class="chip">⌕ Find PO</span>
+        </div>
+        <button class="composer-send" id="send-btn" disabled>
+          Continue
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>`;
+  CONV.appendChild(composer);
+}
+
+async function renderBeat2(instant=false){
+  const textEl = document.getElementById('composer-text');
+  if(!textEl) return;
+  textEl.classList.remove('placeholder');
+  textEl.innerHTML = '';
+  const sendBtn = document.getElementById('send-btn');
+
+  // Add the attachment first (PDF appears)
+  const composerEl = document.querySelector('#beat-1 .composer');
+  let attachment = composerEl.querySelector('.composer-attachment');
+  if(!attachment){
+    attachment = document.createElement('div');
+    attachment.className = 'composer-attachment pdf';
+    attachment.innerHTML = `
+      <div class="composer-attach-icon">
+        <svg viewBox="0 0 16 16"><path d="M4 1h6l3 3v11H4V1z"/><path d="M10 1v3h3"/><path d="M6 8h4M6 10h4M6 12h2"/></svg>
+      </div>
+      <div class="composer-attach-info">
+        <div class="composer-attach-name">Sigma_Invoice_INV-2026-4471.pdf</div>
+        <div class="composer-attach-meta">PDF · 142 KB · From Sigma-Aldrich Co. (sales@sigma.com)</div>
+      </div>`;
+    composerEl.insertBefore(attachment, composerEl.querySelector('.composer-foot'));
+  }
+
+  if(instant){
+    textEl.textContent = SCRIPT.user_request;
+    sendBtn.disabled = false;
+    sendBtn.classList.add('ready');
+  } else {
+    STATE.isAnimating = true;
+    await sleep(400);
+    await typeInto(textEl, SCRIPT.user_request, 22);
+    textEl.innerHTML += '<span class="typing-cursor"></span>';
+    sendBtn.disabled = false;
+    sendBtn.classList.add('ready');
+    STATE.isAnimating = false;
+  }
+}
+
+async function renderBeat3(instant=false){
+  const composerBeat = document.getElementById('beat-1');
+  if(composerBeat) composerBeat.remove();
+
+  // User message with attachment indicator
+  const userMsg = buildUserMsg('JM', 'Jamie Mendez', `
+    <div style="margin-bottom:10px;padding:8px 10px;background:rgba(124,58,237,.1);border-left:2px solid var(--plum);font-family:var(--font-mono);font-size:.7rem;display:flex;align-items:center;gap:8px;color:var(--text-primary)">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--red)" stroke-width="1.5"><path d="M4 1h6l3 3v11H4V1z"/><path d="M10 1v3h3"/></svg>
+      Sigma_Invoice_INV-2026-4471.pdf
+    </div>
+    <span class="msg-text">${SCRIPT.user_request}</span>
+  `);
+  userMsg.id = 'beat-3-user';
+  CONV.appendChild(userMsg);
+  scrollDown();
+
+  if(instant){
+    const agentMsg = buildAgentMsgStatic(SCRIPT.agent_classify);
+    agentMsg.id = 'beat-3-agent';
+    CONV.appendChild(agentMsg);
+  } else {
+    STATE.isAnimating = true;
+    await sleep(400);
+    const agentMsg = buildAgentMsg();
+    agentMsg.id = 'beat-3-agent';
+    CONV.appendChild(agentMsg);
+    scrollDown();
+    await sleep(1400); // longer pause - "reading the PDF"
+    const bubble = agentMsg.querySelector('.msg-bubble');
+    bubble.innerHTML = '<span class="msg-text"></span>';
+    await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_classify, 13);
+    scrollDown();
+    STATE.isAnimating = false;
+  }
+}
+
+async function renderBeat4(instant=false){
+  if(document.getElementById('beat-4')) return;
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-4';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="extract-card">
+      <div class="extract-head">
+        <div class="extract-title">Extracted from Sigma_Invoice_INV-2026-4471.pdf</div>
+        <div class="extract-sub" id="extract-status">Parsing…</div>
+      </div>
+      <div class="extract-rows" id="extract-rows"></div>
+    </div>
+
+    <div class="match-panel" id="match-panel" style="display:none">
+      <div class="match-head">Three-way match status · PO-2026-0312</div>
+      <div class="match-grid">
+        <div class="match-cell ok">
+          <div class="match-cell-icon"><svg viewBox="0 0 16 16"><polyline points="3 8 7 12 13 5"/></svg></div>
+          <div class="match-cell-label">Purchase order</div>
+          <div class="match-cell-status">PO-2026-0312 on file</div>
+        </div>
+        <div class="match-cell ok">
+          <div class="match-cell-icon"><svg viewBox="0 0 16 16"><polyline points="3 8 7 12 13 5"/></svg></div>
+          <div class="match-cell-label">Invoice</div>
+          <div class="match-cell-status">Received and parsed</div>
+        </div>
+        <div class="match-cell pending" id="receipt-match-cell">
+          <div class="match-cell-icon"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg></div>
+          <div class="match-cell-label">Goods receipt</div>
+          <div class="match-cell-status">Awaiting confirmation</div>
+        </div>
+      </div>
+
+      <div class="line-items">
+        <div class="line-item header">
+          <span>Line item (from PO)</span>
+          <span style="text-align:right">Qty</span>
+          <span style="text-align:right">Amount</span>
+          <span style="text-align:right">Match</span>
+        </div>
+        <div class="line-item">
+          <div class="line-item-name"><strong>Anti-IgG antibody</strong>, ChromPure, 5mg</div>
+          <div class="line-item-qty">2</div>
+          <div class="line-item-amt">$1,420.00</div>
+          <div class="line-item-status"><span class="tag-sm" style="color:var(--green);background:var(--green-soft);border-color:var(--green);font-family:var(--font-mono);font-size:.58rem;letter-spacing:.06em;padding:2px 6px;border-width:1px;border-style:solid;font-weight:500;text-transform:uppercase">PO ✓ INV ✓</span></div>
+        </div>
+        <div class="line-item">
+          <div class="line-item-name"><strong>Tris-HCl Buffer</strong>, 1M, pH 7.5, 500mL</div>
+          <div class="line-item-qty">4</div>
+          <div class="line-item-amt">$867.20</div>
+          <div class="line-item-status"><span class="tag-sm" style="color:var(--green);background:var(--green-soft);border-color:var(--green);font-family:var(--font-mono);font-size:.58rem;letter-spacing:.06em;padding:2px 6px;border-width:1px;border-style:solid;font-weight:500;text-transform:uppercase">PO ✓ INV ✓</span></div>
+        </div>
+        <div class="line-item">
+          <div class="line-item-name"><strong>DMSO</strong>, anhydrous, ≥99.9%, 100mL</div>
+          <div class="line-item-qty">12</div>
+          <div class="line-item-amt">$2,000.00</div>
+          <div class="line-item-status"><span class="tag-sm" style="color:var(--green);background:var(--green-soft);border-color:var(--green);font-family:var(--font-mono);font-size:.58rem;letter-spacing:.06em;padding:2px 6px;border-width:1px;border-style:solid;font-weight:500;text-transform:uppercase">PO ✓ INV ✓</span></div>
+        </div>
+      </div>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+
+  const fields = [
+    { label:'Vendor', value:'<strong>Sigma-Aldrich Co.</strong> (V-00284)', matched:false },
+    { label:'Invoice number', value:'<strong>INV-2026-4471</strong>', matched:false },
+    { label:'Invoice date', value:'May 12, 2026', matched:false },
+    { label:'Payment terms', value:'Net 30 · <strong>day 24 of 30</strong>', matched:false },
+    { label:'Total amount', value:'<strong>$4,287.20 USD</strong>', matched:false },
+    { label:'PO reference', value:'PO-2026-0312', matched:true }
+  ];
+
+  const rowsContainer = document.getElementById('extract-rows');
+
+  if(instant){
+    fields.forEach(f => {
+      const row = document.createElement('div');
+      row.className = 'extract-row';
+      row.innerHTML = `<div class="extract-label">${f.label}</div><div class="extract-value ${f.matched?'matched':''}">${f.value}</div>`;
+      rowsContainer.appendChild(row);
+    });
+    document.getElementById('extract-status').textContent = '6 fields extracted · PO match confirmed';
+    document.getElementById('match-panel').style.display = 'block';
+  } else {
+    STATE.isAnimating = true;
+    for(const f of fields){
+      const row = document.createElement('div');
+      row.className = 'extract-row';
+      row.innerHTML = `<div class="extract-label">${f.label}</div><div class="extract-value ${f.matched?'matched':''}">${f.value}</div>`;
+      rowsContainer.appendChild(row);
+      scrollDown();
+      await sleep(160);
+    }
+    document.getElementById('extract-status').textContent = '6 fields extracted · PO match confirmed';
+    await sleep(300);
+    document.getElementById('match-panel').style.display = 'block';
+    scrollDown();
+    STATE.isAnimating = false;
+  }
+}
+
+async function renderBeat5(instant=false){
+  if(document.getElementById('beat-5')) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-5';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="receipt-card" id="receipt-card">
+      <div class="receipt-head">
+        <div class="receipt-icon">
+          <svg viewBox="0 0 16 16"><path d="M2 4h12v9H2z"/><path d="M2 4l6 5 6-5"/></svg>
+        </div>
+        <div class="receipt-info">
+          <div class="receipt-title">Receipt confirmation needed</div>
+          <div class="receipt-meta">Sigma's at <strong>day 24 of net-30</strong>. Once you confirm receipt, AP can release payment in the next ACH run. Did the reagents arrive at the lab?</div>
+        </div>
+      </div>
+      <div class="receipt-actions">
+        <button class="btn-receipt primary" id="btn-yes" onclick="confirmReceipt(true)">
+          <svg viewBox="0 0 16 16"><polyline points="3 8 7 12 13 5"/></svg>
+          Yes, all three line items received
+        </button>
+        <button class="btn-receipt" onclick="confirmReceipt(false)">Partial · let me adjust</button>
+        <button class="btn-receipt" onclick="confirmReceipt(false)">No · escalate to AP</button>
+      </div>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  if(!instant){
+    STATE.isAnimating = true;
+    await sleep(400);
+    const agentMsg = buildAgentMsg();
+    agentMsg.id = 'beat-5-agent';
+    CONV.insertBefore(agentMsg, wrap);
+    scrollDown();
+    await sleep(700);
+    const bubble = agentMsg.querySelector('.msg-bubble');
+    bubble.innerHTML = '<span class="msg-text"></span>';
+    await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_receipt_pending, 13);
+    scrollDown();
+    STATE.isAnimating = false;
+  } else {
+    const agentMsg = buildAgentMsgStatic(SCRIPT.agent_receipt_pending);
+    agentMsg.id = 'beat-5-agent';
+    CONV.insertBefore(agentMsg, wrap);
+  }
+}
+
+async function renderBeat6(instant=false){
+  if(document.getElementById('beat-6')) return;
+  STATE.receiptConfirmed = true;
+
+  // Flip the receipt match cell to confirmed
+  const receiptCell = document.getElementById('receipt-match-cell');
+  if(receiptCell){
+    receiptCell.classList.remove('pending');
+    receiptCell.classList.add('confirmed');
+    receiptCell.querySelector('.match-cell-icon').innerHTML = '<svg viewBox="0 0 16 16"><polyline points="3 8 7 12 13 5"/></svg>';
+    receiptCell.querySelector('.match-cell-label').textContent = 'Goods receipt';
+    receiptCell.querySelector('.match-cell-status').textContent = 'Confirmed by Jamie';
+  }
+
+  // Disable receipt buttons
+  document.querySelectorAll('.receipt-card .btn-receipt').forEach(b => b.disabled = true);
+  const yesBtn = document.getElementById('btn-yes');
+  if(yesBtn) yesBtn.innerHTML = '<svg viewBox="0 0 16 16"><polyline points="3 8 7 12 13 5"/></svg> Receipt confirmed';
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-6';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="ap-context">
+      <div class="ap-context-head">AP context</div>
+      <div class="ap-context-rows">
+        <div class="ap-context-row"><span>Position in AP queue</span><strong>14 of 28</strong></div>
+        <div class="ap-context-row"><span>Estimated payment release</span><strong>Tonight · ACH</strong></div>
+        <div class="ap-context-row"><span>Sigma billing cadence</span><strong>Day 7 ± 1 after delivery</strong></div>
+        <div class="ap-context-row"><span>Early-pay discount window</span><strong>Open · 2% if paid within 48h</strong></div>
+        <div class="ap-context-row behavioral">
+          Your receipt response is in the <strong style="color:var(--green)">top 10%</strong> — Sigma will be paid on time and your lab captures the early-pay discount.
+        </div>
+      </div>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  if(!instant){
+    STATE.isAnimating = true;
+    await sleep(500);
+    const agentMsg = buildAgentMsg();
+    agentMsg.id = 'beat-6-agent';
+    CONV.insertBefore(agentMsg, wrap);
+    scrollDown();
+    await sleep(700);
+    const bubble = agentMsg.querySelector('.msg-bubble');
+    bubble.innerHTML = '<span class="msg-text"></span>';
+    await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_receipt_confirmed, 13);
+    scrollDown();
+    STATE.isAnimating = false;
+  } else {
+    const agentMsg = buildAgentMsgStatic(SCRIPT.agent_receipt_confirmed);
+    agentMsg.id = 'beat-6-agent';
+    CONV.insertBefore(agentMsg, wrap);
+  }
+}
+
+async function renderBeat7(instant=false){
+  if(document.getElementById('beat-7')) return;
+  const checks = [
+    'Three-way match complete',
+    'Vendor master active + banking verified',
+    'OFAC / sanctions screen',
+    'Duplicate invoice detection (90d)',
+    'Tax classification confirmed',
+    'Use-tax determination',
+    'Budget availability vs cost object',
+    'Grant compliance (Uniform Guidance)',
+    'Price variance vs PO (0.0%)',
+    'Quantity variance vs PO (0.0%)',
+    'Document retention tagged',
+    'Audit trail recorded'
+  ];
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-7';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="compliance-panel">
+      <div class="compliance-head">
+        <div class="compliance-title">Compliance checks</div>
+        <div class="compliance-status running" id="compliance-status"><span class="dot"></span><span id="compliance-text">Running…</span></div>
+      </div>
+      <div class="compliance-progress"><div class="compliance-progress-bar" id="compliance-bar"></div></div>
+      <div class="compliance-checks" id="compliance-list"></div>
+    </div>
+
+    <div class="submit-row" id="submit-row" style="display:none">
+      <button class="btn-submit" id="btn-submit" onclick="releasePayment()">
+        Release for payment
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  const listEl = document.getElementById('compliance-list');
+  const statusEl = document.getElementById('compliance-status');
+  const statusTextEl = document.getElementById('compliance-text');
+  const barEl = document.getElementById('compliance-bar');
+  const submitEl = document.getElementById('submit-row');
+
+  if(instant){
+    checks.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'compliance-check';
+      item.textContent = c;
+      item.style.opacity = '1';
+      listEl.appendChild(item);
+    });
+    barEl.style.width = '100%';
+    statusEl.classList.remove('running');
+    statusTextEl.textContent = '12 of 12 passed · 1.2s';
+    submitEl.style.display = 'flex';
+  } else {
+    STATE.isAnimating = true;
+    barEl.style.width = '100%';
+    for(let i=0;i<checks.length;i++){
+      const item = document.createElement('div');
+      item.className = 'compliance-check';
+      item.textContent = checks[i];
+      listEl.appendChild(item);
+      await sleep(95);
+    }
+    await sleep(200);
+    statusEl.classList.remove('running');
+    statusTextEl.textContent = '12 of 12 passed · 1.2s';
+    await sleep(400);
+    submitEl.style.display = 'flex';
+    scrollDown();
+    STATE.isAnimating = false;
+  }
+}
+
+async function renderBeat8(instant=false){
+  if(document.getElementById('beat-8')) return;
+  STATE.submitted = true;
+  const submitBtn = document.getElementById('btn-submit');
+  if(submitBtn){submitBtn.disabled = true;submitBtn.innerHTML = '✓ Released'}
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-8';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="confirm-card">
+      <div class="confirm-eyebrow"><span class="dot"></span>Released for payment · Predictive close-out</div>
+      <div class="confirm-title">Sigma will be paid on time.</div>
+      <div class="confirm-ref">PAY-2026-1184 · $4,287.20 · matched to PO-2026-0312</div>
+
+      <div class="telepathy-grid">
+        <div class="telepathy-item" style="animation-delay:0s">
+          <div class="telepathy-when">Tonight, 9:00 PM</div>
+          <div class="telepathy-what">Payment <strong>posts via ACH</strong> in tonight's batch. Sigma receives funds next business day.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.15s">
+          <div class="telepathy-when">Within 48 hours</div>
+          <div class="telepathy-what"><strong>Early-pay discount captured</strong> — $85.74 saved on this invoice alone. Annualized for Sigma volume: ~$3,200.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.3s">
+          <div class="telepathy-when">Around June 9</div>
+          <div class="telepathy-what">Sigma's <strong>next invoice expected</strong> based on order cadence. I'll auto-match it to whichever PO is open.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.45s">
+          <div class="telepathy-when">For your grant</div>
+          <div class="telepathy-what">R01-CA248932 burn updated — <strong>$4,287 reclassified</strong> from encumbered to spent. New balance: $128,400.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.6s">
+          <div class="telepathy-when">For you</div>
+          <div class="telepathy-what">Behavioral nudge logged: <strong>3rd month in a row</strong> in the top 10% for receipt response time. Your AP team notices.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-end">
+      <div class="demo-end-title">End of demo</div>
+      <div class="demo-end-actions">
+        <a href="index.html" class="btn-ghost">← Back to landing</a>
+        <button class="btn-ghost" onclick="restart()">↻ Restart demo</button>
+        <a href="catalog-guided-buying.html" class="btn-ghost">Catalog scenario</a>
+        <a href="ap-operations.html" class="btn-ghost">See AP perspective</a>
+      </div>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  if(!instant){
+    STATE.isAnimating = true;
+    const agentMsg = buildAgentMsg();
+    agentMsg.id = 'beat-8-agent';
+    CONV.insertBefore(agentMsg, wrap);
+    scrollDown();
+    await sleep(700);
+    const bubble = agentMsg.querySelector('.msg-bubble');
+    bubble.innerHTML = '<span class="msg-text"></span>';
+    await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_submitted, 13);
+    scrollDown();
+    STATE.isAnimating = false;
+  } else {
+    const agentMsg = buildAgentMsgStatic(SCRIPT.agent_submitted);
+    agentMsg.id = 'beat-8-agent';
+    CONV.insertBefore(agentMsg, wrap);
+  }
+}
+
+/* ── CONTROL FLOW ── */
+async function renderUpToStep(targetStep){
+  CONV.innerHTML = '';
+  STATE.receiptConfirmed = targetStep >= 6;
+  STATE.submitted = targetStep >= 8;
+  if(targetStep >= 1) renderBeat1();
+  if(targetStep >= 2) await renderBeat2(true);
+  if(targetStep >= 3) await renderBeat3(true);
+  if(targetStep >= 4) await renderBeat4(true);
+  if(targetStep >= 5) await renderBeat5(true);
+  if(targetStep >= 6) await renderBeat6(true);
+  if(targetStep >= 7) await renderBeat7(true);
+  if(targetStep >= 8) await renderBeat8(true);
+  buildStepDots();
+  updateHash();
+  scrollDown();
+}
+
+async function advance(){
+  if(STATE.isAnimating) return;
+  if(STATE.step >= TOTAL_STEPS) return;
+  if(STATE.step === 5 && !STATE.receiptConfirmed){
+    STATE.step = 6;buildStepDots();updateHash();
+    await renderBeat6(false);return;
+  }
+  if(STATE.step === 7 && !STATE.submitted){
+    STATE.step = 8;buildStepDots();updateHash();
+    await renderBeat8(false);return;
+  }
+  STATE.step++;buildStepDots();updateHash();
+  switch(STATE.step){
+    case 2: await renderBeat2(false); break;
+    case 3: await renderBeat3(false); break;
+    case 4: await renderBeat4(false); break;
+    case 5: await renderBeat5(false); break;
+    case 6: await renderBeat6(false); break;
+    case 7: await renderBeat7(false); break;
+    case 8: await renderBeat8(false); break;
+  }
+}
+
+async function goBack(){
+  if(STATE.isAnimating || STATE.step <= 1) return;
+  STATE.step--;
+  await renderUpToStep(STATE.step);
+}
+function goNext(){advance()}
+
+async function confirmReceipt(yes){
+  if(STATE.isAnimating || STATE.step !== 5) return;
+  if(!yes){
+    // Brief visual feedback but don't proceed
+    return;
+  }
+  STATE.step = 6;buildStepDots();updateHash();
+  await renderBeat6(false);
+}
+
+async function releasePayment(){
+  if(STATE.isAnimating || STATE.step !== 7) return;
+  STATE.step = 8;buildStepDots();updateHash();
+  await renderBeat8(false);
+}
+
+async function restart(){
+  STATE.step = 1;STATE.receiptConfirmed = false;STATE.submitted = false;
+  await renderUpToStep(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateHash(){history.replaceState(null,'',`#step-${STATE.step}`)}
+
+async function init(){
+  const hash = window.location.hash.match(/step-(\d+)/);
+  let initialStep = 1;
+  if(hash && hash[1]) initialStep = Math.min(Math.max(parseInt(hash[1],10),1),TOTAL_STEPS);
+  STATE.step = initialStep;
+  await renderUpToStep(initialStep);
+}
+
+document.addEventListener('keydown', e => {
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if(e.code === 'Space' || e.code === 'ArrowRight'){e.preventDefault();advance()}
+  else if(e.code === 'ArrowLeft'){e.preventDefault();goBack()}
+  else if(e.code === 'Escape'){restart()}
+});
+
+init();
+</script>
 
 </body>
 </html>

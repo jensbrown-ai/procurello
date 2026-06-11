@@ -3,603 +3,1296 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Procurello Guided Buying</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Procurello — Non-catalog service request (live demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
- :root {
- /* Brand palette DS v2 */
- --ink: #1A1016;
- --aubergine: #3C1239;
- --plum: #5D1E58;
- --brand: #7C3AED;
- --brand-light: #A87CE8;
- --violet-dim: #2D1B4E;
-
- /* Earth neutrals */
- --bg: #F5F2EF;
- --surface: #FFFFFF;
- --surface-2: #EDE8E3;
- --line: #D9D2CB;
- --line-2: #B8AFA6;
- --border: #D9D2CB;
-
- /* Text */
- --text-primary: #1F1A17;
- --text-secondary: #7A6E65;
- --text-muted: #B8AFA6;
-
- /* Semantic status muted, not neon */
- --green: #3D6B4A;
- --amber: #7A5C1E;
- --red: #7A2C1E;
-
- /* Soft tints */
- --brand-soft: #EDE9FE;
- --green-soft: #E4F1EB;
- --amber-soft: #F5EDD8;
- --red-soft: #FBEBE8;
-
- /* Typography */
- --font-display: 'DM Serif Display', Georgia, serif;
- --font-body: 'Karla', 'Helvetica Neue', sans-serif;
- --font-mono: 'DM Mono', 'Courier New', monospace;
-
- /* Radius: intentionally minimal */
- --r: 0px;
- --rs: 2px;
- --rl: 0px;
-
- /* Shadows: crisp offset, no blur */
- --shadow-sm: 2px 2px 0px #D9D2CB;
- --shadow-md: 4px 4px 0px #D9D2CB;
- --shadow-brand: 4px 4px 0px rgba(92,30,88,0.25);
+:root {
+  /* Procurello Design System v3 */
+  --ink:#1A1016; --aubergine:#3C1239; --plum:#5D1E58;
+  --brand:#7C3AED; --brand-light:#A87CE8; --violet-dim:#2D1B4E;
+  --bg:#F5F2EF; --surface:#FFFFFF; --surface-2:#EDE8E3;
+  --line:#D9D2CB; --line-2:#B8AFA6;
+  --text-primary:#1F1A17; --text-secondary:#7A6E65; --text-muted:#B8AFA6;
+  --green:#3D6B4A; --green-soft:#E4F1EB;
+  --amber:#7A5C1E; --amber-soft:#F5EDD8;
+  --red:#7A2C1E; --red-soft:#FBEBE8;
+  --teal:#2A6F73; --teal-soft:#E0EDEE;
+  --brand-soft:#EDE9FE; --purple-soft:#EFE8F5;
+  --font-display:'DM Serif Display',Georgia,serif;
+  --font-body:'Karla','Helvetica Neue',sans-serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+  --shadow-sm:2px 2px 0px #D9D2CB;
+  --shadow-md:4px 4px 0px #D9D2CB;
+  --shadow-brand:4px 4px 0px rgba(92,30,88,0.25);
 }
- *{box-sizing:border-box;margin:0;padding:0}
- body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
- .app{display:grid;grid-template-columns:220px 1fr 380px;min-height:calc(100vh - 52px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--text-primary);
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+  font-size:0.9375rem;line-height:1.6;
+}
 
- /* SIDEBAR */
- .sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%);border-right:none;padding:20px 14px;display:flex;flex-direction:column;gap:2px}
- .nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:2px;color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:500}
- .nav:hover{background:rgba(255,255,255,0.07);color:var(--ink)}
- .nav.active{background:var(--brand-soft);color:var(--brand)}
- .nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
- .nav .pill{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 6px;border-radius:0;font-weight:600}
- .nav-h{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.35);padding:18px 10px 6px;font-weight:600}
- .sb-foot{margin-top:auto;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 10px 0}
- .av{width:30px;height:30px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
- .av-i{flex:1;min-width:0}
- .av-n{font-size:12px;font-weight:600}
- .av-r{font-size:11px;color:var(--ink-3)}
+/* ── TOPBAR (matches other authenticated pages) ── */
+.topbar{
+  position:sticky;top:0;background:rgba(245,242,239,.9);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);z-index:200
+}
+.topbar::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);
+  pointer-events:none
+}
+.topbar-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;height:56px;max-width:1180px;margin:0 auto
+}
+.tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.tb-dot{
+  width:28px;height:28px;border-radius:2px;
+  background:linear-gradient(135deg,var(--aubergine),var(--plum));
+  display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;font-family:var(--font-body)
+}
+.tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em}
+.tb-sub{font-size:11px;color:var(--text-secondary);margin-top:1px}
+.tb-links{display:flex;gap:24px;font-size:13px}
+.tb-links a{color:var(--text-secondary);text-decoration:none;transition:color .15s}
+.tb-links a:hover{color:var(--text-primary)}
+.tb-user{display:flex;align-items:center;gap:10px}
+.tb-uname{font-size:12px;color:var(--text-secondary)}
+.tb-av{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--brand),var(--brand-light));
+  color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600
+}
 
- /* MAIN */
- .main{padding:32px 40px 60px;overflow-y:auto;max-height:calc(100vh - 52px)}
- .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin-bottom:14px}
- .crumb .s{color:var(--line-2)}
- h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
- .lede{color:var(--ink-2);font-size:14px;margin-bottom:24px;max-width:620px}
+/* ── DEMO LAYOUT ── */
+.demo-wrap{max-width:880px;margin:0 auto;padding:32px 24px 160px;position:relative}
 
- /* COMPOSER */
- .composer{background:var(--surface);border:1px solid var(--line);border-radius:0;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
- .c-in{padding:16px 18px 12px}
- .c-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
- .spk{width:12px;height:12px;color:var(--brand)}
- .c-txt{font-size:15px;color:var(--ink);min-height:20px}
- .c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}
- .c-acts{display:flex;gap:4px;flex-wrap:wrap}
- .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:12px;cursor:pointer;border:1px solid transparent}
- .chip:hover{border-color:var(--line-2);color:var(--ink)}
- .chip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
- .btn{padding:8px 14px;border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .15s}
- .btn:hover{background:var(--surface-2)}
- .btn-p{background:var(--aubergine);color:rgba(255,255,255,.92);box-shadow:var(--shadow-brand)}
- .btn-p:hover{background:var(--plum)}
+.demo-intro{
+  padding:24px 28px;background:var(--surface);
+  border:1px solid var(--line);box-shadow:var(--shadow-sm);
+  margin-bottom:28px
+}
+.demo-eyebrow{
+  font-family:var(--font-mono);font-size:.65rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.14em;color:var(--plum);
+  margin-bottom:8px;display:flex;align-items:center;gap:8px
+}
+.demo-eyebrow .live-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 0 3px var(--green-soft);
+  animation:livepulse 2s ease-in-out infinite
+}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:.4}}
+.demo-title{font-family:var(--font-display);font-size:1.5rem;font-weight:400;line-height:1.2;color:var(--text-primary);margin-bottom:6px}
+.demo-title em{color:var(--aubergine);font-style:italic}
+.demo-lede{font-size:.875rem;color:var(--text-secondary);line-height:1.6;max-width:620px}
+.demo-hint{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+  font-family:var(--font-mono);font-size:.7rem;color:var(--text-secondary);
+  letter-spacing:.04em;display:flex;gap:14px;flex-wrap:wrap
+}
+.demo-hint kbd{
+  font-family:var(--font-mono);font-size:.65rem;background:var(--surface-2);
+  border:1px solid var(--line);padding:1px 6px;border-radius:3px;color:var(--text-primary)
+}
 
- /* THREAD */
- .thread{margin-top:24px}
- .turn{margin-bottom:22px}
- .t-user{display:flex;justify-content:flex-end;margin-bottom:14px}
- .t-user-b{background:var(--accent);color:#fff;padding:10px 14px;border-radius:0 14px 4px 14px;font-size:14px;max-width:80%;line-height:1.5}
- .t-agent{display:flex;gap:12px}
- .a-dot{width:28px;height:28px;border-radius:0;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
- .a-body{flex:1;min-width:0}
- .a-name{font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
- .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft);display:inline-block}
- .a-msg{font-size:14px;color:var(--ink);line-height:1.6}
- .a-msg p{margin-bottom:10px}
- .a-msg strong{font-weight:600}
+/* ── CONVERSATION ── */
+.conv{display:flex;flex-direction:column;gap:18px}
+.msg{display:flex;gap:12px;animation:msgIn .35s ease-out}
+.msg.from-user{flex-direction:row-reverse}
+.msg-av{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  display:grid;place-items:center;font-size:11px;font-weight:600;color:#fff;
+  font-family:var(--font-body)
+}
+.msg.from-user .msg-av{background:linear-gradient(135deg,var(--brand),var(--brand-light))}
+.msg.from-agent .msg-av{background:linear-gradient(135deg,var(--aubergine),var(--plum))}
+.msg-body{max-width:78%}
+.msg-meta{
+  font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--text-secondary);margin-bottom:4px;display:flex;gap:8px;align-items:center
+}
+.msg.from-user .msg-meta{justify-content:flex-end}
+.msg-bubble{
+  padding:12px 16px;font-size:.9375rem;line-height:1.55;
+  border:1px solid var(--line);background:var(--surface);
+  box-shadow:var(--shadow-sm);
+  white-space:pre-wrap;word-wrap:break-word
+}
+.msg.from-user .msg-bubble{
+  background:var(--brand-soft);
+  border-color:#D8CDF5;
+  color:var(--text-primary)
+}
+.msg.from-agent .msg-bubble{
+  border-left:3px solid var(--aubergine);
+  background:var(--surface);
+  position:relative
+}
+.msg.from-agent .msg-bubble strong{color:var(--aubergine);font-weight:600}
 
- /* INLINE CARDS */
- .card{background:var(--surface);border:1px solid var(--line);border-radius:0;margin:10px 0;overflow:hidden}
- .card-h{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
- .card-t{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
- .card-t .ai,.sum-h .ai,.card-h .ai{font-size:9px;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
- .card-b{padding:12px 14px}
+/* Typing indicator */
+.typing-dots{display:inline-flex;gap:4px;align-items:center;padding:6px 4px}
+.typing-dots span{
+  width:6px;height:6px;border-radius:50%;background:var(--text-secondary);
+  animation:dotPulse 1.4s ease-in-out infinite
+}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotPulse{
+  0%,60%,100%{opacity:.3;transform:translateY(0)}
+  30%{opacity:1;transform:translateY(-2px)}
+}
 
- /* SUPPLIER RECS */
- .sup-grid{display:grid;grid-template-columns:1fr;gap:8px}
- .sup{display:flex;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:2px;cursor:pointer;transition:all .15s;background:var(--surface)}
- .sup:hover{border-color:var(--line-2);background:var(--surface-2)}
- .sup.rec{border-color:var(--green);background:linear-gradient(180deg,var(--green-soft) 0%,var(--surface) 70%)}
- .sup-logo{width:38px;height:38px;border-radius:2px;background:var(--surface-2);display:grid;place-items:center;font-weight:700;font-size:11px;color:var(--ink-2);flex-shrink:0;border:1px solid var(--line)}
- .sup-i{flex:1;min-width:0}
- .sup-n{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
- .sup-m{font-size:11px;color:var(--ink-3);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap}
- .sup-m b{color:var(--ink-2);font-weight:500}
- .sup-price{text-align:right;font-size:13px;font-weight:600;flex-shrink:0}
- .sup-price-s{font-size:11px;color:var(--ink-3);font-weight:400;margin-top:2px}
- .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:2px;font-size:10px;font-weight:600}
- .b-g{background:var(--green-soft);color:var(--green)}
- .b-a{background:var(--amber-soft);color:var(--amber)}
- .b-n{background:var(--surface-2);color:var(--ink-2)}
+/* Cursor (typing animation) */
+.typing-cursor{
+  display:inline-block;width:2px;height:1.1em;background:var(--text-primary);
+  vertical-align:text-bottom;margin-left:1px;
+  animation:cursorBlink 1s steps(2) infinite
+}
+@keyframes cursorBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
- /* FILLED FIELDS */
- .ff-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
- .ff{background:var(--surface-2);padding:10px 12px;border-radius:2px;border:1px solid var(--line)}
- .ff.full{grid-column:1/-1}
- .ff-l{font-size:11px;color:var(--ink-3);font-weight:500;margin-bottom:3px}
- .ff-v{font-size:13px;font-weight:500}
- .ff-v .muted{color:var(--ink-3);font-weight:400}
+/* ── COMPOSER (initial state) ── */
+.composer{
+  background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);
+  padding:18px 20px;margin-bottom:8px
+}
+.composer-label{
+  font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:8px
+}
+.composer-label svg{width:12px;height:12px;stroke:var(--plum);stroke-width:1.5;fill:none}
+.composer-text{
+  font-size:1.0625rem;line-height:1.55;color:var(--text-primary);
+  min-height:60px;padding:6px 0;font-family:var(--font-body)
+}
+.composer-text.placeholder{color:var(--text-muted)}
+.composer-foot{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:12px;margin-top:12px;border-top:1px solid var(--line)
+}
+.composer-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  font-family:var(--font-mono);font-size:.7rem;font-weight:500;
+  padding:5px 10px;border:1px solid var(--line);
+  color:var(--text-secondary);background:var(--surface-2);cursor:default;
+  text-transform:none;letter-spacing:0
+}
+.composer-send{
+  padding:8px 18px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;
+  background:var(--aubergine);color:#fff;border:none;cursor:pointer;
+  box-shadow:var(--shadow-brand);transition:all .12s;
+  display:inline-flex;align-items:center;gap:8px
+}
+.composer-send:hover{background:var(--plum)}
+.composer-send:disabled{background:var(--text-muted);box-shadow:none;cursor:not-allowed}
+.composer-send.ready{animation:btnReady 1.8s ease-in-out infinite}
+@keyframes btnReady{
+  0%,100%{box-shadow:var(--shadow-brand)}
+  50%{box-shadow:0 0 0 4px rgba(124,58,237,.12), var(--shadow-brand)}
+}
 
- /* FOLLOWUP */
- .fu{background:var(--surface);border:1px dashed var(--line-2);border-radius:0;padding:13px;margin:10px 0}
- .fu-q{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink-2)}
- .fu-opts{display:flex;flex-wrap:wrap;gap:6px}
- .opt{padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;cursor:pointer;background:var(--surface);transition:all .15s}
- .opt:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* ── SUPPLIER CARDS ── */
+.supplier-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px
+}
+.sup-card{
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow-sm);padding:16px;cursor:pointer;
+  transition:all .2s;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;animation:cardIn .4s ease-out both
+}
+.sup-card:hover{border-color:var(--plum);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.sup-card.recommended{border-color:var(--plum);box-shadow:var(--shadow-brand)}
+.sup-card.faded{opacity:.35;cursor:default;transform:none!important;box-shadow:var(--shadow-sm)!important}
+.sup-card.faded:hover{border-color:var(--line);transform:none}
+.sup-card.selected{border-color:var(--aubergine);box-shadow:var(--shadow-brand)}
 
- /* INLINE COMPOSER */
- .icomp{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:0;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 4px 12px -8px rgba(0,0,0,.08)}
- .icomp input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:10px 0}
- .icomp input::placeholder{color:var(--ink-3)}
+.sup-badge{
+  position:absolute;top:0;right:0;
+  font-family:var(--font-mono);font-size:.58rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;padding:4px 10px;
+  background:var(--aubergine);color:#fff
+}
+.sup-selected-mark{
+  position:absolute;top:8px;right:8px;
+  width:24px;height:24px;background:var(--aubergine);color:#fff;
+  display:grid;place-items:center;
+  animation:checkPop .3s ease-out
+}
+.sup-selected-mark svg{width:14px;height:14px;stroke:#fff;stroke-width:2.5;fill:none}
+@keyframes checkPop{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 
- /* RIGHT SUMMARY */
- .sum{background:var(--surface);border-left:1px solid var(--line);padding:32px 24px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
- .sum-s{margin-bottom:22px}
- .sum-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
- .draft{background:linear-gradient(180deg,var(--accent-soft) 0%,var(--surface) 60%);border:1px solid var(--line);border-radius:0;padding:14px}
- .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:600;background:var(--amber-soft);color:var(--amber);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em}
- .pill .d{width:5px;height:5px;border-radius:50%;background:currentColor}
- .draft-t{font-size:15px;font-weight:600;margin-bottom:4px;line-height:1.3}
- .draft-sub{font-size:12px;color:var(--ink-3);margin-bottom:14px}
- .kv{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px dashed var(--line);gap:10px}
- .kv:last-child{border-bottom:none;padding-top:10px}
- .kv-k{color:var(--ink-3);white-space:nowrap}
- .kv-v{font-weight:500;color:var(--ink);text-align:right}
- .kv-v.big{font-size:15px;font-weight:600}
+.sup-name{
+  font-family:var(--font-display);font-size:1.0625rem;line-height:1.2;
+  color:var(--text-primary);margin-bottom:6px;margin-right:24px
+}
+.sup-meta{
+  font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--text-secondary);margin-bottom:12px
+}
+.sup-details{flex:1;font-size:.8125rem;color:var(--text-secondary);line-height:1.55}
+.sup-details strong{color:var(--text-primary);font-weight:600}
+.sup-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.tag-sm{
+  font-family:var(--font-mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;
+  padding:3px 7px;border:1px solid currentColor;font-weight:500
+}
+.tag-sm.tg-ok{color:var(--green);background:var(--green-soft)}
+.tag-sm.tg-warn{color:var(--amber);background:var(--amber-soft)}
+.tag-sm.tg-neutral{color:var(--text-secondary);background:var(--surface-2);border-color:var(--line)}
+.tag-sm.tg-info{color:var(--plum);background:var(--purple-soft)}
+.sup-hint{
+  text-align:center;margin-top:10px;font-family:var(--font-mono);
+  font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em
+}
 
- /* APPROVAL */
- .ap{display:flex;gap:10px;padding:10px 0;position:relative}
- .ap:not(:last-child)::before{content:'';position:absolute;left:10px;top:30px;bottom:-2px;width:1px;background:var(--line-2)}
- .ap-m{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;font-size:10px;font-weight:600;z-index:1}
- .ap-m.done{background:var(--green);color:#fff}
- .ap-m.cur{background:var(--accent);color:#fff;box-shadow:0 0 0 3px var(--accent-soft)}
- .ap-m.pend{background:var(--surface);color:var(--ink-3);border:1px dashed var(--line-2)}
- .ap-i{flex:1;min-width:0;padding-top:1px}
- .ap-n{font-size:12px;font-weight:600;line-height:1.3}
- .ap-d{font-size:11px;color:var(--ink-3);margin-top:2px}
+/* ── REQUISITION CARD ── */
+.req-card{
+  background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);
+  margin-top:6px;overflow:hidden
+}
+.req-head{
+  padding:14px 18px;background:var(--surface-2);border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center
+}
+.req-title{
+  font-family:var(--font-mono);font-size:.7rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--text-primary)
+}
+.req-title-sub{font-size:.7rem;color:var(--text-secondary);letter-spacing:.04em}
+.req-rows{padding:4px 0}
+.req-row{
+  display:grid;grid-template-columns:180px 1fr;gap:18px;
+  padding:9px 18px;font-size:.8125rem;border-bottom:1px solid var(--line)
+}
+.req-row:last-child{border-bottom:none}
+.req-label{
+  font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text-secondary);font-weight:500;padding-top:1px
+}
+.req-value{color:var(--text-primary);font-weight:500;animation:fieldIn .25s ease-out}
+.req-value.populating::after{
+  content:'';display:inline-block;width:6px;height:1em;background:var(--brand);
+  vertical-align:text-bottom;margin-left:2px;animation:cursorBlink .6s steps(2) infinite
+}
+.req-value.confirm{
+  color:var(--plum);font-weight:600;
+  display:inline-flex;align-items:center;gap:6px
+}
+.req-value.confirm::before{
+  content:'';width:5px;height:5px;background:var(--plum);
+  display:inline-block;border-radius:50%;flex-shrink:0
+}
+@keyframes fieldIn{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 
- /* CHECKS */
- .chk{display:flex;align-items:flex-start;gap:8px;padding:7px 0;font-size:12px}
- .chk-i{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
- .chk-i.ok{background:var(--green);color:#fff}
- .chk-i.warn{background:var(--amber);color:#fff}
- .chk-i svg{width:8px;height:8px;stroke:currentColor;stroke-width:3;fill:none}
- .chk-t{color:var(--ink-2)}
- .chk-t b{color:var(--ink);font-weight:600}
+/* ── COMPLIANCE PANEL ── */
+.compliance-panel{
+  background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);
+  padding:16px 18px;margin-top:6px
+}
+.compliance-head{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px
+}
+.compliance-title{
+  font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;
+  font-weight:600;color:var(--text-primary)
+}
+.compliance-status{
+  font-family:var(--font-mono);font-size:.7rem;color:var(--green);font-weight:600;
+  display:inline-flex;align-items:center;gap:6px
+}
+.compliance-status .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:livepulse 1.5s ease-in-out infinite
+}
+.compliance-status.running .dot{background:var(--amber)}
+.compliance-status.running{color:var(--amber)}
+.compliance-progress{
+  height:3px;background:var(--surface-2);position:relative;overflow:hidden;margin-bottom:10px
+}
+.compliance-progress-bar{
+  height:100%;background:linear-gradient(90deg,var(--brand),var(--aubergine));
+  width:0%;transition:width 1.4s ease-out
+}
+.compliance-checks{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:6px 18px;
+  font-size:.78rem;color:var(--text-secondary)
+}
+.compliance-check{display:flex;align-items:center;gap:8px;opacity:0;animation:checkIn .25s ease-out forwards}
+.compliance-check.fail{color:var(--red)}
+.compliance-check::before{
+  content:'';width:14px;height:14px;background:var(--green);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.5 8.5L6.5 11.5L12.5 5.5' stroke='white' stroke-width='2' fill='none'/></svg>");
+  background-position:center;background-repeat:no-repeat;flex-shrink:0
+}
+@keyframes checkIn{
+  from{opacity:0;transform:translateX(-4px)}
+  to{opacity:1;transform:translateX(0)}
+}
 
- .actions{margin-top:18px;display:flex;flex-direction:column;gap:8px}
- .actions .btn{width:100%;text-align:center;padding:10px}
+/* ── APPROVAL PATH ── */
+.approval-path{
+  background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);
+  padding:16px 18px;margin-top:6px
+}
+.approval-path-head{
+  font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text-primary);font-weight:600;margin-bottom:14px
+}
+.approval-chain{display:flex;align-items:center;gap:0;flex-wrap:wrap}
+.approval-step{
+  display:flex;align-items:center;gap:10px;padding:8px 0;flex:1;min-width:0
+}
+.approval-step-av{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  display:grid;place-items:center;font-size:11px;font-weight:600;color:#fff
+}
+.approval-step.current .approval-step-av{background:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.approval-step.next .approval-step-av{background:var(--surface-2);color:var(--text-secondary);border:1px solid var(--line)}
+.approval-step.done .approval-step-av{background:var(--aubergine)}
+.approval-step-info{min-width:0;flex:1}
+.approval-step-name{font-size:.8125rem;font-weight:600;color:var(--text-primary)}
+.approval-step-role{font-size:.7rem;color:var(--text-secondary);margin-top:1px}
+.approval-arrow{color:var(--text-muted);padding:0 4px;font-size:.875rem}
 
- /* ── Topbar (cross-page nav) ─────────────────────────────── */
- .topbar{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:200}
- .topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(92,30,88,.35) 30%,rgba(60,18,57,.35) 70%,transparent);pointer-events:none}
- .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;max-width:1600px;margin:0 auto}
- .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
- .tb-dot{width:28px;height:28px;border-radius:2px;background:var(--aubergine);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;box-shadow:var(--shadow-sm)}
- .tb-name{font-weight:600;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
- .tb-sub{font-size:11px;color:var(--ink-3)}
- .tb-links{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink-2);font-weight:500}
- .tb-links a{text-decoration:none;color:var(--ink-2);transition:color .15s}
- .tb-links a:hover{color:var(--ink)}
- .tb-links a.tb-active{color:var(--plum);font-weight:600;border-bottom:2px solid var(--plum)}
- .tb-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
- .tb-uname{font-size:12px;color:var(--ink-3);white-space:nowrap}
- .tb-av{width:28px;height:28px;border-radius:50%;background:var(--aubergine);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
+.approval-note{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:.78rem;color:var(--text-secondary);display:flex;gap:6px;align-items:center
+}
+.approval-note strong{color:var(--text-primary);font-weight:600}
 
- 
- /* Sidebar nav light text on dark aubergine */
- .sb .nav{color:rgba(255,255,255,.75)}
- .sb .nav svg{stroke:rgba(255,255,255,.55)}
- .sb .nav:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92)}
- .sb .nav:hover svg{stroke:rgba(255,255,255,.8)}
- .sb .nav.active{color:#fff;background:rgba(168,124,232,.2);border-left-color:var(--brand-light)}
- .sb .nav.active svg{stroke:var(--brand-light)}
- .sb .nav-h{color:rgba(255,255,255,.35)}
- .sb .pill{background:rgba(168,124,232,.25);color:var(--brand-light)}
- .sb .pill.amber{background:rgba(122,92,30,.35);color:#FBBF24}
+/* ── SUBMIT BUTTON ── */
+.submit-row{
+  margin-top:8px;display:flex;gap:10px;justify-content:flex-end
+}
+.btn-submit{
+  padding:11px 24px;font-family:var(--font-body);font-size:.875rem;font-weight:600;
+  background:var(--aubergine);color:#fff;border:none;cursor:pointer;
+  box-shadow:var(--shadow-brand);transition:all .12s;
+  display:inline-flex;align-items:center;gap:10px
+}
+.btn-submit:hover{background:var(--plum)}
+.btn-submit:disabled{background:var(--text-muted);cursor:not-allowed;box-shadow:none}
+.btn-submit svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
 
- 
- /* Sidebar gradient + guaranteed light text (placed last, high specificity) */
- aside.sb{background:linear-gradient(180deg,#3C1239 0%,#2D1B4E 100%)}
- aside.sb .nav{color:rgba(255,255,255,.75)!important}
- aside.sb .nav svg{stroke:rgba(255,255,255,.5)!important}
- aside.sb .nav:hover{background:rgba(255,255,255,.07)!important;color:rgba(255,255,255,.92)!important}
- aside.sb .nav:hover svg{stroke:rgba(255,255,255,.8)!important}
- aside.sb .nav.active{color:#fff!important;background:rgba(168,124,232,.2)!important;border-left:2px solid var(--brand-light)!important}
- aside.sb .nav.active svg{stroke:var(--brand-light)!important}
- aside.sb .nav-h{color:rgba(255,255,255,.3)!important}
- aside.sb .pill{background:rgba(168,124,232,.25)!important;color:var(--brand-light)!important}
- aside.sb .pill.amber{background:rgba(122,92,30,.4)!important;color:#FBBF24!important}
+/* ── SUBMISSION CONFIRMATION + TELEPATHY ── */
+.confirm-card{
+  background:linear-gradient(135deg, #2D1B4E 0%, #3C1239 100%);
+  color:rgba(255,255,255,.92);padding:24px 28px;margin-top:8px;
+  box-shadow:var(--shadow-md);position:relative;overflow:hidden
+}
+.confirm-card::before{
+  content:'';position:absolute;top:-100px;right:-100px;width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(168,124,232,.22),transparent 70%);pointer-events:none
+}
+.confirm-eyebrow{
+  font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;
+  color:rgba(168,124,232,.9);margin-bottom:10px;display:flex;align-items:center;gap:8px
+}
+.confirm-eyebrow .dot{
+  width:6px;height:6px;background:var(--brand-light);border-radius:50%;
+  box-shadow:0 0 0 3px rgba(168,124,232,.25);animation:livepulse 1.5s ease-in-out infinite
+}
+.confirm-title{
+  font-family:var(--font-display);font-size:1.5rem;font-weight:400;line-height:1.2;
+  color:#fff;margin-bottom:6px
+}
+.confirm-ref{
+  font-family:var(--font-mono);font-size:.85rem;letter-spacing:.04em;
+  color:rgba(168,124,232,.9);margin-bottom:18px
+}
+.telepathy-grid{margin-top:14px}
+.telepathy-item{
+  display:grid;grid-template-columns:160px 1fr;gap:18px;
+  padding:10px 0;border-top:1px solid rgba(255,255,255,.1);
+  font-size:.8125rem;line-height:1.55;color:rgba(255,255,255,.75);
+  animation:teleIn .4s ease-out both
+}
+.telepathy-item:first-child{border-top:none;padding-top:6px}
+.telepathy-when{
+  font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--brand-light);font-weight:600
+}
+.telepathy-what strong{color:#fff;font-weight:600}
+@keyframes teleIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
- </style>
+.demo-end{
+  margin-top:32px;padding:20px;background:var(--surface);
+  border:1px solid var(--line);text-align:center
+}
+.demo-end-title{
+  font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--text-secondary);margin-bottom:14px
+}
+.demo-end-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-ghost{
+  padding:8px 16px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;
+  background:transparent;color:var(--text-primary);border:1px solid var(--line-2);
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  transition:all .12s
+}
+.btn-ghost:hover{border-color:var(--aubergine);color:var(--aubergine)}
+
+/* ── DEMO CONTROLS (floating) ── */
+.demo-controls{
+  position:fixed;bottom:0;left:0;right:0;
+  background:linear-gradient(180deg,rgba(245,242,239,0) 0%,rgba(245,242,239,.95) 30%);
+  padding:32px 24px 18px;z-index:100;
+  display:flex;justify-content:center;pointer-events:none
+}
+.demo-controls-inner{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);padding:8px 8px 8px 16px;
+  border:1px solid var(--line);box-shadow:var(--shadow-md);
+  pointer-events:auto
+}
+.demo-step-indicator{
+  display:flex;gap:4px;align-items:center
+}
+.demo-step-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--line-2);
+  transition:all .25s
+}
+.demo-step-dot.active{background:var(--aubergine);transform:scale(1.5)}
+.demo-step-dot.completed{background:var(--plum)}
+.demo-step-label{
+  font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--text-secondary);margin:0 8px;white-space:nowrap
+}
+.demo-step-label b{color:var(--text-primary);font-weight:600}
+.btn-control{
+  padding:7px 12px;font-family:var(--font-body);font-size:.8125rem;font-weight:600;
+  border:none;cursor:pointer;background:var(--surface-2);color:var(--text-primary);
+  display:inline-flex;align-items:center;gap:6px;transition:all .12s
+}
+.btn-control:hover:not(:disabled){background:var(--line)}
+.btn-control:disabled{opacity:.4;cursor:not-allowed}
+.btn-control.primary{
+  background:var(--aubergine);color:#fff;box-shadow:var(--shadow-brand)
+}
+.btn-control.primary:hover:not(:disabled){background:var(--plum)}
+.btn-control svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none}
+
+/* Animations */
+@keyframes msgIn{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Initial states - hidden until step activates */
+.beat{display:none}
+.beat.visible{display:block;animation:msgIn .4s ease-out}
+
+/* Print / reduce motion */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* Mobile */
+@media (max-width:720px){
+  .supplier-grid{grid-template-columns:1fr}
+  .req-row{grid-template-columns:1fr;gap:4px}
+  .req-label{padding-top:0}
+  .telepathy-item{grid-template-columns:1fr}
+  .demo-controls-inner{flex-wrap:wrap;justify-content:center}
+}
+</style>
 </head>
 <body>
 
-
 <!-- ── Topbar ── -->
 <nav class="topbar">
- <div class="topbar-inner">
- <a href="index.html" class="tb-brand">
- <div class="tb-dot">P</div>
- <div>
- <div class="tb-name">Procurello</div>
- <div class="tb-sub">Guided buying</div>
- </div>
- </a>
- <div class="tb-links">
- <a href="index.html#concept">Concept</a>
- <a href="index.html#different">Why It Matters</a>
- <a href="index.html#demos">Demos</a>
- </div>
- <div class="tb-user">
- <span class="tb-uname">Jamie Mendez &nbsp;·&nbsp; Lab Manager</span>
- <div class="tb-av">JM</div>
- </div>
- </div>
+  <div class="topbar-inner">
+    <a href="index.html" class="tb-brand">
+      <div class="tb-dot">P</div>
+      <div>
+        <div class="tb-name">Procurello</div>
+        <div class="tb-sub">Buyer workspace</div>
+      </div>
+    </a>
+    <div class="tb-links">
+      <a href="index.html#concept">Concept</a>
+      <a href="index.html#different">Why It Matters</a>
+      <a href="index.html#demos">Demos</a>
+    </div>
+    <div class="tb-user">
+      <span class="tb-uname">Jamie Mendez · Lab Manager</span>
+      <div class="tb-av">JM</div>
+    </div>
+  </div>
 </nav>
 
-<div class="app">
+<!-- ── Demo container ── -->
+<div class="demo-wrap">
 
- <!-- ===== SIDEBAR ===== -->
- <aside class="sb">
+  <!-- Intro -->
+  <div class="demo-intro">
+    <div class="demo-eyebrow"><span class="live-dot"></span>Interactive Demo · Non-catalog service request</div>
+    <div class="demo-title">A buying request handled <em>conversationally.</em></div>
+    <p class="demo-lede">Walk through how Procurello takes a casual user's plain-language request, classifies the intent, ranks suppliers, and produces a fully compliant requisition with predictive close-out — all without forms.</p>
+    <div class="demo-hint">
+      <span><kbd>Space</kbd> or <kbd>→</kbd> to advance</span>
+      <span><kbd>←</kbd> to step back</span>
+      <span><kbd>Esc</kbd> to restart</span>
+    </div>
+  </div>
 
- <div class="nav active">
- <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
- Buy something
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
- My requests
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
- Approvals <span class="pill">3</span>
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
- Orders
- </div>
-
- <div class="nav-h">Workspace</div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
- Suppliers
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
- Contracts
- </div>
- <div class="nav">
- <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
- Spend insights
- </div>
- </aside>
-
- <!-- ===== MAIN ===== -->
- <main class="main">
- <div class="crumb">
- <span>Shop</span><span class="s">/</span><span>New request</span>
- </div>
-
- <h1>What do you need to buy?</h1>
- <p class="lede">Describe it in plain language I'll find the right supplier, fill in the forms, check policy, and route it for approval.</p>
-
- <!-- COMPOSER -->
- <div class="composer">
- <div class="c-in">
- <div class="c-lbl">
- <svg class="spk" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z"/></svg>
- Ask your buying agent
- </div>
- <div class="c-txt">
- We need a centrifuge serviced and recalibrated for the Wellman lab budget around $4,500, needed by end of month.
- </div>
- </div>
- <div class="c-row">
- <div class="c-acts">
- <span class="chip"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Attach quote</span>
- <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Need-by date</span>
- <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
- </div>
- <button class="btn btn-p">Continue →</button>
- </div>
- </div>
-
- <!-- THREAD -->
- <div class="thread">
-
- <!-- Turn 1 -->
- <div class="turn">
- <div class="t-agent">
- <div class="a-dot">AI</div>
- <div class="a-body">
- <div class="a-name">Buying agent <span class="live"></span> working</div>
- <div class="a-msg">
- <p>Got it. This looks like a <strong>service request</strong> for lab equipment calibration I'm setting it up as a Services line item (not a goods purchase) so the right tax treatment and approvals apply.</p>
- <p>Three suppliers in your network can do centrifuge calibration. I've ranked them by what matters here active contract, lead time, and past performance with Wellman Lab:</p>
-
- <div class="card">
- <div class="card-h">
- <div class="card-t">Recommended suppliers <span class="ai">AI Ranked</span></div>
- <span style="font-size:11px;color:var(--ink-3)">3 of 7 shown</span>
- </div>
- <div class="card-b">
- <div class="sup-grid">
- <div class="sup rec">
- <div class="sup-logo">PRC</div>
- <div class="sup-i">
- <div class="sup-n">
- PrecisionCal Services
- <span class="badge b-g">✓ Preferred</span>
- <span class="badge b-n">MSA active</span>
- </div>
- <div class="sup-m">
- <span><b>5 7 days</b> lead</span>
- <span>Used 4× by your lab</span>
- <span>On-time 98%</span>
- </div>
- </div>
- <div class="sup-price">
- ~$4,200
- <div class="sup-price-s">based on prior orders</div>
- </div>
- </div>
-
- <div class="sup">
- <div class="sup-logo">MTC</div>
- <div class="sup-i">
- <div class="sup-n">
- MetroTest Calibration
- <span class="badge b-g">Diverse-owned</span>
- </div>
- <div class="sup-m">
- <span><b>10 14 days</b> lead</span>
- <span>No prior orders</span>
- <span>Quote required</span>
- </div>
- </div>
- <div class="sup-price">
- Request quote
- <div class="sup-price-s">est. $3,800 4,800</div>
- </div>
- </div>
-
- <div class="sup">
- <div class="sup-logo">LAB</div>
- <div class="sup-i">
- <div class="sup-n">
- LabServ Industries
- <span class="badge b-a">COI expires Jun 30</span>
- </div>
- <div class="sup-m">
- <span><b>3 5 days</b> lead</span>
- <span>Used 12× campus-wide</span>
- <span>On-time 91%</span>
- </div>
- </div>
- <div class="sup-price">
- ~$4,650
- <div class="sup-price-s">last similar order</div>
- </div>
- </div>
- </div>
- </div>
- </div>
-
- <p>My pick is <strong>PrecisionCal</strong> they're under an active MSA, so we skip the quote step and shorten the approval path by one level. Want me to draft it with them?</p>
-
- <div class="fu">
- <div class="fu-q">How should I proceed?</div>
- <div class="fu-opts">
- <span class="opt">✓ Use PrecisionCal</span>
- <span class="opt">Request quotes from all 3</span>
- <span class="opt">Show more suppliers</span>
- <span class="opt">I have a specific vendor in mind</span>
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- Turn 2 -->
- <div class="turn">
- <div class="t-user">
- <div class="t-user-b">Go with PrecisionCal. The machine is the Beckman Allegra X-15R in room 312.</div>
- </div>
-
- <div class="t-agent">
- <div class="a-dot">AI</div>
- <div class="a-body">
- <div class="a-name">Buying agent</div>
- <div class="a-msg">
- <p>Done drafted as a non-catalog services requisition with PrecisionCal. I pulled the asset record for the Beckman Allegra (Asset #WL-0312-04) and attached it so they don't have to ask.</p>
-
- <div class="card">
- <div class="card-h">
- <div class="card-t">Auto-filled from your request <span class="ai">AI</span></div>
- <span style="font-size:11px;color:var(--ink-3)">Click any field to edit</span>
- </div>
- <div class="card-b">
- <div class="ff-grid">
- <div class="ff full">
- <div class="ff-l">Product / service description</div>
- <div class="ff-v">Centrifuge calibration & service Beckman Allegra X-15R (Asset WL-0312-04)</div>
- </div>
- <div class="ff">
- <div class="ff-l">Commodity code</div>
- <div class="ff-v">41103905 · Calibration services</div>
- </div>
- <div class="ff">
- <div class="ff-l">Line item type</div>
- <div class="ff-v">Services</div>
- </div>
- <div class="ff">
- <div class="ff-l">Amount</div>
- <div class="ff-v">$4,200.00 USD</div>
- </div>
- <div class="ff">
- <div class="ff-l">Need by</div>
- <div class="ff-v">May 30, 2026</div>
- </div>
- <div class="ff full">
- <div class="ff-l">Cost object</div>
- <div class="ff-v">Fund 100 · Dept 4421 · Project WL-CAL-26 <span class="muted">(your default for lab maintenance)</span></div>
- </div>
- </div>
- </div>
- </div>
-
- <p>Two things to know before submitting:</p>
-
- <div class="card">
- <div class="card-b" style="padding:6px 14px">
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t"><b>Under MSA</b> no quote required, single-approver path.</div>
- </div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t"><b>Within budget</b> $4,200 leaves $20,800 in your lab maintenance allocation.</div>
- </div>
- <div class="chk">
- <div class="chk-i warn"><svg viewBox="0 0 24 24"><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="16.5"/></svg></div>
- <div class="chk-t"><b>Heads up:</b> this asset is also on Dr. Chen's calibration schedule next quarter. Want me to flag for shared cost-split?</div>
- </div>
- </div>
- </div>
-
- <p style="color:var(--ink-3);font-size:13px">Anything to add, or should I send it for approval?</p>
- </div>
- </div>
- </div>
- </div>
-
- </div>
-
- <!-- INLINE CHAT INPUT -->
- <div class="icomp">
- <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
- <input placeholder="Reply, ask a question, or change something…" />
- <button class="btn btn-p" style="padding:7px 14px">Send</button>
- </div>
-
- </main>
-
- <!-- ===== RIGHT SUMMARY ===== -->
- <aside class="sum">
-
- <div class="sum-s">
- <div class="sum-h">
- <span>Draft requisition</span>
- <span class="ai">Live</span>
- </div>
- <div class="draft">
- <span class="pill"><span class="d"></span>Drafting</span>
- <div class="draft-t">Centrifuge calibration<br/> Wellman Lab</div>
- <div class="draft-sub">Req · auto-numbered on submit</div>
-
- <div class="kv">
- <span class="kv-k">Supplier</span>
- <span class="kv-v">PrecisionCal Services</span>
- </div>
- <div class="kv">
- <span class="kv-k">Type</span>
- <span class="kv-v">Service · MSA</span>
- </div>
- <div class="kv">
- <span class="kv-k">Need by</span>
- <span class="kv-v">May 30, 2026</span>
- </div>
- <div class="kv">
- <span class="kv-k">Cost object</span>
- <span class="kv-v">WL-CAL-26</span>
- </div>
- <div class="kv">
- <span class="kv-k">Total</span>
- <span class="kv-v big">$4,200.00</span>
- </div>
- </div>
- </div>
-
- <div class="sum-s">
- <div class="sum-h"><span>Approval path</span><span style="font-size:11px;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0">Est. 1 day</span></div>
- <div>
- <div class="ap">
- <div class="ap-m done">✓</div>
- <div class="ap-i">
- <div class="ap-n">You (requester)</div>
- <div class="ap-d">Jamie Mendez · ready to submit</div>
- </div>
- </div>
- <div class="ap">
- <div class="ap-m cur">2</div>
- <div class="ap-i">
- <div class="ap-n">Dr. Sarah Wellman</div>
- <div class="ap-d">PI approver · typically responds &lt;4h</div>
- </div>
- </div>
- <div class="ap">
- <div class="ap-m pend">3</div>
- <div class="ap-i">
- <div class="ap-n">Procurement</div>
- <div class="ap-d">Auto-approve under MSA threshold</div>
- </div>
- </div>
- </div>
- </div>
-
- <div class="sum-s">
- <div class="sum-h"><span>Policy & compliance</span></div>
- <div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t">Supplier insurance current</div>
- </div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t">W-9 on file (2024)</div>
- </div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t">Not flagged on watchlists</div>
- </div>
- <div class="chk">
- <div class="chk-i ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
- <div class="chk-t">Funded Project WL-CAL-26</div>
- </div>
- </div>
- </div>
-
- <div class="actions">
- <button class="btn btn-p">Submit for approval</button>
- <button class="btn">Save draft</button>
- </div>
-
- </aside>
+  <!-- Conversation thread (populated dynamically) -->
+  <div class="conv" id="conv"></div>
 
 </div>
+
+<!-- ── Floating controls ── -->
+<div class="demo-controls">
+  <div class="demo-controls-inner">
+    <button class="btn-control" id="btn-back" onclick="goBack()" aria-label="Previous step">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="demo-step-indicator" id="step-dots"></div>
+    <span class="demo-step-label">Step <b id="step-num">1</b> of 8</span>
+    <button class="btn-control primary" id="btn-next" onclick="goNext()" aria-label="Next step">
+      <span id="btn-next-label">Continue</span>
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   PROCURELLO — GUIDED BUYING DEMO
+   Eight-beat conversational walk-through
+═══════════════════════════════════════════════════════════════════ */
+
+const TOTAL_STEPS = 8;
+const TIME = () => new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+
+const STATE = {
+  step: 1,
+  isAnimating: false,
+  supplierSelected: false,
+  submitted: false
+};
+
+const CONV = document.getElementById('conv');
+
+/* ── Step dots indicator ── */
+function buildStepDots() {
+  const c = document.getElementById('step-dots');
+  c.innerHTML = '';
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const d = document.createElement('div');
+    d.className = 'demo-step-dot';
+    if (i < STATE.step) d.classList.add('completed');
+    if (i === STATE.step) d.classList.add('active');
+    c.appendChild(d);
+  }
+  document.getElementById('step-num').textContent = STATE.step;
+  document.getElementById('btn-back').disabled = STATE.step === 1;
+  const nextBtn = document.getElementById('btn-next');
+  const nextLabel = document.getElementById('btn-next-label');
+
+  if (STATE.step === TOTAL_STEPS) {
+    nextBtn.disabled = true;
+    nextLabel.textContent = 'Complete';
+  } else if (STATE.step === 4 && !STATE.supplierSelected) {
+    nextBtn.disabled = false;
+    nextLabel.textContent = 'Skip selection';
+  } else if (STATE.step === 7 && !STATE.submitted) {
+    nextBtn.disabled = false;
+    nextLabel.textContent = 'Submit & continue';
+  } else {
+    nextBtn.disabled = false;
+    nextLabel.textContent = 'Continue';
+  }
+}
+
+/* ── Utility: sleep, smooth scroll ── */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function scrollDown() {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+/* ── Typing animation utility ──
+   Types text into an element character by character with variable speed
+*/
+async function typeInto(el, text, baseSpeed = 22, instant = false) {
+  if (instant) {
+    el.textContent = text;
+    return;
+  }
+  el.textContent = '';
+  for (const char of text) {
+    el.textContent += char;
+    let delay = baseSpeed + Math.random() * 30;
+    if (',.;:'.includes(char)) delay += 180;
+    if (char === ' ') delay += 8;
+    await sleep(delay);
+  }
+}
+
+/* ── Message builders ── */
+function buildUserMsg(initials, name, text = '') {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-user';
+  wrap.innerHTML = `
+    <div class="msg-av">${initials}</div>
+    <div class="msg-body">
+      <div class="msg-meta">${name} · ${TIME()}</div>
+      <div class="msg-bubble"><span class="msg-text">${text}</span></div>
+    </div>`;
+  return wrap;
+}
+
+function buildAgentMsg(content = '') {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-agent';
+  wrap.innerHTML = `
+    <div class="msg-av">AI</div>
+    <div class="msg-body">
+      <div class="msg-meta">Procurello agent · ${TIME()}</div>
+      <div class="msg-bubble">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>
+    </div>`;
+  return wrap;
+}
+
+function buildAgentMsgStatic(html) {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg from-agent';
+  wrap.innerHTML = `
+    <div class="msg-av">AI</div>
+    <div class="msg-body">
+      <div class="msg-meta">Procurello agent · ${TIME()}</div>
+      <div class="msg-bubble"><span class="msg-text">${html}</span></div>
+    </div>`;
+  return wrap;
+}
+
+/* ── Content for each beat ── */
+const SCRIPT = {
+  user_request: "I need someone to recalibrate the LE-300 centrifuge in the Wellman lab. It's overdue and we have a grant audit in three weeks.",
+
+  agent_classify: "Got it. This is a service request, not a goods purchase — I'll set it up as a non-catalog services requisition. Let me find suppliers who can do this and check for any active contracts.",
+
+  agent_selected: "PrecisionCal works under your active MSA, so we skip the quote step and shorten the approval path. I'm drafting the requisition now using the standard service template.",
+
+  agent_compliance: "All twelve compliance checks passed in 1.4 seconds. Routing to Dr. Wellman directly — she typically responds within four hours.",
+
+  agent_submitted: "Submitted as REQ-2026-0847. I'll prompt Dr. Wellman now, watch for the PO to release once she approves, and remind you to confirm receipt when PrecisionCal completes the calibration."
+};
+
+/* ────────────────────────────────────────────────────────────────
+   BEAT RENDERERS
+   Each beat-N function builds the DOM for that step.
+   They append rather than replace — the conversation grows.
+─────────────────────────────────────────────────────────────────*/
+
+/* BEAT 1: Empty composer */
+function renderBeat1() {
+  const composer = document.createElement('div');
+  composer.id = 'beat-1';
+  composer.className = 'beat visible';
+  composer.innerHTML = `
+    <div class="composer">
+      <div class="composer-label">
+        <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4 5.6 20.8 8 13.6 2 9.2h7.6z" fill="currentColor"/></svg>
+        What do you need to buy?
+      </div>
+      <div class="composer-text placeholder" id="composer-text">Describe your need, attach a quote, or forward an email…<span class="typing-cursor"></span></div>
+      <div class="composer-foot">
+        <div class="composer-chips">
+          <span class="chip">+ Attach quote</span>
+          <span class="chip">+ Need-by date</span>
+          <span class="chip">↻ Reuse past order</span>
+        </div>
+        <button class="composer-send" id="send-btn" disabled>
+          Continue
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>`;
+  CONV.appendChild(composer);
+}
+
+/* BEAT 2: User types request */
+async function renderBeat2(instant = false) {
+  const textEl = document.getElementById('composer-text');
+  if (!textEl) return;
+
+  textEl.classList.remove('placeholder');
+  textEl.innerHTML = '';
+  const sendBtn = document.getElementById('send-btn');
+
+  if (instant) {
+    textEl.textContent = SCRIPT.user_request;
+    sendBtn.disabled = false;
+    sendBtn.classList.add('ready');
+  } else {
+    STATE.isAnimating = true;
+    await typeInto(textEl, SCRIPT.user_request, 22);
+    textEl.innerHTML += '<span class="typing-cursor"></span>';
+    sendBtn.disabled = false;
+    sendBtn.classList.add('ready');
+    STATE.isAnimating = false;
+  }
+}
+
+/* BEAT 3: User message commits + agent classifies */
+async function renderBeat3(instant = false) {
+  // Remove composer
+  const composerBeat = document.getElementById('beat-1');
+  if (composerBeat) composerBeat.remove();
+
+  // Add user message
+  const userMsg = buildUserMsg('JM', 'Jamie Mendez', SCRIPT.user_request);
+  userMsg.id = 'beat-3-user';
+  CONV.appendChild(userMsg);
+  scrollDown();
+
+  if (instant) {
+    const agentMsg = buildAgentMsgStatic(SCRIPT.agent_classify);
+    agentMsg.id = 'beat-3-agent';
+    CONV.appendChild(agentMsg);
+  } else {
+    STATE.isAnimating = true;
+    await sleep(400);
+    const agentMsg = buildAgentMsg();
+    agentMsg.id = 'beat-3-agent';
+    CONV.appendChild(agentMsg);
+    scrollDown();
+    await sleep(900);
+    const bubble = agentMsg.querySelector('.msg-bubble');
+    bubble.innerHTML = '<span class="msg-text"></span>';
+    const textSpan = bubble.querySelector('.msg-text');
+    await typeInto(textSpan, SCRIPT.agent_classify, 13);
+    scrollDown();
+    STATE.isAnimating = false;
+  }
+}
+
+/* BEAT 4: Supplier ranking */
+function renderBeat4(instant = false) {
+  // Skip if already present
+  if (document.getElementById('beat-4')) return;
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-4';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="supplier-grid">
+
+      <div class="sup-card recommended" data-supplier="precisioncal" onclick="selectSupplier('precisioncal')">
+        <div class="sup-badge">Recommended</div>
+        <div class="sup-name">PrecisionCal</div>
+        <div class="sup-meta">ISO 17025 · Lab calibration</div>
+        <div class="sup-details">
+          <p><strong>Active MSA</strong> — no quote needed. 5–7 day lead time. Previously calibrated 4 instruments for Wellman Lab. <strong>5/5 satisfaction</strong> on prior work.</p>
+        </div>
+        <div class="sup-tags">
+          <span class="tag-sm tg-ok">MSA active</span>
+          <span class="tag-sm tg-info">Skips quote</span>
+          <span class="tag-sm tg-ok">5/5 rated</span>
+        </div>
+      </div>
+
+      <div class="sup-card" data-supplier="metrotest" onclick="selectSupplier('metrotest')">
+        <div class="sup-name">MetroTest</div>
+        <div class="sup-meta">ISO 17025 · Lab calibration</div>
+        <div class="sup-details">
+          <p><strong>Quote required.</strong> 3–5 day lead time — faster than PrecisionCal. 4/5 satisfaction with peer labs on similar work. No standing contract.</p>
+        </div>
+        <div class="sup-tags">
+          <span class="tag-sm tg-warn">Quote required</span>
+          <span class="tag-sm tg-neutral">3–5d lead</span>
+          <span class="tag-sm tg-neutral">No MSA</span>
+        </div>
+      </div>
+
+      <div class="sup-card" data-supplier="labserv" onclick="selectSupplier('labserv')">
+        <div class="sup-name">LabServ Solutions</div>
+        <div class="sup-meta">A2LA accredited</div>
+        <div class="sup-details">
+          <p><strong>New supplier.</strong> Would require vendor setup (3–5 business days). 10–14 day lead. No institutional history yet — newer entrant.</p>
+        </div>
+        <div class="sup-tags">
+          <span class="tag-sm tg-warn">Setup required</span>
+          <span class="tag-sm tg-neutral">10–14d lead</span>
+          <span class="tag-sm tg-neutral">New vendor</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="sup-hint" id="sup-hint">Click a supplier to continue · PrecisionCal is recommended given the active MSA and prior performance</div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+}
+
+/* BEAT 5: Supplier selected + agent confirmation */
+async function renderBeat5(instant = false) {
+  STATE.supplierSelected = true;
+
+  // Fade non-selected supplier cards
+  document.querySelectorAll('.sup-card').forEach(c => {
+    if (c.dataset.supplier !== 'precisioncal') {
+      c.classList.add('faded');
+    } else {
+      c.classList.add('selected');
+      c.classList.remove('recommended');
+      if (!c.querySelector('.sup-selected-mark')) {
+        const mark = document.createElement('div');
+        mark.className = 'sup-selected-mark';
+        mark.innerHTML = '<svg viewBox="0 0 16 16"><polyline points="3 8 7 12 13 5"/></svg>';
+        c.appendChild(mark);
+        const badge = c.querySelector('.sup-badge');
+        if (badge) badge.remove();
+      }
+    }
+  });
+
+  // Update hint
+  const hint = document.getElementById('sup-hint');
+  if (hint) hint.textContent = 'PrecisionCal selected — agent is drafting the requisition';
+
+  if (instant) {
+    if (!document.getElementById('beat-5-agent')) {
+      const agentMsg = buildAgentMsgStatic(SCRIPT.agent_selected);
+      agentMsg.id = 'beat-5-agent';
+      CONV.appendChild(agentMsg);
+    }
+  } else {
+    if (!document.getElementById('beat-5-agent')) {
+      STATE.isAnimating = true;
+      await sleep(500);
+      const agentMsg = buildAgentMsg();
+      agentMsg.id = 'beat-5-agent';
+      CONV.appendChild(agentMsg);
+      scrollDown();
+      await sleep(800);
+      const bubble = agentMsg.querySelector('.msg-bubble');
+      bubble.innerHTML = '<span class="msg-text"></span>';
+      await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_selected, 13);
+      scrollDown();
+      STATE.isAnimating = false;
+    }
+  }
+}
+
+/* BEAT 6: Requisition autofills */
+async function renderBeat6(instant = false) {
+  if (document.getElementById('beat-6')) return;
+
+  const fields = [
+    { label: 'Description', value: 'Recalibration service — Beckman Coulter LE-300 centrifuge', confirm: false },
+    { label: 'Service type', value: 'Equipment calibration · ISO 17025', confirm: false },
+    { label: 'Commodity code', value: '81101701 · Calibration services', confirm: false },
+    { label: 'Supplier', value: 'PrecisionCal Inc. (V-00284)', confirm: false },
+    { label: 'Contract reference', value: 'MSA-2024-118 · Active through Dec 31, 2026', confirm: false },
+    { label: 'Estimated amount', value: '$4,200.00 USD', confirm: false },
+    { label: 'Need-by date', value: 'Friday, May 23, 2026', confirm: true },
+    { label: 'Cost object', value: 'WL-CAL-26 · Wellman Lab Calibration', confirm: false },
+    { label: 'Asset reference', value: 'AST-LE300-7421 · LE-300 Centrifuge', confirm: false },
+    { label: 'Justification', value: 'Calibration overdue — grant audit June 12', confirm: true }
+  ];
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-6';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="req-card">
+      <div class="req-head">
+        <div class="req-title">Draft requisition · REQ-2026-0847</div>
+        <div class="req-title-sub" id="req-status">Autofilling…</div>
+      </div>
+      <div class="req-rows" id="req-rows"></div>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  const rowsContainer = document.getElementById('req-rows');
+
+  if (instant) {
+    fields.forEach(f => {
+      const row = document.createElement('div');
+      row.className = 'req-row';
+      row.innerHTML = `
+        <div class="req-label">${f.label}</div>
+        <div class="req-value ${f.confirm ? 'confirm' : ''}">${f.value}</div>`;
+      rowsContainer.appendChild(row);
+    });
+    document.getElementById('req-status').textContent = '10 fields populated · 2 require confirmation';
+  } else {
+    STATE.isAnimating = true;
+    for (const f of fields) {
+      const row = document.createElement('div');
+      row.className = 'req-row';
+      row.innerHTML = `
+        <div class="req-label">${f.label}</div>
+        <div class="req-value ${f.confirm ? 'confirm' : ''}">${f.value}</div>`;
+      rowsContainer.appendChild(row);
+      scrollDown();
+      await sleep(140);
+    }
+    document.getElementById('req-status').textContent = '10 fields populated · 2 require confirmation';
+    STATE.isAnimating = false;
+  }
+}
+
+/* BEAT 7: Compliance checks + approval path */
+async function renderBeat7(instant = false) {
+  if (document.getElementById('beat-7')) return;
+
+  const checks = [
+    'OFAC / sanctions screen',
+    'Vendor master active + TIN verified',
+    'Banking validated (no recent change)',
+    'Tax classification confirmed',
+    'Use-tax determination',
+    'Budget availability vs cost object',
+    'MSA scope coverage validated',
+    'Duplicate request detection',
+    'Segregation of duties',
+    'Approval threshold mapped',
+    'Document retention tagged',
+    'Audit trail recorded'
+  ];
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-7';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="compliance-panel">
+      <div class="compliance-head">
+        <div class="compliance-title">Compliance checks</div>
+        <div class="compliance-status running" id="compliance-status">
+          <span class="dot"></span>
+          <span id="compliance-text">Running…</span>
+        </div>
+      </div>
+      <div class="compliance-progress"><div class="compliance-progress-bar" id="compliance-bar"></div></div>
+      <div class="compliance-checks" id="compliance-list"></div>
+    </div>
+
+    <div class="approval-path" id="approval-path" style="display:none">
+      <div class="approval-path-head">Approval path</div>
+      <div class="approval-chain">
+        <div class="approval-step done">
+          <div class="approval-step-av">JM</div>
+          <div class="approval-step-info">
+            <div class="approval-step-name">Jamie Mendez</div>
+            <div class="approval-step-role">Requester · Submitted</div>
+          </div>
+        </div>
+        <div class="approval-arrow">→</div>
+        <div class="approval-step current">
+          <div class="approval-step-av">SW</div>
+          <div class="approval-step-info">
+            <div class="approval-step-name">Dr. Sarah Wellman</div>
+            <div class="approval-step-role">PI · Pending approval</div>
+          </div>
+        </div>
+        <div class="approval-arrow">→</div>
+        <div class="approval-step next">
+          <div class="approval-step-av">↓</div>
+          <div class="approval-step-info">
+            <div class="approval-step-name">PO release</div>
+            <div class="approval-step-role">Automatic on approval</div>
+          </div>
+        </div>
+      </div>
+      <div class="approval-note">
+        <strong>Dr. Wellman typically responds within 4 hours.</strong> Under your MSA, no Legal review is required for this requisition.
+      </div>
+    </div>
+
+    <div class="submit-row" id="submit-row" style="display:none">
+      <button class="btn-submit" id="btn-submit" onclick="submitRequisition()">
+        Submit requisition
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  const listEl = document.getElementById('compliance-list');
+  const statusEl = document.getElementById('compliance-status');
+  const statusTextEl = document.getElementById('compliance-text');
+  const barEl = document.getElementById('compliance-bar');
+  const approvalEl = document.getElementById('approval-path');
+  const submitEl = document.getElementById('submit-row');
+
+  if (instant) {
+    checks.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'compliance-check';
+      item.textContent = c;
+      item.style.opacity = '1';
+      listEl.appendChild(item);
+    });
+    barEl.style.width = '100%';
+    statusEl.classList.remove('running');
+    statusTextEl.textContent = '12 of 12 passed · 1.4s';
+    approvalEl.style.display = 'block';
+    submitEl.style.display = 'flex';
+  } else {
+    STATE.isAnimating = true;
+    barEl.style.width = '100%';
+
+    for (let i = 0; i < checks.length; i++) {
+      const item = document.createElement('div');
+      item.className = 'compliance-check';
+      item.textContent = checks[i];
+      item.style.animationDelay = '0s';
+      listEl.appendChild(item);
+      await sleep(95);
+    }
+    await sleep(200);
+    statusEl.classList.remove('running');
+    statusTextEl.textContent = '12 of 12 passed · 1.4s';
+    await sleep(300);
+    approvalEl.style.display = 'block';
+    scrollDown();
+    await sleep(400);
+    submitEl.style.display = 'flex';
+    scrollDown();
+    STATE.isAnimating = false;
+  }
+}
+
+/* BEAT 8: Submitted + predictive close-out */
+async function renderBeat8(instant = false) {
+  if (document.getElementById('beat-8')) return;
+  STATE.submitted = true;
+
+  // Disable submit button if visible
+  const submitBtn = document.getElementById('btn-submit');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '✓ Submitted';
+  }
+
+  const wrap = document.createElement('div');
+  wrap.id = 'beat-8';
+  wrap.className = 'beat visible';
+  wrap.innerHTML = `
+    <div class="confirm-card">
+      <div class="confirm-eyebrow"><span class="dot"></span>Submitted · Predictive close-out</div>
+      <div class="confirm-title">Your requisition is in motion.</div>
+      <div class="confirm-ref">REQ-2026-0847 · PrecisionCal · $4,200.00</div>
+
+      <div class="telepathy-grid">
+        <div class="telepathy-item" style="animation-delay:0s">
+          <div class="telepathy-when">Now</div>
+          <div class="telepathy-what">Dr. Wellman <strong>notified</strong>. Approval expected within 4 hours based on her pattern.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.15s">
+          <div class="telepathy-when">Today</div>
+          <div class="telepathy-what">PO will <strong>release automatically</strong> on approval — no further action needed from you.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.3s">
+          <div class="telepathy-when">Around May 26</div>
+          <div class="telepathy-what">I'll prompt you to <strong>confirm receipt</strong> when PrecisionCal completes the calibration.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.45s">
+          <div class="telepathy-when">Within 48 hours of receipt</div>
+          <div class="telepathy-what">PrecisionCal's <strong>invoice will arrive</strong> and I'll match it to this PO automatically.</div>
+        </div>
+        <div class="telepathy-item" style="animation-delay:.6s">
+          <div class="telepathy-when">Before June 12</div>
+          <div class="telepathy-what">Calibration <strong>complete and audit-ready</strong> ahead of your grant audit.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-end">
+      <div class="demo-end-title">End of demo</div>
+      <div class="demo-end-actions">
+        <a href="index.html" class="btn-ghost">← Back to landing</a>
+        <button class="btn-ghost" onclick="restart()">↻ Restart demo</button>
+        <a href="requester-home.html" class="btn-ghost">Open Jamie's workspace</a>
+        <a href="ap-operations.html" class="btn-ghost">See AP perspective</a>
+      </div>
+    </div>
+  `;
+  CONV.appendChild(wrap);
+  scrollDown();
+
+  if (!instant) {
+    STATE.isAnimating = true;
+    // Add a final agent message above the confirmation card
+    const agentMsg = buildAgentMsg();
+    agentMsg.id = 'beat-8-agent';
+    CONV.insertBefore(agentMsg, wrap);
+    scrollDown();
+    await sleep(700);
+    const bubble = agentMsg.querySelector('.msg-bubble');
+    bubble.innerHTML = '<span class="msg-text"></span>';
+    await typeInto(bubble.querySelector('.msg-text'), SCRIPT.agent_submitted, 13);
+    scrollDown();
+    STATE.isAnimating = false;
+  } else {
+    const agentMsg = buildAgentMsgStatic(SCRIPT.agent_submitted);
+    agentMsg.id = 'beat-8-agent';
+    CONV.insertBefore(agentMsg, wrap);
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   CONTROL FLOW
+─────────────────────────────────────────────────────────────────*/
+
+async function renderUpToStep(targetStep, animated = true) {
+  // Clear and rebuild from scratch
+  CONV.innerHTML = '';
+  STATE.supplierSelected = targetStep >= 5;
+  STATE.submitted = targetStep >= 8;
+
+  // For instant navigation (jumping or going back), render all earlier
+  // beats instantly, then animate only the final one if animated=true
+  if (targetStep >= 1) renderBeat1();
+  if (targetStep >= 2) await renderBeat2(true);
+  if (targetStep >= 3) await renderBeat3(true);
+  if (targetStep >= 4) renderBeat4(true);
+  if (targetStep >= 5) await renderBeat5(true);
+  if (targetStep >= 6) await renderBeat6(true);
+  if (targetStep >= 7) await renderBeat7(true);
+  if (targetStep >= 8) await renderBeat8(true);
+
+  buildStepDots();
+  updateHash();
+  scrollDown();
+}
+
+async function advance() {
+  if (STATE.isAnimating) return;
+  if (STATE.step >= TOTAL_STEPS) return;
+
+  // Special case: step 4 → 5 requires supplier selection.
+  // If user didn't click, auto-select PrecisionCal.
+  if (STATE.step === 4 && !STATE.supplierSelected) {
+    STATE.step = 5;
+    buildStepDots();
+    updateHash();
+    await renderBeat5(false);
+    return;
+  }
+
+  // Special case: step 7 → 8 should trigger submission
+  if (STATE.step === 7 && !STATE.submitted) {
+    STATE.step = 8;
+    buildStepDots();
+    updateHash();
+    await renderBeat8(false);
+    return;
+  }
+
+  STATE.step++;
+  buildStepDots();
+  updateHash();
+
+  switch (STATE.step) {
+    case 2: await renderBeat2(false); break;
+    case 3: await renderBeat3(false); break;
+    case 4: renderBeat4(false); break;
+    case 5: await renderBeat5(false); break;
+    case 6: await renderBeat6(false); break;
+    case 7: await renderBeat7(false); break;
+    case 8: await renderBeat8(false); break;
+  }
+}
+
+async function goBack() {
+  if (STATE.isAnimating) return;
+  if (STATE.step <= 1) return;
+  STATE.step--;
+  await renderUpToStep(STATE.step, false);
+}
+
+function goNext() {
+  advance();
+}
+
+async function selectSupplier(id) {
+  if (STATE.isAnimating) return;
+  if (id !== 'precisioncal') {
+    // Visual feedback — flash but don't proceed
+    const card = document.querySelector(`[data-supplier="${id}"]`);
+    if (card && !card.classList.contains('faded')) {
+      card.style.animation = 'none';
+      void card.offsetWidth;
+      card.style.animation = 'msgIn .3s ease-out';
+    }
+    return;
+  }
+  if (STATE.step !== 4) return;
+  STATE.step = 5;
+  buildStepDots();
+  updateHash();
+  await renderBeat5(false);
+}
+
+async function submitRequisition() {
+  if (STATE.isAnimating) return;
+  if (STATE.step !== 7) return;
+  STATE.step = 8;
+  buildStepDots();
+  updateHash();
+  await renderBeat8(false);
+}
+
+async function restart() {
+  STATE.step = 1;
+  STATE.supplierSelected = false;
+  STATE.submitted = false;
+  await renderUpToStep(1, false);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateHash() {
+  history.replaceState(null, '', `#step-${STATE.step}`);
+}
+
+/* ── Initial load + hash routing ── */
+async function init() {
+  const hash = window.location.hash.match(/step-(\d+)/);
+  let initialStep = 1;
+  if (hash && hash[1]) {
+    initialStep = Math.min(Math.max(parseInt(hash[1], 10), 1), TOTAL_STEPS);
+  }
+  STATE.step = initialStep;
+  await renderUpToStep(initialStep, false);
+}
+
+/* ── Keyboard ── */
+document.addEventListener('keydown', e => {
+  // Ignore if user is in an input
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+  if (e.code === 'Space' || e.code === 'ArrowRight') {
+    e.preventDefault();
+    advance();
+  } else if (e.code === 'ArrowLeft') {
+    e.preventDefault();
+    goBack();
+  } else if (e.code === 'Escape') {
+    restart();
+  }
+});
+
+/* ── Boot ── */
+init();
+</script>
 
 </body>
 </html>
