@@ -352,13 +352,14 @@
   .pr-arrow{color:var(--ink-3);font-size:14px;text-align:right}
 
   /* COLLAPSIBLE SECTIONS */
-  .sec-block.collapsible .sec-h{cursor:pointer;user-select:none;transition:opacity .15s}
-  .sec-block.collapsible .sec-h:hover .sec-t{color:var(--ink-2)}
+  .sec-block.collapsible .sec-h{cursor:pointer;user-select:none;transition:opacity .15s;padding:4px 0;margin:-4px 0 10px;border-radius:2px}
+  .sec-block.collapsible .sec-h:hover .sec-t{color:var(--aubergine)}
+  .sec-block.collapsible .sec-h:hover .sec-t::after{border-color:var(--aubergine)}
   .sec-block.collapsible .sec-t::after{
-    content:'';display:inline-block;width:7px;height:7px;
-    border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);
-    transform:rotate(45deg);margin-left:10px;margin-bottom:3px;
-    transition:transform .2s;vertical-align:middle
+    content:'';display:inline-block;width:9px;height:9px;
+    border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);
+    transform:rotate(45deg);margin-left:12px;margin-bottom:4px;
+    transition:transform .25s, border-color .15s;vertical-align:middle
   }
   .sec-block.collapsible.collapsed .sec-t::after{transform:rotate(-45deg);margin-bottom:0}
   .sec-block.collapsible.collapsed > *:not(.sec-h){display:none}
@@ -457,7 +458,7 @@
           <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Need-by date</span>
           <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Reuse past order</span>
         </div>
-        <button class="btn btn-p">Continue →</button>
+        <a href="catalog-guided-buying.html" class="btn btn-p" style="text-decoration:none;display:inline-block">Continue →</a>
       </div>
     </div>
 
@@ -584,215 +585,6 @@
           <svg class="kpi-spark" viewBox="0 0 80 34" preserveAspectRatio="none">
             <polyline fill="none" stroke="var(--green)" stroke-width="1.5" points="0,8 10,8 20,8 30,8 40,8 50,8 60,8 70,8 80,8"/>
           </svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- SAVINGS DEEP DIVE -->
-    <div class="sec-block collapsible">
-      <div class="sec-h">
-        <div class="sec-t">Where savings came from · FY26</div>
-        <div class="sec-sub"><a href="#">Department view</a></div>
-      </div>
-
-      <div class="card">
-        <div class="card-b">
-          <div class="save-hero">
-            <!-- Big number -->
-            <div class="save-big">
-              <div class="save-l">Total realized savings</div>
-              <div class="save-v">$11,420</div>
-              <div class="save-sub">vs. <b>$98K</b> of addressable spend · <b>11.6%</b> realized rate</div>
-
-              <div class="save-bar">
-                <div class="save-seg cat" style="flex-basis:62%">$7.1K</div>
-                <div class="save-seg cont" style="flex-basis:21%">$2.4K</div>
-                <div class="save-seg pay" style="flex-basis:7%">$820</div>
-                <div class="save-seg neg" style="flex-basis:10%">$1.1K</div>
-              </div>
-
-              <div class="save-legend">
-                <div class="lg"><span class="lg-d cat"></span>Catalog / punchout</div>
-                <div class="lg"><span class="lg-d cont"></span>MSA pricing</div>
-                <div class="lg"><span class="lg-d pay"></span>Early-pay disc.</div>
-                <div class="lg"><span class="lg-d neg"></span>Negotiated</div>
-              </div>
-            </div>
-
-            <!-- Trend chart -->
-            <div>
-              <div class="save-l">Monthly trend · last 6 months</div>
-              <svg class="chart" viewBox="0 0 480 140" preserveAspectRatio="none">
-                <!-- Grid -->
-                <line x1="0" y1="35" x2="480" y2="35" stroke="var(--line)" stroke-dasharray="2,3"/>
-                <line x1="0" y1="70" x2="480" y2="70" stroke="var(--line)" stroke-dasharray="2,3"/>
-                <line x1="0" y1="105" x2="480" y2="105" stroke="var(--line)" stroke-dasharray="2,3"/>
-
-                <!-- Bars: 6 months of savings, grouped -->
-                <!-- Dec -->
-                <rect x="20" y="92" width="38" height="22" fill="var(--green)" opacity=".7" rx="2"/>
-                <rect x="60" y="100" width="14" height="14" fill="var(--purple)" opacity=".7" rx="2"/>
-                <!-- Jan -->
-                <rect x="100" y="84" width="38" height="30" fill="var(--green)" opacity=".75" rx="2"/>
-                <rect x="140" y="98" width="14" height="16" fill="var(--purple)" opacity=".75" rx="2"/>
-                <!-- Feb -->
-                <rect x="180" y="74" width="38" height="40" fill="var(--green)" opacity=".8" rx="2"/>
-                <rect x="220" y="96" width="14" height="18" fill="var(--purple)" opacity=".8" rx="2"/>
-                <!-- Mar -->
-                <rect x="260" y="68" width="38" height="46" fill="var(--green)" opacity=".85" rx="2"/>
-                <rect x="300" y="92" width="14" height="22" fill="var(--purple)" opacity=".85" rx="2"/>
-                <rect x="316" y="106" width="10" height="8" fill="var(--teal)" opacity=".7" rx="2"/>
-                <!-- Apr -->
-                <rect x="340" y="56" width="38" height="58" fill="var(--green)" opacity=".9" rx="2"/>
-                <rect x="380" y="88" width="14" height="26" fill="var(--purple)" opacity=".9" rx="2"/>
-                <rect x="396" y="104" width="10" height="10" fill="var(--teal)" opacity=".8" rx="2"/>
-                <!-- May -->
-                <rect x="420" y="48" width="38" height="66" fill="var(--green)" rx="2"/>
-                <rect x="460" y="86" width="14" height="28" fill="var(--purple)" rx="2"/>
-
-                <!-- Total line -->
-                <polyline fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-dasharray="0"
-                  points="40,100 120,90 200,82 280,76 360,62 440,52"/>
-                <circle cx="40" cy="100" r="3" fill="var(--ink)"/>
-                <circle cx="120" cy="90" r="3" fill="var(--ink)"/>
-                <circle cx="200" cy="82" r="3" fill="var(--ink)"/>
-                <circle cx="280" cy="76" r="3" fill="var(--ink)"/>
-                <circle cx="360" cy="62" r="3" fill="var(--ink)"/>
-                <circle cx="440" cy="52" r="3" fill="var(--brand)" stroke="#fff" stroke-width="2"/>
-
-                <!-- Y-axis labels -->
-                <text x="0" y="32" font-size="9" fill="var(--ink-3)">$3K</text>
-                <text x="0" y="67" font-size="9" fill="var(--ink-3)">$2K</text>
-                <text x="0" y="102" font-size="9" fill="var(--ink-3)">$1K</text>
-              </svg>
-              <div class="chart-x">
-                <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SPEND BY OBJECT CODE + GRANT UTILIZATION -->
-    <div class="sec-block collapsible">
-      <div class="sec-h">
-        <div class="sec-t">Spend & funding</div>
-        <div class="sec-sub">Lab + linked grants</div>
-      </div>
-
-      <div class="grid-2">
-        <!-- Object Codes -->
-        <div class="card">
-          <div class="card-h">
-            <div class="card-t">Spend by object code</div>
-            <div class="card-meta">FY26 · $84.2K total</div>
-          </div>
-          <div class="card-b">
-            <div class="oc">
-              <div class="oc-row">
-                <div>
-                  <div class="oc-top">
-                    <div class="oc-name"><span class="oc-code">7110</span>Lab supplies & reagents</div>
-                    <div class="oc-amt">$38,210 <span class="oc-pct">45%</span></div>
-                  </div>
-                  <div class="oc-bar-w"><div class="oc-bar" style="width:45%"></div></div>
-                </div>
-              </div>
-              <div class="oc-row">
-                <div>
-                  <div class="oc-top">
-                    <div class="oc-name"><span class="oc-code">7240</span>Equipment service & maintenance</div>
-                    <div class="oc-amt">$14,820 <span class="oc-pct">18%</span></div>
-                  </div>
-                  <div class="oc-bar-w"><div class="oc-bar" style="width:18%;background:linear-gradient(90deg,var(--purple),#8463B0)"></div></div>
-                </div>
-              </div>
-              <div class="oc-row">
-                <div>
-                  <div class="oc-top">
-                    <div class="oc-name"><span class="oc-code">7320</span>Consulting & research services</div>
-                    <div class="oc-amt">$12,400 <span class="oc-pct">15%</span></div>
-                  </div>
-                  <div class="oc-bar-w"><div class="oc-bar" style="width:15%;background:linear-gradient(90deg,var(--teal),#458388)"></div></div>
-                </div>
-              </div>
-              <div class="oc-row">
-                <div>
-                  <div class="oc-top">
-                    <div class="oc-name"><span class="oc-code">7180</span>Software & data subscriptions</div>
-                    <div class="oc-amt">$8,940 <span class="oc-pct">11%</span></div>
-                  </div>
-                  <div class="oc-bar-w"><div class="oc-bar" style="width:11%;background:linear-gradient(90deg,var(--green),#3A9971)"></div></div>
-                </div>
-              </div>
-              <div class="oc-row">
-                <div>
-                  <div class="oc-top">
-                    <div class="oc-name"><span class="oc-code">7150</span>Office & general supplies</div>
-                    <div class="oc-amt">$5,720 <span class="oc-pct">7%</span></div>
-                  </div>
-                  <div class="oc-bar-w"><div class="oc-bar" style="width:7%;background:linear-gradient(90deg,var(--amber),#D89522)"></div></div>
-                </div>
-              </div>
-              <div class="oc-row">
-                <div>
-                  <div class="oc-top">
-                    <div class="oc-name"><span class="oc-code">7460</span>Conference & travel</div>
-                    <div class="oc-amt">$4,110 <span class="oc-pct">4%</span></div>
-                  </div>
-                  <div class="oc-bar-w"><div class="oc-bar" style="width:4%;background:linear-gradient(90deg,var(--brand),#A8351F)"></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Grants -->
-        <div class="card">
-          <div class="card-h">
-            <div class="card-t">Grant utilization</div>
-            <div class="card-meta">3 active</div>
-          </div>
-          <div class="card-b">
-            <div class="gr-list">
-              <div class="gr">
-                <div class="gr-top">
-                  <div>
-                    <div class="gr-name">Cancer immunotherapy mechanisms</div>
-                    <div class="gr-id">NIH · R01-CA248932 · Wellman PI</div>
-                  </div>
-                  <div class="gr-status tight">78% spent</div>
-                </div>
-                <div class="gr-bar-w"><div class="gr-bar tight" style="width:78%"></div></div>
-                <div class="gr-meta"><span><b>$487K</b> of $625K</span><span>6 mo left · burn slightly high</span></div>
-              </div>
-
-              <div class="gr">
-                <div class="gr-top">
-                  <div>
-                    <div class="gr-name">Single-cell sequencing instrumentation</div>
-                    <div class="gr-id">NSF · DBI-2231445 · co-PI</div>
-                  </div>
-                  <div class="gr-status ok">37% spent</div>
-                </div>
-                <div class="gr-bar-w"><div class="gr-bar ok" style="width:37%"></div></div>
-                <div class="gr-meta"><span><b>$112K</b> of $300K</span><span>14 mo left · on pace</span></div>
-              </div>
-
-              <div class="gr">
-                <div class="gr-top">
-                  <div>
-                    <div class="gr-name">Internal bridge fund</div>
-                    <div class="gr-id">MU · WL-BRIDGE-26</div>
-                  </div>
-                  <div class="gr-status warn">48% spent</div>
-                </div>
-                <div class="gr-bar-w"><div class="gr-bar warn" style="width:48%"></div></div>
-                <div class="gr-meta"><span><b>$24K</b> of $50K</span><span>4 mo left · watch closely</span></div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -997,6 +789,215 @@
           </div>
           <div class="pr-action">—</div>
           <div class="pr-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPEND BY OBJECT CODE + GRANT UTILIZATION -->
+    <div class="sec-block collapsible">
+      <div class="sec-h">
+        <div class="sec-t">Spend & funding</div>
+        <div class="sec-sub">Lab + linked grants</div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Object Codes -->
+        <div class="card">
+          <div class="card-h">
+            <div class="card-t">Spend by object code</div>
+            <div class="card-meta">FY26 · $84.2K total</div>
+          </div>
+          <div class="card-b">
+            <div class="oc">
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7110</span>Lab supplies & reagents</div>
+                    <div class="oc-amt">$38,210 <span class="oc-pct">45%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:45%"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7240</span>Equipment service & maintenance</div>
+                    <div class="oc-amt">$14,820 <span class="oc-pct">18%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:18%;background:linear-gradient(90deg,var(--purple),#8463B0)"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7320</span>Consulting & research services</div>
+                    <div class="oc-amt">$12,400 <span class="oc-pct">15%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:15%;background:linear-gradient(90deg,var(--teal),#458388)"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7180</span>Software & data subscriptions</div>
+                    <div class="oc-amt">$8,940 <span class="oc-pct">11%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:11%;background:linear-gradient(90deg,var(--green),#3A9971)"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7150</span>Office & general supplies</div>
+                    <div class="oc-amt">$5,720 <span class="oc-pct">7%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:7%;background:linear-gradient(90deg,var(--amber),#D89522)"></div></div>
+                </div>
+              </div>
+              <div class="oc-row">
+                <div>
+                  <div class="oc-top">
+                    <div class="oc-name"><span class="oc-code">7460</span>Conference & travel</div>
+                    <div class="oc-amt">$4,110 <span class="oc-pct">4%</span></div>
+                  </div>
+                  <div class="oc-bar-w"><div class="oc-bar" style="width:4%;background:linear-gradient(90deg,var(--brand),#A8351F)"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grants -->
+        <div class="card">
+          <div class="card-h">
+            <div class="card-t">Grant utilization</div>
+            <div class="card-meta">3 active</div>
+          </div>
+          <div class="card-b">
+            <div class="gr-list">
+              <div class="gr">
+                <div class="gr-top">
+                  <div>
+                    <div class="gr-name">Cancer immunotherapy mechanisms</div>
+                    <div class="gr-id">NIH · R01-CA248932 · Wellman PI</div>
+                  </div>
+                  <div class="gr-status tight">78% spent</div>
+                </div>
+                <div class="gr-bar-w"><div class="gr-bar tight" style="width:78%"></div></div>
+                <div class="gr-meta"><span><b>$487K</b> of $625K</span><span>6 mo left · burn slightly high</span></div>
+              </div>
+
+              <div class="gr">
+                <div class="gr-top">
+                  <div>
+                    <div class="gr-name">Single-cell sequencing instrumentation</div>
+                    <div class="gr-id">NSF · DBI-2231445 · co-PI</div>
+                  </div>
+                  <div class="gr-status ok">37% spent</div>
+                </div>
+                <div class="gr-bar-w"><div class="gr-bar ok" style="width:37%"></div></div>
+                <div class="gr-meta"><span><b>$112K</b> of $300K</span><span>14 mo left · on pace</span></div>
+              </div>
+
+              <div class="gr">
+                <div class="gr-top">
+                  <div>
+                    <div class="gr-name">Internal bridge fund</div>
+                    <div class="gr-id">MU · WL-BRIDGE-26</div>
+                  </div>
+                  <div class="gr-status warn">48% spent</div>
+                </div>
+                <div class="gr-bar-w"><div class="gr-bar warn" style="width:48%"></div></div>
+                <div class="gr-meta"><span><b>$24K</b> of $50K</span><span>4 mo left · watch closely</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAVINGS DEEP DIVE -->
+    <div class="sec-block collapsible">
+      <div class="sec-h">
+        <div class="sec-t">Where savings came from · FY26</div>
+        <div class="sec-sub"><a href="#">Department view</a></div>
+      </div>
+
+      <div class="card">
+        <div class="card-b">
+          <div class="save-hero">
+            <!-- Big number -->
+            <div class="save-big">
+              <div class="save-l">Total realized savings</div>
+              <div class="save-v">$11,420</div>
+              <div class="save-sub">vs. <b>$98K</b> of addressable spend · <b>11.6%</b> realized rate</div>
+
+              <div class="save-bar">
+                <div class="save-seg cat" style="flex-basis:62%">$7.1K</div>
+                <div class="save-seg cont" style="flex-basis:21%">$2.4K</div>
+                <div class="save-seg pay" style="flex-basis:7%">$820</div>
+                <div class="save-seg neg" style="flex-basis:10%">$1.1K</div>
+              </div>
+
+              <div class="save-legend">
+                <div class="lg"><span class="lg-d cat"></span>Catalog / punchout</div>
+                <div class="lg"><span class="lg-d cont"></span>MSA pricing</div>
+                <div class="lg"><span class="lg-d pay"></span>Early-pay disc.</div>
+                <div class="lg"><span class="lg-d neg"></span>Negotiated</div>
+              </div>
+            </div>
+
+            <!-- Trend chart -->
+            <div>
+              <div class="save-l">Monthly trend · last 6 months</div>
+              <svg class="chart" viewBox="0 0 480 140" preserveAspectRatio="none">
+                <!-- Grid -->
+                <line x1="0" y1="35" x2="480" y2="35" stroke="var(--line)" stroke-dasharray="2,3"/>
+                <line x1="0" y1="70" x2="480" y2="70" stroke="var(--line)" stroke-dasharray="2,3"/>
+                <line x1="0" y1="105" x2="480" y2="105" stroke="var(--line)" stroke-dasharray="2,3"/>
+
+                <!-- Bars: 6 months of savings, grouped -->
+                <!-- Dec -->
+                <rect x="20" y="92" width="38" height="22" fill="var(--green)" opacity=".7" rx="2"/>
+                <rect x="60" y="100" width="14" height="14" fill="var(--purple)" opacity=".7" rx="2"/>
+                <!-- Jan -->
+                <rect x="100" y="84" width="38" height="30" fill="var(--green)" opacity=".75" rx="2"/>
+                <rect x="140" y="98" width="14" height="16" fill="var(--purple)" opacity=".75" rx="2"/>
+                <!-- Feb -->
+                <rect x="180" y="74" width="38" height="40" fill="var(--green)" opacity=".8" rx="2"/>
+                <rect x="220" y="96" width="14" height="18" fill="var(--purple)" opacity=".8" rx="2"/>
+                <!-- Mar -->
+                <rect x="260" y="68" width="38" height="46" fill="var(--green)" opacity=".85" rx="2"/>
+                <rect x="300" y="92" width="14" height="22" fill="var(--purple)" opacity=".85" rx="2"/>
+                <rect x="316" y="106" width="10" height="8" fill="var(--teal)" opacity=".7" rx="2"/>
+                <!-- Apr -->
+                <rect x="340" y="56" width="38" height="58" fill="var(--green)" opacity=".9" rx="2"/>
+                <rect x="380" y="88" width="14" height="26" fill="var(--purple)" opacity=".9" rx="2"/>
+                <rect x="396" y="104" width="10" height="10" fill="var(--teal)" opacity=".8" rx="2"/>
+                <!-- May -->
+                <rect x="420" y="48" width="38" height="66" fill="var(--green)" rx="2"/>
+                <rect x="460" y="86" width="14" height="28" fill="var(--purple)" rx="2"/>
+
+                <!-- Total line -->
+                <polyline fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-dasharray="0"
+                  points="40,100 120,90 200,82 280,76 360,62 440,52"/>
+                <circle cx="40" cy="100" r="3" fill="var(--ink)"/>
+                <circle cx="120" cy="90" r="3" fill="var(--ink)"/>
+                <circle cx="200" cy="82" r="3" fill="var(--ink)"/>
+                <circle cx="280" cy="76" r="3" fill="var(--ink)"/>
+                <circle cx="360" cy="62" r="3" fill="var(--ink)"/>
+                <circle cx="440" cy="52" r="3" fill="var(--brand)" stroke="#fff" stroke-width="2"/>
+
+                <!-- Y-axis labels -->
+                <text x="0" y="32" font-size="9" fill="var(--ink-3)">$3K</text>
+                <text x="0" y="67" font-size="9" fill="var(--ink-3)">$2K</text>
+                <text x="0" y="102" font-size="9" fill="var(--ink-3)">$1K</text>
+              </svg>
+              <div class="chart-x">
+                <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
